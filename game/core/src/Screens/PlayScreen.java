@@ -2,6 +2,7 @@ package Screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -29,11 +30,22 @@ public class PlayScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClearColor(255, 182, 193, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         game.batch.setProjectionMatrix(gameCam.combined); // Renderdab pildi kaameraga kaasa
         game.batch.begin(); // Opens window
-        game.batch.draw(texture, 0, 0); // draws texture
+
+
+        game.batch.draw(texture, game.getX(), game.getY()); // draws texture
+        int x = game.getX();
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            x -= 10;
+            game.sendPositionInfoToServer();
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            x += 10;
+            game.sendPositionInfoToServer();
+        }
         game.batch.end();
     }
 

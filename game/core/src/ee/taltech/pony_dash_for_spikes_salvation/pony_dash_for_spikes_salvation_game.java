@@ -19,6 +19,14 @@ public class pony_dash_for_spikes_salvation_game extends Game {
 
 	private Client client;
 
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
 	@Override
 	public void create () {
 		client = new Client();
@@ -33,7 +41,7 @@ public class pony_dash_for_spikes_salvation_game extends Game {
 		}
 	}
 
-	private void sendPositionInfoToServer() {
+	public void sendPositionInfoToServer() {
 		client.sendUDP(x + "|" + y);
 	}
 
