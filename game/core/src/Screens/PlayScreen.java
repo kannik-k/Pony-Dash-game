@@ -19,7 +19,7 @@ public class PlayScreen implements Screen {
 
     public PlayScreen(pony_dash_for_spikes_salvation_game game){
         this.game = game;
-        texture = new Texture("badlogic.jpg");
+        texture = new Texture("twilight.png");
         gameCam = new OrthographicCamera();
         gamePort = new FitViewport(1920, 1080, gameCam);
     }
