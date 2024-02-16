@@ -19,14 +19,6 @@ public class pony_dash_for_spikes_salvation_game extends Game {
 
 	private Client client;
 
-	public int getX() {
-		return x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
 	@Override
 	public void create () {
 		client = new Client();
@@ -45,8 +37,20 @@ public class pony_dash_for_spikes_salvation_game extends Game {
 		client.sendUDP(x + "|" + y);
 	}
 
+	public void makePlayerMove() {
+		batch.draw(PlayScreen.texture, x , y); // draws texture
+		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+			x -= 10;
+			sendPositionInfoToServer();
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+			x += 10;
+			sendPositionInfoToServer();
+		}
+	}
+
 	@Override
-	public void render () {
+	public void render() {
 		super.render(); // delegate render to playscreen
 	}
 	

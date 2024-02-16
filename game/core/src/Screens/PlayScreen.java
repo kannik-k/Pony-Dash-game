@@ -12,10 +12,10 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import ee.taltech.pony_dash_for_spikes_salvation.pony_dash_for_spikes_salvation_game;
 
 public class PlayScreen implements Screen {
-    private pony_dash_for_spikes_salvation_game game;
-    Texture texture; // ajutine
-    private OrthographicCamera gameCam;
-    private Viewport gamePort;
+    private final pony_dash_for_spikes_salvation_game game;
+    public static Texture texture = null; // ajutine
+    private final OrthographicCamera gameCam;
+    private final Viewport gamePort;
 
     public PlayScreen(pony_dash_for_spikes_salvation_game game){
         this.game = game;
@@ -30,22 +30,11 @@ public class PlayScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(255, 182, 193, 1);
+        Gdx.gl.glClearColor((float)0.941, (float)0.698, (float)0.784, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         game.batch.setProjectionMatrix(gameCam.combined); // Renderdab pildi kaameraga kaasa
         game.batch.begin(); // Opens window
-
-
-        game.batch.draw(texture, game.getX(), game.getY()); // draws texture
-        int x = game.getX();
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            x -= 10;
-            game.sendPositionInfoToServer();
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            x += 10;
-            game.sendPositionInfoToServer();
-        }
+        game.makePlayerMove();
         game.batch.end();
     }
 
