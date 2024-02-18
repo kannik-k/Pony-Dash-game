@@ -17,7 +17,7 @@ public class PlayScreen implements Screen {
 
     public PlayScreen(Main game){
         this.game = game;
-        texture = new Texture("twilight.png");
+        texture = new Texture("twilight_sparkle_one.png");
         gameCam = new OrthographicCamera();
         gamePort = new FitViewport(1920, 1080, gameCam);
     }
@@ -32,6 +32,7 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         game.batch.setProjectionMatrix(gameCam.combined); // Renderdab pildi kaameraga kaasa
         game.batch.begin(); // Opens window
+        game.makeAllPlayersMove();
         game.makePlayerMove();
         game.batch.end();
     }
