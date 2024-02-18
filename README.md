@@ -1,5 +1,9 @@
-# Save Spike
+# Pony Dash For Spikes Salvation
 
 Ideeks on teha võistlusmäng, kus ponid läbivad takistustega ja lobisevate külaelanikega kaardi, et päästa oma sõber Spike. Mängida saab üksinda või kaasmängijatega: võidab see, kes esimesena Spike'i päästab.
 
 Mängu sisenedes on võimalik valida, kas mängida üksi või mitmekesi. Edasi saab valida nime ja tegelase. Mängu alguses kuvatakse mängijatele mängu reeglid ja eesmärk: päästa Spike. Mängijad hakkavad läbima kaarti, ületades takistusi. Kaart on jagatud erinevateks osadeks ning iga osa takistused lähevad aina raskemaks. Kaardil liiguvad ringi ka külaelanikud, kes mängija läheduses hakkavad külajutte rääkima ja kulutavad mängija aega. Kaardi peal on ka mündid, mida tekib suvalisel hetkel juurde. Kaardil olevatest vahepunktidest edasi liikumiseks peab olema kogutud mingi kindel arv münte. Takistuste vahel on augud, mille sisse kukkudes viiakse mängija kaardiosa algusesse tagasi. Võidab mängija, kes esimesena lõppu jõuab ja Spike'i päästab.
+
+# Mängu jooksutamine
+
+Mängimiseks on vaja IntelliJ-sse alla kloonida serveri (iti0301-2024-server) ja kliendi (iti0301-2024-game) repositooriumite HTTP lingid. Projekt tuleb ühendada Gradle'ga. Järgmiseks tuleb liikuda serveri repositooriumis GameServer klassi ja seda jooksutada. Edasi tuleb liikuda kliendi repositooriumis DesktopLauncher klassi ja seda jooksutada. Multiplayer'i saab tööle, kui DesktopLauncher'it mitu korda jooksutada. Kui tuleb ette error, siis tuleb avada üleval ribal "Run" nupust vasakul valge kolmnurk ning "Edit configurations...". Sealt edasi "Modify options" ja "Allow multiple instances".
