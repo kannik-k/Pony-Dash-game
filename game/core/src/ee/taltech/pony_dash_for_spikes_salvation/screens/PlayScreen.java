@@ -1,25 +1,23 @@
-package Screens;
+package ee.taltech.pony_dash_for_spikes_salvation.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import ee.taltech.pony_dash_for_spikes_salvation.pony_dash_for_spikes_salvation_game;
+import ee.taltech.pony_dash_for_spikes_salvation.Main;
 
 public class PlayScreen implements Screen {
-    private final pony_dash_for_spikes_salvation_game game;
+    private final Main game;
     public static Texture texture = null; // ajutine
     private final OrthographicCamera gameCam;
     private final Viewport gamePort;
 
-    public PlayScreen(pony_dash_for_spikes_salvation_game game){
+    public PlayScreen(Main game){
         this.game = game;
-        texture = new Texture("twilight.png");
+        texture = new Texture("twilight_sparkle_one.png");
         gameCam = new OrthographicCamera();
         gamePort = new FitViewport(1920, 1080, gameCam);
     }
@@ -34,6 +32,7 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         game.batch.setProjectionMatrix(gameCam.combined); // Renderdab pildi kaameraga kaasa
         game.batch.begin(); // Opens window
+        game.makeAllPlayersMove();
         game.makePlayerMove();
         game.batch.end();
     }
