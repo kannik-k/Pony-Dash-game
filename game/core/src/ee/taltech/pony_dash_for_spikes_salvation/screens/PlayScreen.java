@@ -39,12 +39,12 @@ public class PlayScreen implements Screen {
         this.game = game;
         // texture = new Texture("twilight_sparkle_one.png");
         gameCam = new OrthographicCamera();
-        gamePort = new FitViewport(400, 256, gameCam);
+        gamePort = new FitViewport(Main.WIDTH / Main.PPM, Main.HEIGHT / Main.PPM, gameCam);
 
         // Loading map
         mapLoader = new TmxMapLoader();
         map  = mapLoader.load("testmap..tmx");
-        renderer = new OrthogonalTiledMapRenderer(map,1);
+        renderer = new OrthogonalTiledMapRenderer(map,1 / Main.PPM);
 
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
@@ -64,9 +64,9 @@ public class PlayScreen implements Screen {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
             bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set(rect.getX() + rect.getWidth() / 2, rect.getY() + rect.getHeight() / 2);
+            bdef.position.set((rect.getX() + rect.getWidth() / 2) / Main.PPM, ((rect.getY() + rect.getHeight() / 2) / Main.PPM));
             body = world.createBody(bdef);
-            shape.setAsBox(rect.getWidth() / 2, rect.getHeight() / 2);
+            shape.setAsBox((rect.getWidth() / 2) / Main.PPM, (rect.getHeight() / 2) / Main.PPM);
             fdef.shape = shape;
             body.createFixture(fdef);
         }
@@ -76,24 +76,21 @@ public class PlayScreen implements Screen {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
             bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set(rect.getX() + rect.getWidth() / 2, rect.getY() + rect.getHeight() / 2);
+            bdef.position.set((rect.getX() + rect.getWidth() / 2) / Main.PPM, ((rect.getY() + rect.getHeight() / 2) / Main.PPM));
             body = world.createBody(bdef);
-            shape.setAsBox(rect.getWidth() / 2, rect.getHeight() / 2);
+            shape.setAsBox((rect.getWidth() / 2) / Main.PPM, (rect.getHeight() / 2) / Main.PPM);
             fdef.shape = shape;
             body.createFixture(fdef);
         }
     }
 
     public  void hanelInput(float dt) {
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)){
-            player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2) {
-            player.b2body.applyLinearImpulse(new Vector2(25f, 0), player.b2body.getWorldCenter(), true);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x >= -2) {
-            player.b2body.applyLinearImpulse(new Vector2(-25f, 0), player.b2body.getWorldCenter(), true);
-        }
+        if (Gdx.input.isKeyPressed(Input.Keys.UP))
+            player.b2body.applyLinearImpulse(new Vector2(0, 1f), player.b2body.getWorldCenter(), true);
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2)
+            player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x >= -2)
+            player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
     }
 
     public void update(float dt) {
@@ -111,9 +108,11 @@ public class PlayScreen implements Screen {
 
     @Override
     public void render(float delta) {
+
         update(delta);
         Gdx.gl.glClearColor((float)0.941, (float)0.698, (float)0.784, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        b2dr.render(world, gameCam.combined);
         renderer.render();
         b2dr.render(world, gameCam.combined);
         game.batch.setProjectionMatrix(gameCam.combined); // Renderdab pildi kaameraga kaasa
