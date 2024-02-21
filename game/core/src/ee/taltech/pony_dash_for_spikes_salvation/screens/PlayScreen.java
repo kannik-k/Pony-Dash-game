@@ -6,11 +6,14 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -59,29 +62,54 @@ public class PlayScreen implements Screen {
         FixtureDef fdef = new FixtureDef();
         Body body;
 
-        // Ground Layer 8
-        for (MapObject object : map.getLayers().get(8).getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() / 2) / Main.PPM, ((rect.getY() + rect.getHeight() / 2) / Main.PPM));
-            body = world.createBody(bdef);
-            shape.setAsBox((rect.getWidth() / 2) / Main.PPM, (rect.getHeight() / 2) / Main.PPM);
-            fdef.shape = shape;
-            body.createFixture(fdef);
-        }
-
         // Platform Layer 10
-        for (MapObject object : map.getLayers().get(10).getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+        MapLayer collisionLayer = map.getLayers().get(10);
 
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() / 2) / Main.PPM, ((rect.getY() + rect.getHeight() / 2) / Main.PPM));
-            body = world.createBody(bdef);
-            shape.setAsBox((rect.getWidth() / 2) / Main.PPM, (rect.getHeight() / 2) / Main.PPM);
-            fdef.shape = shape;
-            body.createFixture(fdef);
+        for (MapObject object : collisionLayer.getObjects()) {
+            if (object instanceof PolygonMapObject) {
+                Polygon rect = ((PolygonMapObject) object).getPolygon();
+
+                // Get the bounding rectangle
+                Rectangle boundingRectangle = rect.getBoundingRectangle();
+
+                // Set the body position based on the bounding rectangle
+                bdef.position.set((boundingRectangle.x + boundingRectangle.width / 2) / Main.PPM,
+                        (boundingRectangle.y + boundingRectangle.height / 2) / Main.PPM);
+
+                // Set the fixture shape based on the bounding rectangle dimensions
+                shape.setAsBox(boundingRectangle.width / 2 / Main.PPM, boundingRectangle.height / 2 / Main.PPM);
+
+                // Rest of your code for creating the body and fixture
+                body = world.createBody(bdef);
+                fdef.shape = shape;
+                body.createFixture(fdef);
+            }
         }
+
+        // Layer 8 and 10 - PolygonMapObject
+        MapLayer collisionLayerGround = map.getLayers().get(8);
+
+        for (MapObject object : collisionLayerGround.getObjects()) {
+            if (object instanceof PolygonMapObject) {
+                Polygon rect = ((PolygonMapObject) object).getPolygon();
+
+                // Get the bounding rectangle
+                Rectangle boundingRectangle = rect.getBoundingRectangle();
+
+                // Set the body position based on the bounding rectangle
+                bdef.position.set((boundingRectangle.x + boundingRectangle.width / 2) / Main.PPM,
+                        (boundingRectangle.y + boundingRectangle.height / 2) / Main.PPM);
+
+                // Set the fixture shape based on the bounding rectangle dimensions
+                shape.setAsBox(boundingRectangle.width / 2 / Main.PPM, boundingRectangle.height / 2 / Main.PPM);
+
+                // Rest of your code for creating the body and fixture
+                body = world.createBody(bdef);
+                fdef.shape = shape;
+                body.createFixture(fdef);
+            }
+        }
+
     }
 
     public  void hanelInput(float dt) {
