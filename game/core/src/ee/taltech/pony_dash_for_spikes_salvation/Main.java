@@ -69,7 +69,7 @@ public class Main extends Game {
 	}
 
 	public void makePlayerMove() {
-		batch.draw(PlayScreen.texture, x , y); // draws texture
+		// batch.draw(PlayScreen.texture, x , y); // draws texture
 		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 			x -= 10;
 			sendPositionInfoToServer();
@@ -90,7 +90,7 @@ public class Main extends Game {
 
 	public void makeAllPlayersMove() {
 		for (Map.Entry<Integer, Player> set : players.entrySet()) {
-			batch.draw(PlayScreen.texture, set.getValue().getX(), set.getValue().getY());
+			// batch.draw(PlayScreen.texture, set.getValue().getX(), set.getValue().getY());
 		}
 	}
 
