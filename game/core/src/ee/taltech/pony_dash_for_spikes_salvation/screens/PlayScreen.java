@@ -63,58 +63,29 @@ public class PlayScreen implements Screen {
         Body body;
 
         // Platform Layer 10
-        MapLayer collisionLayer = map.getLayers().get(10);
+        MapLayer collisionLayerPlatform= map.getLayers().get(10);
 
-        for (MapObject object : collisionLayer.getObjects()) {
+        for (MapObject object : collisionLayerPlatform.getObjects()) {
             if (object instanceof PolygonMapObject) {
                 Polygon rect = ((PolygonMapObject) object).getPolygon();
 
-                // Get the bounding rectangle
                 Rectangle boundingRectangle = rect.getBoundingRectangle();
 
-                // Set the body position based on the bounding rectangle
                 bdef.position.set((boundingRectangle.x + boundingRectangle.width / 2) / Main.PPM,
                         (boundingRectangle.y + boundingRectangle.height / 2) / Main.PPM);
 
-                // Set the fixture shape based on the bounding rectangle dimensions
                 shape.setAsBox(boundingRectangle.width / 2 / Main.PPM, boundingRectangle.height / 2 / Main.PPM);
 
-                // Rest of your code for creating the body and fixture
                 body = world.createBody(bdef);
                 fdef.shape = shape;
                 body.createFixture(fdef);
             }
         }
-
-        // Layer 8 and 10 - PolygonMapObject
-        MapLayer collisionLayerGround = map.getLayers().get(8);
-
-        for (MapObject object : collisionLayerGround.getObjects()) {
-            if (object instanceof PolygonMapObject) {
-                Polygon rect = ((PolygonMapObject) object).getPolygon();
-
-                // Get the bounding rectangle
-                Rectangle boundingRectangle = rect.getBoundingRectangle();
-
-                // Set the body position based on the bounding rectangle
-                bdef.position.set((boundingRectangle.x + boundingRectangle.width / 2) / Main.PPM,
-                        (boundingRectangle.y + boundingRectangle.height / 2) / Main.PPM);
-
-                // Set the fixture shape based on the bounding rectangle dimensions
-                shape.setAsBox(boundingRectangle.width / 2 / Main.PPM, boundingRectangle.height / 2 / Main.PPM);
-
-                // Rest of your code for creating the body and fixture
-                body = world.createBody(bdef);
-                fdef.shape = shape;
-                body.createFixture(fdef);
-            }
-        }
-
     }
 
     public  void hanelInput(float dt) {
-        if (Gdx.input.isKeyPressed(Input.Keys.UP))
-            player.b2body.applyLinearImpulse(new Vector2(0, 1f), player.b2body.getWorldCenter(), true);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
+            player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2)
             player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x >= -2)

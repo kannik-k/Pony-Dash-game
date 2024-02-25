@@ -17,8 +17,8 @@ import java.util.Map;
 
 public class Main extends Game {
 
-	public static final int WIDTH = 400;
-	public static final int HEIGHT = 208;
+	public static final int WIDTH = 500;
+	public static final int HEIGHT = 308;
 	public static final float PPM = 100f; // pixels per meter
 	public SpriteBatch batch; // holds stuff, for example maps. One is enough.
 
