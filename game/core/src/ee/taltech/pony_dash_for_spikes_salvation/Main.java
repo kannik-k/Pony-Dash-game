@@ -2,6 +2,7 @@ package ee.taltech.pony_dash_for_spikes_salvation;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import ee.taltech.pony_dash_for_spikes_salvation.exceptions.ConnectionException;
 import ee.taltech.pony_dash_for_spikes_salvation.packets.PacketPlayerConnect;
 import ee.taltech.pony_dash_for_spikes_salvation.packets.PacketSendCoordinates;
 import ee.taltech.pony_dash_for_spikes_salvation.screens.PlayScreen;
@@ -16,19 +17,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Main extends Game {
-
-	public static final int WIDTH = 500;
-	public static final int HEIGHT = 308;
-	public static final float PPM = 100f; // pixels per meter
-	public SpriteBatch batch; // holds stuff, for example maps. One is enough.
-
-	private int x = 0, y = 0;
-
+	private SpriteBatch batch; // holds stuff, for example maps. One is enough.
+	private int x = 0;
+	private int y = 0;
 	private Client client;
 	private Map<Integer, Player> players = new HashMap<>();
 
-	public Map<Integer, Player> getPlayers() {
-		return players;
+	public SpriteBatch getBatch() {
+		return batch;
 	}
 
 	@Override
@@ -38,11 +34,10 @@ public class Main extends Game {
 		Network.register(client);
 		batch = new SpriteBatch();
 		setScreen(new PlayScreen(this));
-		//client.sendTCP("Start");
 		try {
 			client.connect(5000, "localhost", 8080, 8081);
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			throw new ConnectionException(e.getMessage());
 		}
 		PacketPlayerConnect packetPlayerConnect = new PacketPlayerConnect();
 		packetPlayerConnect.setPlayerName("player");
@@ -53,7 +48,6 @@ public class Main extends Game {
 				if (object instanceof PacketPlayerConnect) {
 					Player player = new Player(((PacketPlayerConnect) object).getPlayerName());
 					players.put(((PacketPlayerConnect) object).getPlayerID(), player);
-					System.out.println(players);
 				}
 				if (object instanceof PacketSendCoordinates) {
 					Player player = players.get(((PacketSendCoordinates) object).getPlayerID());
@@ -73,7 +67,7 @@ public class Main extends Game {
 	}
 
 	public void makePlayerMove() {
-		// batch.draw(PlayScreen.texture, x , y); // draws texture
+		batch.draw(PlayScreen.getTexture(), x , y); // draws texture
 		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 			x -= 10;
 			sendPositionInfoToServer();
@@ -92,15 +86,14 @@ public class Main extends Game {
 		}
 	}
 
+	/**
+	 * Draw all player movements.
+	 * Ajutiselt välja kommenteeritud (katsetame collison'i).
+	 */
 	public void makeAllPlayersMove() {
 		for (Map.Entry<Integer, Player> set : players.entrySet()) {
-			// batch.draw(PlayScreen.texture, set.getValue().getX(), set.getValue().getY());
+			batch.draw(PlayScreen.getTexture(), set.getValue().getX(), set.getValue().getY());
 		}
-	}
-
-	@Override
-	public void render() {
-		super.render(); // Delegate render to playscreen
 	}
 	
 	@Override
@@ -109,7 +102,7 @@ public class Main extends Game {
 		try {
 			client.dispose();
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			throw new ConnectionException(e.getMessage());
 		}
 		batch.dispose();
 	}

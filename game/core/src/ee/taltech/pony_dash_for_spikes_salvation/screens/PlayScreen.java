@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -24,7 +23,10 @@ import ee.taltech.pony_dash_for_spikes_salvation.sprites.PonySprite;
 
 public class PlayScreen implements Screen {
     private final Main game;
-    // public static Texture texture = null; // ajutine
+    private static final Texture texture = new Texture("twilight_sparkle_one.png");
+    private static final int WIDTH = 500;
+    private static final int HEIGHT = 308;
+    private static final float PPM = 100f; // pixels per meter
     private final OrthographicCamera gameCam;
     private final Viewport gamePort;
 
@@ -38,16 +40,23 @@ public class PlayScreen implements Screen {
     private Box2DDebugRenderer b2dr;
     private PonySprite player;
 
+    public static float getPPM() {
+        return PPM;
+    }
+
+    public static Texture getTexture() {
+        return texture;
+    }
+
     public PlayScreen(Main game){
         this.game = game;
-        // texture = new Texture("twilight_sparkle_one.png");
         gameCam = new OrthographicCamera();
-        gamePort = new FitViewport(Main.WIDTH / Main.PPM, Main.HEIGHT / Main.PPM, gameCam);
+        gamePort = new FitViewport(WIDTH / PPM, HEIGHT / PPM, gameCam);
 
         // Loading map
         mapLoader = new TmxMapLoader();
         map  = mapLoader.load("testmap..tmx");
-        renderer = new OrthogonalTiledMapRenderer(map,1 / Main.PPM);
+        renderer = new OrthogonalTiledMapRenderer(map,1 / PPM);
 
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
@@ -71,10 +80,10 @@ public class PlayScreen implements Screen {
 
                 Rectangle boundingRectangle = rect.getBoundingRectangle();
 
-                bdef.position.set((boundingRectangle.x + boundingRectangle.width / 2) / Main.PPM,
-                        (boundingRectangle.y + boundingRectangle.height / 2) / Main.PPM);
+                bdef.position.set((boundingRectangle.x + boundingRectangle.width / 2) / PPM,
+                        (boundingRectangle.y + boundingRectangle.height / 2) / PPM);
 
-                shape.setAsBox(boundingRectangle.width / 2 / Main.PPM, boundingRectangle.height / 2 / Main.PPM);
+                shape.setAsBox(boundingRectangle.width / 2 / PPM, boundingRectangle.height / 2 / PPM);
 
                 body = world.createBody(bdef);
                 fdef.shape = shape;
@@ -83,26 +92,27 @@ public class PlayScreen implements Screen {
         }
     }
 
-    public  void hanelInput(float dt) {
+    public  void hanelInput(float dt) { //dt parameetrit on vb hiljem vaja, võtta demopäevaks ära
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
-            player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2)
-            player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x >= -2)
-            player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
+            player.getB2body().applyLinearImpulse(new Vector2(0, 4f), player.getB2body().getWorldCenter(), true);
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.getB2body().getLinearVelocity().x <= 2)
+            player.getB2body().applyLinearImpulse(new Vector2(0.1f, 0), player.getB2body().getWorldCenter(), true);
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.getB2body().getLinearVelocity().x >= -2)
+            player.getB2body().applyLinearImpulse(new Vector2(-0.1f, 0), player.getB2body().getWorldCenter(), true);
     }
 
     public void update(float dt) {
         hanelInput(dt);
-        gameCam.position.x = player.b2body.getPosition().x;
-        gameCam.position.y = player.b2body.getPosition().y;
+        gameCam.position.x = player.getB2body().getPosition().x;
+        gameCam.position.y = player.getB2body().getPosition().y;
         world.step(1/60f, 6, 2);
         gameCam.update();
         renderer.setView(gameCam);
     }
+
     @Override
     public void show() {
-
+        //Will use later
     }
 
     @Override
@@ -114,11 +124,11 @@ public class PlayScreen implements Screen {
         b2dr.render(world, gameCam.combined);
         renderer.render();
         b2dr.render(world, gameCam.combined);
-        game.batch.setProjectionMatrix(gameCam.combined); // Renderdab pildi kaameraga kaasa
-        game.batch.begin(); // Opens window
+        game.getBatch().setProjectionMatrix(gameCam.combined); // Renderdab pildi kaameraga kaasa
+        game.getBatch().begin(); // Opens window
         game.makeAllPlayersMove();
         game.makePlayerMove();
-        game.batch.end();
+        game.getBatch().end();
     }
 
     @Override
@@ -128,7 +138,7 @@ public class PlayScreen implements Screen {
 
     @Override
     public void pause() {
-
+        //Will use later
     }
 
     public TiledMap getMap() {
@@ -141,16 +151,16 @@ public class PlayScreen implements Screen {
 
     @Override
     public void resume() {
-
+        //Will use later
     }
 
     @Override
     public void hide() {
-
+        //Will use later
     }
 
     @Override
     public void dispose() {
-
+        //Will use later
     }
 }

@@ -7,7 +7,12 @@ import ee.taltech.pony_dash_for_spikes_salvation.packets.PacketPlayerConnect;
 import ee.taltech.pony_dash_for_spikes_salvation.packets.PacketSendCoordinates;
 
 public class Network {
-    static public void register (EndPoint endPoint) {
+
+    private Network() {
+        // Prevent instantiation
+    }
+
+    public static void register (EndPoint endPoint) {
         Kryo kryo = endPoint.getKryo();
         kryo.register(Packet.class);
         kryo.register(PacketPlayerConnect.class);
