@@ -1,0 +1,47 @@
+
+pony_sprites.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+applejack
+  rotate: false
+  xy: 1, 517
+  size: 384, 256
+  orig: 384, 256
+  offset: 0, 0
+  index: -1
+fluttershy
+  rotate: false
+  xy: 1, 259
+  size: 384, 256
+  orig: 384, 256
+  offset: 0, 0
+  index: -1
+pinkie
+  rotate: false
+  xy: 387, 517
+  size: 384, 256
+  orig: 384, 256
+  offset: 0, 0
+  index: -1
+rainbow
+  rotate: false
+  xy: 1, 1
+  size: 384, 256
+  orig: 384, 256
+  offset: 0, 0
+  index: -1
+rarity
+  rotate: false
+  xy: 387, 259
+  size: 384, 256
+  orig: 384, 256
+  offset: 0, 0
+  index: -1
+twilight
+  rotate: false
+  xy: 387, 1
+  size: 384, 256
+  orig: 384, 256
+  offset: 0, 0
+  index: -1
