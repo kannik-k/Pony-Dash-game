@@ -11,8 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import ee.taltech.pony_dash_for_spikes_salvation.screens.PlayScreen;
 
-
-import static ee.taltech.pony_dash_for_spikes_salvation.screens.PlayScreen.PPM;
+import static ee.taltech.pony_dash_for_spikes_salvation.screens.PlayScreen.getPPM;
 
 public class PonySprite extends Sprite {
     private enum State {FALLING, JUMPING, STANDING, RUN}
@@ -63,7 +62,7 @@ public class PonySprite extends Sprite {
 
         definePony();
 
-        setBounds(418, 65, 32 / PPM, 32 / PPM);
+        setBounds(418, 65, 32 / getPPM(), 32 / getPPM());
         setRegion(ponyStill);
     }
 
@@ -124,13 +123,13 @@ public class PonySprite extends Sprite {
 
     public void definePony() {
         BodyDef bdef = new BodyDef();
-        bdef.position.set(32 / PlayScreen.getPPM(), 80 / PlayScreen.getPPM());
+        bdef.position.set(32 / getPPM(), 80 / getPPM());
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(14 / PlayScreen.getPPM());
+        shape.setRadius(14 / getPPM());
 
         fdef.shape = shape;
         b2body.createFixture(fdef);

@@ -28,7 +28,7 @@ public class PlayScreen implements Screen {
     private TextureAtlas atlas;
     private static final int WIDTH = 500;
     private static final int HEIGHT = 308;
-    public static final float PPM = 100f; // pixels per meter
+    private static final float PPM = 100f; // pixels per meter
     private final OrthographicCamera gameCam;
     private final Viewport gamePort;
 
@@ -165,6 +165,7 @@ public class PlayScreen implements Screen {
     public void resize(int width, int height) {
         gamePort.update(width, height);
     }
+
 
     @Override
     public void pause() {
