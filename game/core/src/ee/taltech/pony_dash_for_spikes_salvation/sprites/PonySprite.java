@@ -44,7 +44,7 @@ public class PonySprite extends Sprite {
         Array<TextureRegion> frames = new Array<>();
 
         // Pony run animation
-        for (int i = 15; i < 17; i++) {
+        for (int i = 15; i < 18; i++) {
             frames.add(new TextureRegion(getTexture(), i * 32 + 2, 64, 32, 32));
         }
         ponyRun = new Animation<>(0.09f, frames);
