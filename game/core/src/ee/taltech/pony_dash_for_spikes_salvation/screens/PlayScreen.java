@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
@@ -24,6 +25,7 @@ import ee.taltech.pony_dash_for_spikes_salvation.sprites.PonySprite;
 public class PlayScreen implements Screen {
     private final Main game;
     private static final Texture texture = new Texture("twilight_sparkle_one.png");
+    private TextureAtlas atlas;
     private static final int WIDTH = 500;
     private static final int HEIGHT = 308;
     private static final float PPM = 100f; // pixels per meter
@@ -53,6 +55,8 @@ public class PlayScreen implements Screen {
         gameCam = new OrthographicCamera();
         gamePort = new FitViewport(WIDTH / PPM, HEIGHT / PPM, gameCam);
 
+        atlas = new TextureAtlas("pony_sprites.pack");
+
         // Loading map
         mapLoader = new TmxMapLoader();
         map  = mapLoader.load("testmap..tmx");
@@ -63,7 +67,7 @@ public class PlayScreen implements Screen {
         world = new World(new Vector2(0, -10), true);
         b2dr = new Box2DDebugRenderer();
 
-        player = new PonySprite(this.getWorld());
+        player = new PonySprite(world, this);
 
         // Ajutine, tuleb hiljem ümber tõsta
         BodyDef bdef = new BodyDef();
@@ -90,9 +94,33 @@ public class PlayScreen implements Screen {
                 body.createFixture(fdef);
             }
         }
+
+        // Ground, demporary
+        MapLayer collisionLayerGround = map.getLayers().get(8);
+
+        for (MapObject object : collisionLayerGround.getObjects()) {
+            if (object instanceof PolygonMapObject) {
+                Polygon rect = ((PolygonMapObject) object).getPolygon();
+
+                Rectangle boundingRectangle = rect.getBoundingRectangle();
+
+                bdef.position.set((boundingRectangle.x + boundingRectangle.width / 2) / PPM,
+                        (boundingRectangle.y + boundingRectangle.height / 2) / PPM);
+
+                shape.setAsBox(boundingRectangle.width / 2 / PPM, boundingRectangle.height / 2 / PPM);
+
+                body = world.createBody(bdef);
+                fdef.shape = shape;
+                body.createFixture(fdef);
+            }
+        }
     }
 
-    public  void hanelInput(float dt) { //dt parameetrit on vb hiljem vaja, võtta demopäevaks ära
+    public TextureAtlas getAtlas() {
+        return atlas;
+    }
+
+    public  void hanelInput() { //dt parameetrit on vb hiljem vaja, võtta demopäevaks ära
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
             player.getB2body().applyLinearImpulse(new Vector2(0, 4f), player.getB2body().getWorldCenter(), true);
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.getB2body().getLinearVelocity().x <= 2)
@@ -102,7 +130,8 @@ public class PlayScreen implements Screen {
     }
 
     public void update(float dt) {
-        hanelInput(dt);
+        hanelInput();
+        player.update(dt);
         gameCam.position.x = player.getB2body().getPosition().x;
         gameCam.position.y = player.getB2body().getPosition().y;
         world.step(1/60f, 6, 2);
@@ -126,6 +155,7 @@ public class PlayScreen implements Screen {
         b2dr.render(world, gameCam.combined);
         game.getBatch().setProjectionMatrix(gameCam.combined); // Renderdab pildi kaameraga kaasa
         game.getBatch().begin(); // Opens window
+        player.draw(game.getBatch());
         game.makeAllPlayersMove();
         game.makePlayerMove();
         game.getBatch().end();
@@ -135,6 +165,7 @@ public class PlayScreen implements Screen {
     public void resize(int width, int height) {
         gamePort.update(width, height);
     }
+
 
     @Override
     public void pause() {
