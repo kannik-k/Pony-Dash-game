@@ -9,32 +9,37 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import ee.taltech.pony_dash_for_spikes_salvation.Player;
 import ee.taltech.pony_dash_for_spikes_salvation.screens.PlayScreen;
+import sun.awt.image.PixelConverter;
 
 import static ee.taltech.pony_dash_for_spikes_salvation.screens.PlayScreen.getPPM;
 
 public class PonySprite extends Sprite {
-    private enum State {FALLING, JUMPING, STANDING, RUN}
+
+
+    private enum State {FALLING, JUMPING, STANDING, RUN;}
     private State currentState;
     private State previousState;
     private final World world;
     private Body b2body;
-
     // Animation
+
     private final TextureRegion ponyStill;
     private final Animation<TextureRegion> ponyRun;
     private final TextureRegion ponyJump;
     private final TextureRegion ponyFall;
     private boolean runningRight;
     private float stateTimer;
-
+    private Player player;
     public Body getB2body() {
         return b2body;
     }
 
-    public PonySprite(World world, PlayScreen screen) {
+    public PonySprite(World world, PlayScreen screen, Player player) {
         super(screen.getAtlas().findRegion("twilight"));
         this.world = world;
+        this.player = player;
         currentState = State.STANDING;
         previousState = State.STANDING;
         this.runningRight = true;
@@ -66,12 +71,23 @@ public class PonySprite extends Sprite {
         setRegion(ponyStill);
     }
 
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
     public float getStateTimer(){
         return stateTimer;
     }
 
     public void update(float dt) {
-        setPosition(b2body.getPosition(). x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
+        float x = player.getX();
+        float y = player.getY();
+        setPosition(x - getWidth() / 2, y - getHeight() / 2);
+        b2body.getPosition().set(x, y);
         setRegion(getFrame(dt));
     }
 

@@ -1,5 +1,6 @@
 package ee.taltech.pony_dash_for_spikes_salvation;
 
+import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import ee.taltech.pony_dash_for_spikes_salvation.exceptions.ConnectionException;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.esotericsoftware.kryonet.Client;
+import ee.taltech.pony_dash_for_spikes_salvation.sprites.PonySprite;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -18,13 +20,20 @@ import java.util.Map;
 
 public class Main extends Game {
 	private SpriteBatch batch; // holds stuff, for example maps. One is enough.
-	private int x = 0;
-	private int y = 0;
 	private Client client;
 	private Map<Integer, Player> players = new HashMap<>();
+	private Player myPlayer;
 
 	public SpriteBatch getBatch() {
 		return batch;
+	}
+
+	public Client getClient() {
+		return client;
+	}
+
+	public Map<Integer, Player> getPlayers() {
+		return players;
 	}
 
 	@Override
@@ -33,7 +42,9 @@ public class Main extends Game {
 		client.start();
 		Network.register(client);
 		batch = new SpriteBatch();
-		setScreen(new PlayScreen(this));
+		myPlayer = new Player("player");
+		PlayScreen playScreen = new PlayScreen(this);
+		setScreen(playScreen);
 		try {
 			client.connect(5000, "localhost", 8080, 8081);
 		} catch (IOException e) {
@@ -46,8 +57,14 @@ public class Main extends Game {
 			@Override
 			public void received(Connection connection, Object object) {
 				if (object instanceof PacketPlayerConnect) {
-					Player player = new Player(((PacketPlayerConnect) object).getPlayerName());
-					players.put(((PacketPlayerConnect) object).getPlayerID(), player);
+					if (((PacketPlayerConnect) object).getPlayerID() == connection.getID()) {
+						players.put(connection.getID(), myPlayer);
+					} else {
+						Player player = new Player(((PacketPlayerConnect) object).getPlayerName());
+						players.put(((PacketPlayerConnect) object).getPlayerID(), player);
+						playScreen.createNewSprite(player);
+						System.out.println("NEW PLAYER JOINED");
+					}
 				}
 				if (object instanceof PacketSendCoordinates) {
 					Player player = players.get(((PacketSendCoordinates) object).getPlayerID());
@@ -58,42 +75,16 @@ public class Main extends Game {
 		}));
 	}
 
+	public Player getMyPlayer() {
+		return myPlayer;
+	}
+
 	public void sendPositionInfoToServer() {
 		PacketSendCoordinates packetSendCoordinates = new PacketSendCoordinates();
-		packetSendCoordinates.setX(x);
-		packetSendCoordinates.setY(y);
+		packetSendCoordinates.setX(myPlayer.getSprite().getB2body().getPosition().x);
+		packetSendCoordinates.setY(myPlayer.getSprite().getB2body().getPosition().y);
 		packetSendCoordinates.setPlayerID(client.getID());
 		client.sendUDP(packetSendCoordinates);
-	}
-
-	public void makePlayerMove() {
-		batch.draw(PlayScreen.getTexture(), x , y); // draws texture
-		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-			x -= 10;
-			sendPositionInfoToServer();
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-			x += 10;
-			sendPositionInfoToServer();
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-			y += 10;
-			sendPositionInfoToServer();
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-			y -= 10;
-			sendPositionInfoToServer();
-		}
-	}
-
-	/**
-	 * Draw all player movements.
-	 * Ajutiselt välja kommenteeritud (katsetame collison'i).
-	 */
-	public void makeAllPlayersMove() {
-		for (Map.Entry<Integer, Player> set : players.entrySet()) {
-			batch.draw(PlayScreen.getTexture(), set.getValue().getX(), set.getValue().getY());
-		}
 	}
 	
 	@Override
