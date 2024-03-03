@@ -11,14 +11,13 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import ee.taltech.pony_dash_for_spikes_salvation.Player;
 import ee.taltech.pony_dash_for_spikes_salvation.screens.PlayScreen;
-import sun.awt.image.PixelConverter;
 
 import static ee.taltech.pony_dash_for_spikes_salvation.screens.PlayScreen.getPPM;
 
 public class PonySprite extends Sprite {
 
 
-    private enum State {FALLING, JUMPING, STANDING, RUN;}
+    private enum State {FALLING, JUMPING, STANDING, RUN}
     private State currentState;
     private State previousState;
     private final World world;
@@ -32,10 +31,23 @@ public class PonySprite extends Sprite {
     private boolean runningRight;
     private float stateTimer;
     private Player player;
+
+    /**
+     * Gets b 2 body.
+     *
+     * @return the b 2 body
+     */
     public Body getB2body() {
         return b2body;
     }
 
+    /**
+     * Instantiates a new Pony sprite.
+     *
+     * @param world  the world
+     * @param screen the screen
+     * @param player the player
+     */
     public PonySprite(World world, PlayScreen screen, Player player) {
         super(screen.getAtlas().findRegion("twilight"));
         this.world = world;
@@ -71,18 +83,38 @@ public class PonySprite extends Sprite {
         setRegion(ponyStill);
     }
 
+    /**
+     * Gets player.
+     *
+     * @return the player
+     */
     public Player getPlayer() {
         return player;
     }
 
+    /**
+     * Sets player.
+     *
+     * @param player the player
+     */
     public void setPlayer(Player player) {
         this.player = player;
     }
 
+    /**
+     * Get state timer float.
+     *
+     * @return the float
+     */
     public float getStateTimer(){
         return stateTimer;
     }
 
+    /**
+     * Update player.
+     *
+     * @param dt the dt
+     */
     public void update(float dt) {
         float x = player.getX();
         float y = player.getY();
@@ -91,6 +123,12 @@ public class PonySprite extends Sprite {
         setRegion(getFrame(dt));
     }
 
+    /**
+     * Gets frame.
+     *
+     * @param dt the dt
+     * @return the frame
+     */
     public TextureRegion getFrame(float dt) {
         currentState = getState();
 
@@ -125,6 +163,11 @@ public class PonySprite extends Sprite {
         return region;
     }
 
+    /**
+     * Gets state.
+     *
+     * @return the state
+     */
     public State getState() {
         if (b2body.getLinearVelocity().y > 0) {
             return State.JUMPING;
@@ -137,6 +180,10 @@ public class PonySprite extends Sprite {
         }
     }
 
+
+    /**
+     * Define pony.
+     */
     public void definePony() {
         BodyDef bdef = new BodyDef();
         bdef.position.set(32 / getPPM(), 80 / getPPM());
