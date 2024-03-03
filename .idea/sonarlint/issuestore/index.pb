@@ -1,8 +1,6 @@
 
 I
 game/desktop/build.gradle,2\d\2d833553c611cd0ae4187e3faa7f2c0f731e8cb9
-ê
-`game/core/src/ee/taltech/pony_dash_for_spikes_salvation/pony_dash_for_spikes_salvation_game.java,1\7\17e90c0bf1f2b0129ed3dd4b4aa56dfaab51d319
 
 Ogame/core/src/ee/taltech/pony_dash_for_spikes_salvation/screens/PlayScreen.java,9\a\9a86e8359945e9e03cdb76919ff3f7202e11db0b
 q
@@ -11,3 +9,17 @@ S
 #.idea/sonarlint/issuestore/index.pb,9\f\9fe84ebb15faf917b7def6236dba604453cc61e0
 ]
 -.idea/sonarlint/securityhotspotstore/index.pb,8\8\88a9255124c95bdc913197c120a8d560edc59c8e
+
+Ogame/core/src/ee/taltech/pony_dash_for_spikes_salvation/sprites/PonySprite.java,f\3\f30ecb5552d7873463e6e2975cf9890ba66fb635
+s
+Cgame/core/src/ee/taltech/pony_dash_for_spikes_salvation/Player.java,e\5\e5cf6be071112e9a162b37e073cfc0907b1a6bd3
+ä
+Zgame/core/src/ee/taltech/pony_dash_for_spikes_salvation/packets/PacketSendCoordinates.java,4\1\411e047f59fc8defbadb99b22d0790de126306eb
+{
+Kgame/core/src/ee/taltech/pony_dash_for_spikes_salvation/packets/Packet.java,9\4\94749e698d342165b9d8c3f7da804b2cbb3ebc12
+à
+Xgame/core/src/ee/taltech/pony_dash_for_spikes_salvation/packets/PacketPlayerConnect.java,4\c\4c7a6849079b2e7ace4c191258cf4ea4f7976d27
+t
+Dgame/core/src/ee/taltech/pony_dash_for_spikes_salvation/Network.java,7\3\73ff4dd76821d89074809600d823c8a13b4b9418
+ã
+[game/core/src/ee/taltech/pony_dash_for_spikes_salvation/exceptions/ConnectionException.java,f\3\f395465238f01906ec2dc559463aea5cc2fb7889

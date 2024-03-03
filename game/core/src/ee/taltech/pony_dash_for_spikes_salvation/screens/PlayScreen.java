@@ -216,6 +216,11 @@ public class PlayScreen implements Screen {
         //Will use later
     }
 
+    /**
+     * Render the play-screen (background, world and players).
+     *
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor((float)0.941, (float)0.698, (float)0.784, 1);
@@ -225,12 +230,18 @@ public class PlayScreen implements Screen {
         b2dr.render(world, gameCam.combined);
         game.getBatch().begin(); // Opens window
         update(delta);
-        game.getBatch().setProjectionMatrix(gameCam.combined); // Renderdab pildi kaameraga kaasa
+        game.getBatch().setProjectionMatrix(gameCam.combined); // Renders the game-cam
         player.draw(game.getBatch());
         game.getBatch().end();
         game.sendPositionInfoToServer();
     }
 
+    /**
+     * Updates the size of the viewport.
+     *
+     * @param width of viewport
+     * @param height of viewport
+     */
     @Override
     public void resize(int width, int height) {
         gamePort.update(width, height);
