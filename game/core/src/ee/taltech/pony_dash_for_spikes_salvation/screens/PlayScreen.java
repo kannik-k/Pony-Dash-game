@@ -47,14 +47,30 @@ public class PlayScreen implements Screen {
     private PonySprite player;
     private SpriteBatch batch;
 
+    /**
+     * Gets ppm.
+     *
+     * @return the ppm
+     */
     public static float getPPM() {
         return PPM;
     }
 
+    /**
+     * Gets texture.
+     *
+     * @return the texture
+     */
     public static Texture getTexture() {
         return texture;
     }
 
+    /**
+     * Instantiates a new Play screen.
+     * Temporarily has body defining and collision.
+     *
+     * @param game the game
+     */
     public PlayScreen(Main game){
         this.game = game;
         batch = game.getBatch();
@@ -123,15 +139,28 @@ public class PlayScreen implements Screen {
         }
     }
 
+    /**
+     * Create new sprite.
+     *
+     * @param player the player
+     */
     public void createNewSprite(Player player) {
         PonySprite sprite = new PonySprite(world, this, player);
         player.setSprite(sprite);
     }
 
+    /**
+     * Gets atlas.
+     *
+     * @return the atlas
+     */
     public TextureAtlas getAtlas() {
         return atlas;
     }
 
+    /**
+     * Handel input and define movements.
+     */
     public  void hanelInput() {
         Player myPlayer = game.getMyPlayer();
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
@@ -151,6 +180,11 @@ public class PlayScreen implements Screen {
         }
     }
 
+    /**
+     * Update screen.
+     *
+     * @param dt the dt
+     */
     public void update(float dt) {
         player.update(dt);
         hanelInput();
@@ -162,6 +196,11 @@ public class PlayScreen implements Screen {
         renderer.setView(gameCam);
     }
 
+    /**
+     * Update all players.
+     *
+     * @param dt the dt
+     */
     public void updateAllPlayers(float dt) {
         Map<Integer, Player> playerMap = game.getPlayers();
         for (Map.Entry<Integer, Player> set : playerMap.entrySet()) {
@@ -179,7 +218,6 @@ public class PlayScreen implements Screen {
 
     @Override
     public void render(float delta) {
-
         Gdx.gl.glClearColor((float)0.941, (float)0.698, (float)0.784, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         b2dr.render(world, gameCam.combined);
@@ -204,10 +242,20 @@ public class PlayScreen implements Screen {
         //Will use later
     }
 
+    /**
+     * Gets map.
+     *
+     * @return the map
+     */
     public TiledMap getMap() {
         return map;
     }
 
+    /**
+     * Gets world.
+     *
+     * @return the world
+     */
     public World getWorld() {
         return world;
     }
