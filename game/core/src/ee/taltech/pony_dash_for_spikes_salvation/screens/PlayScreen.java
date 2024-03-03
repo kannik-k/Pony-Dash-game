@@ -6,7 +6,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -45,7 +44,6 @@ public class PlayScreen implements Screen {
     private World world;
     private Box2DDebugRenderer b2dr;
     private PonySprite player;
-    private SpriteBatch batch;
 
     /**
      * Gets ppm.
@@ -73,7 +71,6 @@ public class PlayScreen implements Screen {
      */
     public PlayScreen(Main game){
         this.game = game;
-        batch = game.getBatch();
         gameCam = new OrthographicCamera();
         gamePort = new FitViewport(WIDTH / PPM, HEIGHT / PPM, gameCam);
 

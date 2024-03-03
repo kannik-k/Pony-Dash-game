@@ -1,6 +1,5 @@
 package ee.taltech.pony_dash_for_spikes_salvation;
 
-import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import ee.taltech.pony_dash_for_spikes_salvation.exceptions.ConnectionException;
@@ -8,11 +7,8 @@ import ee.taltech.pony_dash_for_spikes_salvation.packets.PacketPlayerConnect;
 import ee.taltech.pony_dash_for_spikes_salvation.packets.PacketSendCoordinates;
 import ee.taltech.pony_dash_for_spikes_salvation.screens.PlayScreen;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.esotericsoftware.kryonet.Client;
-import ee.taltech.pony_dash_for_spikes_salvation.sprites.PonySprite;
 
 import java.io.IOException;
 import java.util.HashMap;
