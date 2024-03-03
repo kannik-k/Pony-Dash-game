@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -20,7 +21,10 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
+import ee.taltech.pony_dash_for_spikes_salvation.Player;
 import ee.taltech.pony_dash_for_spikes_salvation.sprites.PonySprite;
+
+import java.util.Map;
 
 public class PlayScreen implements Screen {
     private final Main game;
@@ -41,6 +45,7 @@ public class PlayScreen implements Screen {
     private World world;
     private Box2DDebugRenderer b2dr;
     private PonySprite player;
+    private SpriteBatch batch;
 
     public static float getPPM() {
         return PPM;
@@ -52,6 +57,7 @@ public class PlayScreen implements Screen {
 
     public PlayScreen(Main game){
         this.game = game;
+        batch = game.getBatch();
         gameCam = new OrthographicCamera();
         gamePort = new FitViewport(WIDTH / PPM, HEIGHT / PPM, gameCam);
 
@@ -67,7 +73,8 @@ public class PlayScreen implements Screen {
         world = new World(new Vector2(0, -10), true);
         b2dr = new Box2DDebugRenderer();
 
-        player = new PonySprite(world, this);
+        player = new PonySprite(world, this, game.getMyPlayer());
+        game.getMyPlayer().setSprite(player);
 
         // Ajutine, tuleb hiljem ümber tõsta
         BodyDef bdef = new BodyDef();
@@ -95,7 +102,7 @@ public class PlayScreen implements Screen {
             }
         }
 
-        // Ground, demporary
+        // Ground, temporary
         MapLayer collisionLayerGround = map.getLayers().get(8);
 
         for (MapObject object : collisionLayerGround.getObjects()) {
@@ -116,27 +123,53 @@ public class PlayScreen implements Screen {
         }
     }
 
+    public void createNewSprite(Player player) {
+        PonySprite sprite = new PonySprite(world, this, player);
+        player.setSprite(sprite);
+    }
+
     public TextureAtlas getAtlas() {
         return atlas;
     }
 
-    public  void hanelInput() { //dt parameetrit on vb hiljem vaja, võtta demopäevaks ära
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
+    public  void hanelInput() {
+        Player myPlayer = game.getMyPlayer();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
             player.getB2body().applyLinearImpulse(new Vector2(0, 4f), player.getB2body().getWorldCenter(), true);
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.getB2body().getLinearVelocity().x <= 2)
+            myPlayer.setX(player.getB2body().getPosition().x);
+            myPlayer.setY(player.getB2body().getPosition().y);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.getB2body().getLinearVelocity().x <= 2) {
             player.getB2body().applyLinearImpulse(new Vector2(0.1f, 0), player.getB2body().getWorldCenter(), true);
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.getB2body().getLinearVelocity().x >= -2)
+            myPlayer.setX(player.getB2body().getPosition().x);
+            myPlayer.setY(player.getB2body().getPosition().y);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.getB2body().getLinearVelocity().x >= -2) {
             player.getB2body().applyLinearImpulse(new Vector2(-0.1f, 0), player.getB2body().getWorldCenter(), true);
+            myPlayer.setX(player.getB2body().getPosition().x);
+            myPlayer.setY(player.getB2body().getPosition().y);
+        }
     }
 
     public void update(float dt) {
-        hanelInput();
         player.update(dt);
+        hanelInput();
+        updateAllPlayers(dt);
         gameCam.position.x = player.getB2body().getPosition().x;
         gameCam.position.y = player.getB2body().getPosition().y;
         world.step(1/60f, 6, 2);
         gameCam.update();
         renderer.setView(gameCam);
+    }
+
+    public void updateAllPlayers(float dt) {
+        Map<Integer, Player> playerMap = game.getPlayers();
+        for (Map.Entry<Integer, Player> set : playerMap.entrySet()) {
+            if (set.getKey() != game.getClient().getID()) {
+                set.getValue().getSprite().update(dt);
+                set.getValue().getSprite().draw(game.getBatch());
+           }
+        }
     }
 
     @Override
@@ -147,18 +180,17 @@ public class PlayScreen implements Screen {
     @Override
     public void render(float delta) {
 
-        update(delta);
         Gdx.gl.glClearColor((float)0.941, (float)0.698, (float)0.784, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         b2dr.render(world, gameCam.combined);
         renderer.render();
         b2dr.render(world, gameCam.combined);
-        game.getBatch().setProjectionMatrix(gameCam.combined); // Renderdab pildi kaameraga kaasa
         game.getBatch().begin(); // Opens window
+        update(delta);
+        game.getBatch().setProjectionMatrix(gameCam.combined); // Renderdab pildi kaameraga kaasa
         player.draw(game.getBatch());
-        game.makeAllPlayersMove();
-        game.makePlayerMove();
         game.getBatch().end();
+        game.sendPositionInfoToServer();
     }
 
     @Override
