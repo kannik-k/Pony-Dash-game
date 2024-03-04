@@ -1,6 +1,5 @@
 package ee.taltech.pony_dash_for_spikes_salvation;
 
-import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import ee.taltech.pony_dash_for_spikes_salvation.exceptions.ConnectionException;
@@ -8,11 +7,8 @@ import ee.taltech.pony_dash_for_spikes_salvation.packets.PacketPlayerConnect;
 import ee.taltech.pony_dash_for_spikes_salvation.packets.PacketSendCoordinates;
 import ee.taltech.pony_dash_for_spikes_salvation.screens.PlayScreen;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.esotericsoftware.kryonet.Client;
-import ee.taltech.pony_dash_for_spikes_salvation.sprites.PonySprite;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -36,6 +32,16 @@ public class Main extends Game {
 		return players;
 	}
 
+	/**
+	 * Create a new client and player, create listener.
+	 * <p>
+	 * 	First a new client is created and registered to the network.
+	 * 	Secondly a new batch, player and play-screen are created.
+	 * 	Next the client is connected to a port, alternatively a ConnectionException is thrown if the connection fails.
+	 * 	A new PacketPlayerConnect packet is created that is then sent to the server.
+	 * 	A listener is added.
+	 * </p>
+	 */
 	@Override
 	public void create () {
 		client = new Client();
@@ -54,6 +60,19 @@ public class Main extends Game {
 		packetPlayerConnect.setPlayerName("player");
 		client.sendTCP(packetPlayerConnect); // Send server info that client has connected
 		client.addListener(new Listener.ThreadedListener(new Listener() {
+			/**
+			 * Create listener for different packets sent to the client.
+			 * <p>
+			 *     There are two kinds of packets that the listener receives.
+			 *     1. The PacketPlayerConnect packet is received when someone joins the game. If the packet contains the
+			 *     same player that the packet was sent to then the player and their id are added to the players map.
+			 *     Otherwise a new player is created and added to the map. A new sprite is created for the new player.
+			 *     2. The PacketSendCoordinates packet is received when a player moves in the game. Next the
+			 *     moving players coordinates are set accordingly.
+			 * </p>
+			 * @param connection (TCP or UDP)
+			 * @param object that is received
+			 */
 			@Override
 			public void received(Connection connection, Object object) {
 				if (object instanceof PacketPlayerConnect) {
@@ -63,7 +82,6 @@ public class Main extends Game {
 						Player player = new Player(((PacketPlayerConnect) object).getPlayerName());
 						players.put(((PacketPlayerConnect) object).getPlayerID(), player);
 						playScreen.createNewSprite(player);
-						System.out.println("NEW PLAYER JOINED");
 					}
 				}
 				if (object instanceof PacketSendCoordinates) {
@@ -79,6 +97,13 @@ public class Main extends Game {
 		return myPlayer;
 	}
 
+	/**
+	 * Send players position info to server.
+	 * <p>
+	 * 	The method uses the packet PacketSendCoordinates, sets the right x, y and player id values to the packet and
+	 * 	sends it to the server.
+	 * </p>
+	 */
 	public void sendPositionInfoToServer() {
 		PacketSendCoordinates packetSendCoordinates = new PacketSendCoordinates();
 		packetSendCoordinates.setX(myPlayer.getSprite().getB2body().getPosition().x);
@@ -86,7 +111,10 @@ public class Main extends Game {
 		packetSendCoordinates.setPlayerID(client.getID());
 		client.sendUDP(packetSendCoordinates);
 	}
-	
+
+	/**
+	 * Dispose of the client and batch.
+	 */
 	@Override
 	public void dispose () {
 		client.close();
