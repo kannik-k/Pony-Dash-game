@@ -7,13 +7,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.PolygonMapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -78,7 +75,7 @@ public class PlayScreen implements Screen {
 
         // Loading map
         mapLoader = new TmxMapLoader();
-        map  = mapLoader.load("testmap..tmx");
+        map  = mapLoader.load("Pony_dash_for_spike_salvation_map.tmx");
         renderer = new OrthogonalTiledMapRenderer(map,1 / PPM);
 
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
@@ -95,44 +92,31 @@ public class PlayScreen implements Screen {
         FixtureDef fdef = new FixtureDef();
         Body body;
 
-        // Platform Layer 10
-        MapLayer collisionLayerPlatform= map.getLayers().get(10);
+        // Ground, temporary
+        for (RectangleMapObject object : map.getLayers().get(7).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rectangle = (object).getRectangle();
 
-        for (MapObject object : collisionLayerPlatform.getObjects()) {
-            if (object instanceof PolygonMapObject) {
-                Polygon rect = ((PolygonMapObject) object).getPolygon();
+            bdef.type = BodyDef.BodyType.StaticBody;
+            bdef.position.set((rectangle.getX() + rectangle.getWidth() / 2) / PPM, (rectangle.getY() + rectangle.getHeight() / 2) / PPM);
 
-                Rectangle boundingRectangle = rect.getBoundingRectangle();
+            body = world.createBody(bdef);
 
-                bdef.position.set((boundingRectangle.x + boundingRectangle.width / 2) / PPM,
-                        (boundingRectangle.y + boundingRectangle.height / 2) / PPM);
-
-                shape.setAsBox(boundingRectangle.width / 2 / PPM, boundingRectangle.height / 2 / PPM);
-
-                body = world.createBody(bdef);
-                fdef.shape = shape;
-                body.createFixture(fdef);
-            }
+            shape.setAsBox(rectangle.getWidth() / 2 / PPM, rectangle.getHeight() / 2 / PPM);
+            fdef.shape = shape;
+            body.createFixture(fdef);
         }
 
-        // Ground, temporary
-        MapLayer collisionLayerGround = map.getLayers().get(8);
+        for (RectangleMapObject object : map.getLayers().get(6).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rectangle = (object).getRectangle();
 
-        for (MapObject object : collisionLayerGround.getObjects()) {
-            if (object instanceof PolygonMapObject) {
-                Polygon rect = ((PolygonMapObject) object).getPolygon();
+            bdef.type = BodyDef.BodyType.StaticBody;
+            bdef.position.set((rectangle.getX() + rectangle.getWidth() / 2) / PPM, (rectangle.getY() + rectangle.getHeight() / 2) / PPM);
 
-                Rectangle boundingRectangle = rect.getBoundingRectangle();
+            body = world.createBody(bdef);
 
-                bdef.position.set((boundingRectangle.x + boundingRectangle.width / 2) / PPM,
-                        (boundingRectangle.y + boundingRectangle.height / 2) / PPM);
-
-                shape.setAsBox(boundingRectangle.width / 2 / PPM, boundingRectangle.height / 2 / PPM);
-
-                body = world.createBody(bdef);
-                fdef.shape = shape;
-                body.createFixture(fdef);
-            }
+            shape.setAsBox(rectangle.getWidth() / 2 / PPM, rectangle.getHeight() / 2 / PPM);
+            fdef.shape = shape;
+            body.createFixture(fdef);
         }
     }
 
