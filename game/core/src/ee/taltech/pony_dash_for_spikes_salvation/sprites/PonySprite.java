@@ -111,6 +111,27 @@ public class PonySprite extends Sprite {
     }
 
     /**
+     * Gets current state.
+     *
+     * @return the current state
+     */
+    public String getCurrentState() {
+        if (currentState == State.FALLING) {
+            return "falling";
+        }
+        if (currentState == State.RUN) {
+            return "run";
+        }
+        if (currentState == State.STANDING) {
+            return "standing";
+        }
+        if (currentState == State.JUMPING) {
+            return "jumping";
+        }
+        return null;
+    }
+
+    /**
      * Update player.
      *
      * @param dt the dt
@@ -186,7 +207,7 @@ public class PonySprite extends Sprite {
      */
     public void definePony() {
         BodyDef bdef = new BodyDef();
-        bdef.position.set(32 / getPPM(), 80 / getPPM());
+        bdef.position.set(32 / getPPM(), 420 / getPPM());
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
