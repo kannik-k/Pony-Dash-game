@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -76,7 +77,7 @@ public class PlayScreen implements Screen {
         // Loading map
         mapLoader = new TmxMapLoader();
         map  = mapLoader.load("Pony_dash_for_spike_salvation_map.tmx");
-        renderer = new OrthogonalTiledMapRenderer(map,1 / PPM);
+        renderer = new OrthogonalTiledMapRenderer(map,1f / PPM);
 
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
@@ -170,8 +171,14 @@ public class PlayScreen implements Screen {
         player.update(dt);
         hanelInput();
         updateAllPlayers(dt);
-        gameCam.position.x = player.getB2body().getPosition().x;
-        gameCam.position.y = player.getB2body().getPosition().y;
+
+        float mapWidth = map.getProperties().get("width", Integer.class) * map.getProperties().get("tilewidth", Integer.class) / PPM;
+        float mapHeight = map.getProperties().get("height", Integer.class) * map.getProperties().get("tileheight", Integer.class) / PPM;
+
+        float cameraX = MathUtils.clamp(player.getB2body().getPosition().x, gameCam.viewportWidth / 2, mapWidth - gameCam.viewportWidth / 2);
+        float cameraY = MathUtils.clamp(player.getB2body().getPosition().y, gameCam.viewportHeight / 2, mapHeight - gameCam.viewportHeight / 2);
+
+        gameCam.position.set(cameraX, cameraY, 0);
         world.step(1/60f, 6, 2);
         gameCam.update();
         renderer.setView(gameCam);
@@ -208,7 +215,7 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         b2dr.render(world, gameCam.combined);
         renderer.render();
-        b2dr.render(world, gameCam.combined);
+        // b2dr.render(world, gameCam.combined); renders box2drender lines
         game.getBatch().begin(); // Opens window
         update(delta);
         game.getBatch().setProjectionMatrix(gameCam.combined); // Renders the game-cam
