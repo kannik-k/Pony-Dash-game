@@ -145,7 +145,8 @@ public class PlayScreen implements Screen {
      */
     public  void hanelInput() {
         Player myPlayer = game.getMyPlayer();
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && (player.getCurrentState().equals("run")
+                || player.getCurrentState().equals("standing"))) {
             player.getB2body().applyLinearImpulse(new Vector2(0, 4f), player.getB2body().getWorldCenter(), true);
             myPlayer.setX(player.getB2body().getPosition().x);
             myPlayer.setY(player.getB2body().getPosition().y);
