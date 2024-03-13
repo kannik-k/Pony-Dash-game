@@ -1,10 +1,12 @@
 package ee.taltech.pony_dash_for_spikes_salvation;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import ee.taltech.pony_dash_for_spikes_salvation.exceptions.ConnectionException;
 import ee.taltech.pony_dash_for_spikes_salvation.packets.PacketPlayerConnect;
 import ee.taltech.pony_dash_for_spikes_salvation.packets.PacketSendCoordinates;
+import ee.taltech.pony_dash_for_spikes_salvation.screens.MenuScreen;
 import ee.taltech.pony_dash_for_spikes_salvation.screens.PlayScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,12 +18,17 @@ import java.util.Map;
 
 public class Main extends Game {
 	private SpriteBatch batch; // holds stuff, for example maps. One is enough.
+	private BitmapFont font;
 	private Client client;
 	private Map<Integer, Player> players = new HashMap<>();
 	private Player myPlayer;
 
 	public SpriteBatch getBatch() {
 		return batch;
+	}
+
+	public BitmapFont getFont() {
+		return font;
 	}
 
 	public Client getClient() {
@@ -50,7 +57,8 @@ public class Main extends Game {
 		batch = new SpriteBatch();
 		myPlayer = new Player("player");
 		PlayScreen playScreen = new PlayScreen(this);
-		setScreen(playScreen);
+		MenuScreen menuScreen = new MenuScreen(this);
+		setScreen(menuScreen);
 		try {
 			client.connect(5000, "localhost", 8080, 8081);
 		} catch (IOException e) {
