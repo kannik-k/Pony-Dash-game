@@ -19,8 +19,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
 
-import java.awt.*;
-
 
 public class MenuScreen implements Screen {
     private final Main game;
@@ -77,6 +75,9 @@ public class MenuScreen implements Screen {
         stage.getViewport().update(width, height, true);
     }
 
+    /**
+     * Change cursor to pointer.
+     */
     private void changeCursorToPointer() {
         Pixmap originalPixmap = new Pixmap(Gdx.files.internal("cursor-png-1115.png")); // Replace with your pointer image path
         int desiredWidth = 32; // Desired width of the cursor
@@ -88,6 +89,9 @@ public class MenuScreen implements Screen {
         resizedPixmap.dispose();
     }
 
+    /**
+     * Change cursor to default.
+     */
     private void changeCursorToDefault() {
         Pixmap originalPixmap = new Pixmap(Gdx.files.internal("cursor-png-1127.png")); // Replace with your default cursor image path
         int desiredWidth = 32; // Desired width of the cursor
@@ -114,6 +118,12 @@ public class MenuScreen implements Screen {
 
         skin = new Skin(Gdx.files.internal("Skin/terramotherui/terra-mother-ui.json"));
         heading = new Label("Welcome to Pony Dash For Spikes Salvation!", skin);
+        Table textTable = new Table();
+        textTable.setFillParent(true);
+        textTable.row().pad(0, 0, 110, 0);
+        textTable.add(heading).fillX().uniformX();
+        textTable.row();
+        stage.addActor(textTable);
 
         // Table for the buttons visible on screen.
         Table buttonTable = new Table();
@@ -126,8 +136,7 @@ public class MenuScreen implements Screen {
         TextButton exit = new TextButton("Exit", skin);
 
 
-        //buttonTable.add(heading);
-        buttonTable.row().pad(30, 0, 10, 0);
+        buttonTable.row().pad(100, 0, 10, 0);
         buttonTable.add(singlePlayer).fillX().uniformX();
         buttonTable.row().pad(0, 0, 10, 0);
         buttonTable.add(multiplayer).fillX().uniformX();
