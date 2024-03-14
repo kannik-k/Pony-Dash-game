@@ -63,7 +63,7 @@ public class PonySprite extends Sprite {
         for (int i = 15; i < 18; i++) {
             frames.add(new TextureRegion(getTexture(), i * 32 + 2, 64, 32, 32));
         }
-        ponyRun = new Animation<>(0.09f, frames);
+        ponyRun = new Animation<>(0.18f, frames);
 
         frames.clear();
 
@@ -134,7 +134,7 @@ public class PonySprite extends Sprite {
     /**
      * Update player.
      *
-     * @param dt the dt
+     * @param dt           the dt
      */
     public void update(float dt) {
         float x = player.getX();
@@ -207,7 +207,7 @@ public class PonySprite extends Sprite {
      */
     public void definePony() {
         BodyDef bdef = new BodyDef();
-        bdef.position.set(32 / getPPM(), 420 / getPPM());
+        bdef.position.set(64 / getPPM(), 420 / getPPM());
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
