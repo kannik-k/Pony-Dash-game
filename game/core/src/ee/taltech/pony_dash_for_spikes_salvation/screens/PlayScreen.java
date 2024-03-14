@@ -27,8 +27,8 @@ public class PlayScreen implements Screen {
     private final Main game;
     private static final Texture texture = new Texture("twilight_sparkle_one.png");
     private TextureAtlas atlas;
-    private static final int WIDTH = 500;
-    private static final int HEIGHT = 308;
+    private static final int WIDTH = 620;
+    private static final int HEIGHT = 408;
     private static final float PPM = 100f; // pixels per meter
     private final OrthographicCamera gameCam;
     private final Viewport gamePort;
@@ -119,6 +119,19 @@ public class PlayScreen implements Screen {
             fdef.shape = shape;
             body.createFixture(fdef);
         }
+
+        for (RectangleMapObject object : map.getLayers().get(10).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rectangle = (object).getRectangle();
+
+            bdef.type = BodyDef.BodyType.DynamicBody;
+            bdef.position.set((rectangle.getX() + rectangle.getWidth() / 2) / PPM, (rectangle.getY() + rectangle.getHeight() / 2) / PPM);
+
+            body = world.createBody(bdef);
+
+            shape.setAsBox(rectangle.getWidth() / 2 / PPM, rectangle.getHeight() / 2 / PPM);
+            fdef.shape = shape;
+            body.createFixture(fdef);
+        }
     }
 
     /**
@@ -143,25 +156,35 @@ public class PlayScreen implements Screen {
     /**
      * Handel input and define movements.
      */
-    public  void hanelInput() {
+    public void hanelInput() {
         Player myPlayer = game.getMyPlayer();
+
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            if (player.getB2body().getPosition().x >= 0.15) {
+                player.getB2body().setLinearVelocity(-2f, player.getB2body().getLinearVelocity().y);
+                myPlayer.setX(player.getB2body().getPosition().x);
+                myPlayer.setY(player.getB2body().getPosition().y);
+            } else {
+                player.getB2body().setLinearVelocity(0, player.getB2body().getLinearVelocity().y);
+            }
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            player.getB2body().setLinearVelocity(2f, player.getB2body().getLinearVelocity().y);
+            myPlayer.setX(player.getB2body().getPosition().x);
+            myPlayer.setY(player.getB2body().getPosition().y);
+        } else {
+            player.getB2body().setLinearVelocity(0, player.getB2body().getLinearVelocity().y);
+        }
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && (player.getCurrentState().equals("run")
                 || player.getCurrentState().equals("standing"))) {
-            player.getB2body().applyLinearImpulse(new Vector2(0, 4f), player.getB2body().getWorldCenter(), true);
-            myPlayer.setX(player.getB2body().getPosition().x);
-            myPlayer.setY(player.getB2body().getPosition().y);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.getB2body().getLinearVelocity().x <= 2) {
-            player.getB2body().applyLinearImpulse(new Vector2(0.1f, 0), player.getB2body().getWorldCenter(), true);
-            myPlayer.setX(player.getB2body().getPosition().x);
-            myPlayer.setY(player.getB2body().getPosition().y);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.getB2body().getLinearVelocity().x >= -2) {
-            player.getB2body().applyLinearImpulse(new Vector2(-0.1f, 0), player.getB2body().getWorldCenter(), true);
+            player.getB2body().applyLinearImpulse(0, 5f, player.getB2body().getWorldCenter().x,
+                    player.getB2body().getWorldCenter().y, true);
             myPlayer.setX(player.getB2body().getPosition().x);
             myPlayer.setY(player.getB2body().getPosition().y);
         }
     }
+
+
 
     /**
      * Update screen.
@@ -193,10 +216,7 @@ public class PlayScreen implements Screen {
     public void updateAllPlayers(float dt) {
         Map<Integer, Player> playerMap = game.getPlayers();
         for (Map.Entry<Integer, Player> set : playerMap.entrySet()) {
-            if (set.getKey() != game.getClient().getID()) {
-                set.getValue().getSprite().update(dt);
-                set.getValue().getSprite().draw(game.getBatch());
-           }
+            set.getValue().getSprite().update(dt);
         }
     }
 
@@ -219,10 +239,23 @@ public class PlayScreen implements Screen {
         // b2dr.render(world, gameCam.combined); renders box2drender lines
         game.getBatch().begin(); // Opens window
         update(delta);
+
         game.getBatch().setProjectionMatrix(gameCam.combined); // Renders the game-cam
         player.draw(game.getBatch());
+        renderAllPlayers();
+
         game.getBatch().end();
         game.sendPositionInfoToServer();
+    }
+
+    private void renderAllPlayers() {
+        for (Map.Entry<Integer, Player> entry : game.getPlayers().entrySet()) {
+            Player currentPlayer = entry.getValue();
+            if (currentPlayer.getSprite() != null) {
+                currentPlayer.getSprite().update(Gdx.graphics.getDeltaTime());
+                currentPlayer.getSprite().draw(game.getBatch());
+            }
+        }
     }
 
     /**
