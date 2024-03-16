@@ -154,23 +154,19 @@ public class PlayScreen implements Screen {
     }
 
     /**
-     * Handel input and define movements.
+     * Handle input and define movements.
      */
-    public void hanelInput() {
-        Player myPlayer = game.getMyPlayer();
-
+    public void handleInput() {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             if (player.getB2body().getPosition().x >= 0.15) {
                 player.getB2body().setLinearVelocity(-2f, player.getB2body().getLinearVelocity().y);
-                myPlayer.setX(player.getB2body().getPosition().x);
-                myPlayer.setY(player.getB2body().getPosition().y);
+                game.sendPositionInfoToServer();
             } else {
                 player.getB2body().setLinearVelocity(0, player.getB2body().getLinearVelocity().y);
             }
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             player.getB2body().setLinearVelocity(2f, player.getB2body().getLinearVelocity().y);
-            myPlayer.setX(player.getB2body().getPosition().x);
-            myPlayer.setY(player.getB2body().getPosition().y);
+            game.sendPositionInfoToServer();
         } else {
             player.getB2body().setLinearVelocity(0, player.getB2body().getLinearVelocity().y);
         }
@@ -179,8 +175,7 @@ public class PlayScreen implements Screen {
                 || player.getCurrentState().equals("standing"))) {
             player.getB2body().applyLinearImpulse(0, 5f, player.getB2body().getWorldCenter().x,
                     player.getB2body().getWorldCenter().y, true);
-            myPlayer.setX(player.getB2body().getPosition().x);
-            myPlayer.setY(player.getB2body().getPosition().y);
+            game.sendPositionInfoToServer();
         }
     }
 
@@ -193,7 +188,7 @@ public class PlayScreen implements Screen {
      */
     public void update(float dt) {
         player.update(dt);
-        hanelInput();
+        handleInput();
         updateAllPlayers(dt);
 
         float mapWidth = map.getProperties().get("width", Integer.class) * map.getProperties().get("tilewidth", Integer.class) / PPM;

@@ -162,7 +162,8 @@ public class MenuScreen implements Screen {
         multiplayer.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //This button will lead to the multiplayer lobby
+                game.setScreen(new CreateLobbyScreen(game));
+                changeCursorToDefault();
             }
         });
 

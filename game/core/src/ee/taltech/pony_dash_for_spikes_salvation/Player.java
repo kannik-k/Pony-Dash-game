@@ -44,4 +44,3 @@ public class Player {
         this.sprite = sprite;
     }
 }
-

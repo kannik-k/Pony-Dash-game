@@ -121,6 +121,14 @@ public class Main extends Game {
 	}
 
 	/**
+	 * Send packet with lobby id and player name to server.
+	 * @param packet
+	 */
+	public void sendPacketToServer(Object packet) {
+		client.sendUDP(packet);
+	}
+
+	/**
 	 * Dispose of the client and batch.
 	 */
 	@Override
