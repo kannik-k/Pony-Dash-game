@@ -2,77 +2,42 @@ package ee.taltech.pony_dash_for_spikes_salvation.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
+import ee.taltech.pony_dash_for_spikes_salvation.lobby.Lobby;
+import ee.taltech.pony_dash_for_spikes_salvation.packets.PacketLobby;
 
-
-public class MenuScreen implements Screen {
+public class CreateLobbyScreen implements Screen {
     private final Main game;
-    private Stage stage;
+    private final Stage stage;
     private final OrthographicCamera gameCam;
-    private ExtendViewport viewport;
+    private final ExtendViewport viewport;
     private SpriteBatch spriteBatch;
-    private Texture backgroundTexture;
-
+    private final Texture backgroundTexture;
 
     /**
      * Constructor.
+     *
      * @param game Main game.
      */
-    public MenuScreen(Main game) {
+    public CreateLobbyScreen(Main game) {
         this.game = game;
         spriteBatch = game.getBatch();
         backgroundTexture = new Texture("Game Assets/Sunny land winter forest sky.png");
-        changeCursorToDefault();
         gameCam = new OrthographicCamera();
         viewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), gameCam);
-        stage = new Stage(viewport);
-    }
-
-    /**
-     * Render the menu-screen (background and stage).
-     *
-     * @param delta The time in seconds since the last render.
-     */
-    @Override
-    public void render(float delta) {
-        // clear the screen ready for next set of images to be drawn
-        Gdx.gl.glClearColor(.1f, .1f, .15f, 1);  // screen color
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        // Draw the background image
-        spriteBatch.begin();
-        spriteBatch.draw(backgroundTexture, 0, 0, stage.getWidth(), stage.getHeight());
-        spriteBatch.end();
-
-        // tell our stage to do actions and draw itself
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
-    }
-
-    /**
-     * Updates the size of the viewport.
-     *
-     * @param width of viewport
-     * @param height of viewport
-     */
-    @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
+        stage = new Stage(viewport, spriteBatch);
     }
 
     /**
@@ -103,66 +68,64 @@ public class MenuScreen implements Screen {
         resizedPixmap.dispose();
     }
 
-    /**
-     * Create everything that is shown on the menu screen.
-     * <p>
-     *  A button table is added to the stage. This includes the heading and three buttons.
-     *  Listeners for buttons are also added.
-     * </p>
-     */
     @Override
     public void show() {
         Skin skin;
-        Label heading;
         spriteBatch = new SpriteBatch();
 
         skin = new Skin(Gdx.files.internal("Skin/terramotherui/terra-mother-ui.json"));
-        heading = new Label("Welcome to Pony Dash For Spikes Salvation!", skin);
-        Table textTable = new Table();
-        textTable.setFillParent(true);
-        textTable.row().pad(0, 0, 110, 0);
-        textTable.add(heading).fillX().uniformX();
-        textTable.row();
-        stage.addActor(textTable);
 
-        // Table for the buttons visible on screen.
-        Table buttonTable = new Table();
-        buttonTable.setFillParent(true);
-        stage.addActor(buttonTable);
+        // Tabel nuppude jaoks ekraani keskele
+        Table centerTable = new Table();
+        centerTable.setFillParent(true);
+        stage.addActor(centerTable);
+
+        TextButton name = new TextButton("Name", skin);
+        name.setColor(Color.WHITE); // Määra tekstinupu tekstivärv valgeks
+        centerTable.row();
+        centerTable.add(name).pad(10).fillX().uniformX().left();
+
+        TextButton createLobby = new TextButton("Create lobby", skin);
+        createLobby.setColor(Color.WHITE); // Määra tekstinupu tekstivärv valgeks
+        centerTable.row();
+        centerTable.add(createLobby).pad(10).fillX().uniformX().left();
+
+        TextButton joinLobby = new TextButton("Join lobby", skin);
+        joinLobby.setColor(Color.WHITE); // Määra tekstinupu tekstivärv valgeks
+        centerTable.row();
+        centerTable.add(joinLobby).pad(10).fillX().uniformX().left();
+
+        TextField lobbyIdField = new TextField("", skin);
+        lobbyIdField.setColor(Color.WHITE); // Määra tekstivälja taustavärv valgeks
+        centerTable.row();
+        centerTable.add(lobbyIdField).pad(10).fillX().uniformX().left();
 
 
-        TextButton singlePlayer = new TextButton("Single player", skin);
-        TextButton multiplayer = new TextButton("Multiplayer", skin);
-        TextButton exit = new TextButton("Exit", skin);
+        Table backTable = new Table();
+        TextButton back = new TextButton("Back", skin);
+        backTable.top().left();
+        backTable.setFillParent(true);
+        backTable.add(back).pad(10);
 
+        stage.addActor(backTable);
 
-        buttonTable.row().pad(100, 0, 10, 0);
-        buttonTable.add(singlePlayer).fillX().uniformX();
-        buttonTable.row().pad(0, 0, 10, 0);
-        buttonTable.add(multiplayer).fillX().uniformX();
-        buttonTable.row();
-        buttonTable.add(exit).fillX().uniformX();
-
-        // create button listeners
-        exit.addListener(new ChangeListener() {
+        back.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Gdx.app.exit();
-            }
-        });
-
-        singlePlayer.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new PlayScreen(game));
+                game.setScreen(new MenuScreen(game));
                 changeCursorToDefault();
             }
         });
 
-        multiplayer.addListener(new ChangeListener() {
+        createLobby.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new CreateLobbyScreen(game));
+                Lobby newLobby = new Lobby();
+                newLobby.addPlayer(game.getMyPlayer().getPlayerName());
+                newLobby.incrementLobbyId();
+                PacketLobby packet = new PacketLobby(newLobby.getLobbyId(), newLobby.getPlayers());
+                game.sendPacketToServer(packet);
+                game.setScreen(new LobbyScreen(game));
                 changeCursorToDefault();
             }
         });
@@ -170,22 +133,45 @@ public class MenuScreen implements Screen {
         InputListener inputListener = new InputListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, com.badlogic.gdx.scenes.scene2d.Actor fromActor) {
-                // Change cursor to pointer when mouse enters the button
                 changeCursorToPointer();
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, com.badlogic.gdx.scenes.scene2d.Actor toActor) {
-                // Change cursor back to default when mouse exits the button
                 changeCursorToDefault();
             }
         };
 
-        exit.addListener(inputListener);
-        singlePlayer.addListener(inputListener);
-        multiplayer.addListener(inputListener);
+        name.addListener(inputListener);
+        createLobby.addListener(inputListener);
+        joinLobby.addListener(inputListener);
+        back.addListener(inputListener);
 
         Gdx.input.setInputProcessor(stage);
+    }
+
+
+    @Override
+    public void render(float delta) {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        gameCam.update();
+        spriteBatch.setProjectionMatrix(gameCam.combined);
+
+        spriteBatch.begin();
+
+        spriteBatch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        spriteBatch.end();
+
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.draw();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        viewport.update(width, height);
     }
 
     @Override
@@ -203,15 +189,9 @@ public class MenuScreen implements Screen {
         // Called when the application is resumed from paused state
     }
 
-    /**
-     * Dispose of stage, background and spriteBatch when the menu-screen is closed.
-     */
     @Override
     public void dispose() {
         stage.dispose();
         backgroundTexture.dispose();
-        spriteBatch.dispose();
-
-        Gdx.input.setInputProcessor(null);
     }
 }
