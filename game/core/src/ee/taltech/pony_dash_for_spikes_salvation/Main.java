@@ -22,6 +22,7 @@ public class Main extends Game {
 	private Client client;
 	private Map<Integer, Player> players = new HashMap<>();
 	private Player myPlayer;
+	private int playerSpriteId;
 
 	public SpriteBatch getBatch() {
 		return batch;
@@ -100,6 +101,14 @@ public class Main extends Game {
 				}
 			}
 		}));
+	}
+
+	public int getPlayerSpriteId() {
+		return playerSpriteId;
+	}
+
+	public void setPlayerSpriteId(int playerSpriteId) {
+		this.playerSpriteId = playerSpriteId;
 	}
 
 	public Player getMyPlayer() {

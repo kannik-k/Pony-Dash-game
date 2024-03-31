@@ -33,6 +33,8 @@ public class PlayScreen implements Screen {
     private final OrthographicCamera gameCam;
     private final Viewport gamePort;
 
+    private int ponyId;
+
     // Tiled
     private TmxMapLoader mapLoader;
     private TiledMap map;
@@ -73,6 +75,7 @@ public class PlayScreen implements Screen {
         gamePort = new FitViewport(WIDTH / PPM, HEIGHT / PPM, gameCam);
 
         atlas = new TextureAtlas("pony_sprites.pack");
+        ponyId = game.getPlayerSpriteId();
 
         // Loading map
         mapLoader = new TmxMapLoader();
@@ -84,7 +87,7 @@ public class PlayScreen implements Screen {
         world = new World(new Vector2(0, -10), true);
         b2dr = new Box2DDebugRenderer();
 
-        player = new PonySprite(world, this, game.getMyPlayer());
+        player = new PonySprite(world, this, game.getMyPlayer(), ponyId);
         game.getMyPlayer().setSprite(player);
 
         // Ajutine, tuleb hiljem ümber tõsta
@@ -140,7 +143,7 @@ public class PlayScreen implements Screen {
      * @param player the player
      */
     public void createNewSprite(Player player) {
-        PonySprite sprite = new PonySprite(world, this, player);
+        PonySprite sprite = new PonySprite(world, this, player, ponyId);
         player.setSprite(sprite);
     }
 
@@ -178,8 +181,6 @@ public class PlayScreen implements Screen {
             game.sendPositionInfoToServer();
         }
     }
-
-
 
     /**
      * Update screen.

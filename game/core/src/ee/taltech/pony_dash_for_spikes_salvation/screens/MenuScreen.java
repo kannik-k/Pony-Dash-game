@@ -154,7 +154,7 @@ public class MenuScreen implements Screen {
         singlePlayer.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new PlayScreen(game));
+                game.setScreen(new PlayerSelection(game));
                 changeCursorToDefault();
             }
         });
