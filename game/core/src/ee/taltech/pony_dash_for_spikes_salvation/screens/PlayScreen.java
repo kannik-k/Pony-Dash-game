@@ -205,11 +205,11 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         b2dr.render(world, gameCam.combined);
         renderer.render();
-        // b2dr.render(world, gameCam.combined); renders box2drender lines
+        b2dr.render(world, gameCam.combined); // renders box2drender lines
         game.getBatch().begin(); // Opens window
         update(delta);
 
-        game.getBatch().setProjectionMatrix(gameCam.combined); // Renders the game-cam
+        // game.getBatch().setProjectionMatrix(gameCam.combined); Renders the game-cam
         player.draw(game.getBatch());
         renderAllPlayers();
 
