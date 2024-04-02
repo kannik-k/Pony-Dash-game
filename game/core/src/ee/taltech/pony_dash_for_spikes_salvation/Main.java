@@ -109,6 +109,7 @@ public class Main extends Game {
 
 	public void setPlayerSpriteId(int playerSpriteId) {
 		this.playerSpriteId = playerSpriteId;
+		myPlayer.setSpriteId(playerSpriteId);
 	}
 
 	public Player getMyPlayer() {

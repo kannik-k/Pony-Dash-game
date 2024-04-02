@@ -2,10 +2,7 @@ package ee.taltech.pony_dash_for_spikes_salvation.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -58,6 +55,11 @@ public class PlayerSelection implements Screen {
         spriteBatch = new SpriteBatch();
 
         skin = new Skin(Gdx.files.internal("Skin/terramotherui/terra-mother-ui.json"));
+
+        TextButton.TextButtonStyle defaultStyle = skin.get("default", TextButton.TextButtonStyle.class);
+        TextButton.TextButtonStyle greenStyle = new TextButton.TextButtonStyle(defaultStyle);
+        greenStyle.fontColor = Color.GREEN;
+
         heading = new Label("Select player:", skin);
         Table textTable = new Table();
         textTable.setFillParent(true);
@@ -122,6 +124,12 @@ public class PlayerSelection implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 spriteId = 1;
+                twilight.setStyle(greenStyle);
+                rainbow.setStyle(defaultStyle);
+                applejack.setStyle(defaultStyle);
+                pinkie.setStyle(defaultStyle);
+                rarity.setStyle(defaultStyle);
+                fluttershy.setStyle(defaultStyle);
                 game.setPlayerSpriteId(spriteId);
                 changeCursorToDefault();
             }
@@ -131,6 +139,12 @@ public class PlayerSelection implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 spriteId = 2;
+                twilight.setStyle(defaultStyle);
+                rainbow.setStyle(greenStyle);
+                applejack.setStyle(defaultStyle);
+                pinkie.setStyle(defaultStyle);
+                rarity.setStyle(defaultStyle);
+                fluttershy.setStyle(defaultStyle);
                 game.setPlayerSpriteId(spriteId);
                 changeCursorToDefault();
             }
@@ -140,6 +154,12 @@ public class PlayerSelection implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 spriteId = 3;
+                twilight.setStyle(defaultStyle);
+                rainbow.setStyle(defaultStyle);
+                applejack.setStyle(greenStyle);
+                pinkie.setStyle(defaultStyle);
+                rarity.setStyle(defaultStyle);
+                fluttershy.setStyle(defaultStyle);
                 game.setPlayerSpriteId(spriteId);
                 changeCursorToDefault();
             }
@@ -149,6 +169,12 @@ public class PlayerSelection implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 spriteId = 4;
+                twilight.setStyle(defaultStyle);
+                rainbow.setStyle(defaultStyle);
+                applejack.setStyle(defaultStyle);
+                pinkie.setStyle(greenStyle);
+                rarity.setStyle(defaultStyle);
+                fluttershy.setStyle(defaultStyle);
                 game.setPlayerSpriteId(spriteId);
                 changeCursorToDefault();
             }
@@ -158,6 +184,12 @@ public class PlayerSelection implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 spriteId = 5;
+                twilight.setStyle(defaultStyle);
+                rainbow.setStyle(defaultStyle);
+                applejack.setStyle(defaultStyle);
+                pinkie.setStyle(defaultStyle);
+                rarity.setStyle(greenStyle);
+                fluttershy.setStyle(defaultStyle);
                 game.setPlayerSpriteId(spriteId);
                 changeCursorToDefault();
             }
@@ -167,6 +199,12 @@ public class PlayerSelection implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 spriteId = 6;
+                twilight.setStyle(defaultStyle);
+                rainbow.setStyle(defaultStyle);
+                applejack.setStyle(defaultStyle);
+                pinkie.setStyle(defaultStyle);
+                rarity.setStyle(defaultStyle);
+                fluttershy.setStyle(greenStyle);
                 game.setPlayerSpriteId(spriteId);
                 changeCursorToDefault();
             }

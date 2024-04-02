@@ -3,11 +3,7 @@ package ee.taltech.pony_dash_for_spikes_salvation.sprites;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import ee.taltech.pony_dash_for_spikes_salvation.Player;
 import ee.taltech.pony_dash_for_spikes_salvation.screens.PlayScreen;
@@ -64,9 +60,9 @@ public class PonySprite extends Sprite {
         if (id == 1) {
             this.animationInformation = Arrays.asList(2, 480, 512, 418, 2, 15, 18, 0, 0);
         } else if (id == 5) {
-            this.animationInformation = Arrays.asList(10, 480, 512, 418, 3, 15, 18, 3, 0);
+            this.animationInformation = Arrays.asList(10, 480, 512, 418, 3, 15, 18, 3, 3);
         } else if (id == 4) {
-            this.animationInformation = Arrays.asList(18, 480, 512, 418, 2, 15, 18, 4, 0);
+            this.animationInformation = Arrays.asList(18, 480, 512, 418, 2, 15, 18, 4, 2);
         } else if (id == 2) {
             this.animationInformation = Arrays.asList(2, 96, 128, 32, 2, 2, 5, 0, 0);
         } else if (id == 3) {
@@ -231,8 +227,8 @@ public class PonySprite extends Sprite {
         b2body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
-        CircleShape shape = new CircleShape();
-        shape.setRadius(14 / getPPM());
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(14 / getPPM(), 14 / getPPM());
 
         fdef.shape = shape;
         b2body.createFixture(fdef);
