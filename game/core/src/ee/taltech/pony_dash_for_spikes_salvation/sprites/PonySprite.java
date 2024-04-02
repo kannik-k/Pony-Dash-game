@@ -64,9 +64,9 @@ public class PonySprite extends Sprite {
         if (id == 1) {
             this.animationInformation = Arrays.asList(2, 480, 512, 418, 2, 15, 18, 0, 0);
         } else if (id == 5) {
-            this.animationInformation = Arrays.asList(10, 480, 512, 418, 3, 15, 18, 3, 0);
+            this.animationInformation = Arrays.asList(10, 480, 512, 418, 3, 15, 18, 3, 3);
         } else if (id == 4) {
-            this.animationInformation = Arrays.asList(18, 480, 512, 418, 2, 15, 18, 4, 0);
+            this.animationInformation = Arrays.asList(18, 480, 512, 418, 2, 15, 18, 4, 2);
         } else if (id == 2) {
             this.animationInformation = Arrays.asList(2, 96, 128, 32, 2, 2, 5, 0, 0);
         } else if (id == 3) {
