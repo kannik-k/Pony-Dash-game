@@ -4,8 +4,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import ee.taltech.pony_dash_for_spikes_salvation.exceptions.ConnectionException;
+import ee.taltech.pony_dash_for_spikes_salvation.packets.OnStartGame;
 import ee.taltech.pony_dash_for_spikes_salvation.packets.PacketPlayerConnect;
 import ee.taltech.pony_dash_for_spikes_salvation.packets.PacketSendCoordinates;
+import ee.taltech.pony_dash_for_spikes_salvation.screens.CreateLobbyScreen;
+import ee.taltech.pony_dash_for_spikes_salvation.screens.LobbyScreen;
 import ee.taltech.pony_dash_for_spikes_salvation.screens.MenuScreen;
 import ee.taltech.pony_dash_for_spikes_salvation.screens.PlayScreen;
 import com.badlogic.gdx.Game;
@@ -58,10 +61,12 @@ public class Main extends Game {
 		myPlayer = new Player("player");
 		PlayScreen playScreen = new PlayScreen(this);
 		MenuScreen menuScreen = new MenuScreen(this);
+		CreateLobbyScreen createLobby = new CreateLobbyScreen(this);
+		LobbyScreen lobbyScreen = new LobbyScreen(this);
 		setScreen(menuScreen);
 		try {
-			// client.connect(5000, "localhost", 8080, 8081); // Use this to play on local host
-			client.connect(5000, "193.40.255.33", 8080, 8081); // Use this to play on the school server
+			client.connect(5000, "localhost", 8080, 8081); // Use this to play on local host
+			// client.connect(5000, "193.40.255.33", 8080, 8081); // Use this to play on the school server
 		} catch (IOException e) {
 			throw new ConnectionException(e.getMessage());
 		}
@@ -97,6 +102,10 @@ public class Main extends Game {
 					Player player = players.get(((PacketSendCoordinates) object).getPlayerID());
 					player.setX(((PacketSendCoordinates) object).getX());
 					player.setY(((PacketSendCoordinates) object).getY());
+				}
+				if (object instanceof OnStartGame) {
+					System.out.println("I recived OnStartGamePacket");
+					setScreen(playScreen);
 				}
 			}
 		}));

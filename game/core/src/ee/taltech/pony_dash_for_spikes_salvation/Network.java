@@ -2,10 +2,7 @@ package ee.taltech.pony_dash_for_spikes_salvation;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
-import ee.taltech.pony_dash_for_spikes_salvation.packets.Packet;
-import ee.taltech.pony_dash_for_spikes_salvation.packets.PacketLobby;
-import ee.taltech.pony_dash_for_spikes_salvation.packets.PacketPlayerConnect;
-import ee.taltech.pony_dash_for_spikes_salvation.packets.PacketSendCoordinates;
+import ee.taltech.pony_dash_for_spikes_salvation.packets.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,5 +27,8 @@ public class Network {
         kryo.register(ArrayList.class);
         kryo.register(List.class);
         kryo.register(ee.taltech.pony_dash_for_spikes_salvation.Player.class);
+
+        kryo.register(PlayerJoinPacket.class);
+        kryo.register(OnStartGame.class);
     }
 }

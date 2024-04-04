@@ -7,12 +7,21 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
+import ee.taltech.pony_dash_for_spikes_salvation.packets.OnStartGame;
 
 
 public class LobbyScreen implements Screen {
+    private final Main game;
     private Stage stage;
     private final OrthographicCamera gameCam;
     private ExtendViewport viewport;
@@ -22,9 +31,11 @@ public class LobbyScreen implements Screen {
 
     /**
      * Constructor.
-     * @param game Main game.
+     *
+     * @param game  Main game.
      */
     public LobbyScreen(Main game) {
+        this.game = game;
         spriteBatch = game.getBatch();
         backgroundTexture = new Texture("Game Assets/Sunny land winter forest sky.png");
         changeCursorToDefault();
@@ -88,7 +99,46 @@ public class LobbyScreen implements Screen {
      */
     @Override
     public void show() {
-        // Called when something to show on the screen
+        Skin skin;
+        spriteBatch = new SpriteBatch();
+
+        skin = new Skin(Gdx.files.internal("Skin/terramotherui/terra-mother-ui.json"));
+
+        // Table for the buttons visible on screen.
+        Table buttonTable = new Table();
+        buttonTable.setFillParent(true);
+        stage.addActor(buttonTable);
+
+
+        TextButton startGame = new TextButton("Start game", skin);
+
+        buttonTable.row().pad(100, 0, 10, 0);
+        buttonTable.add(startGame).fillX().uniformX();
+
+        startGame.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                OnStartGame packet = new OnStartGame();
+                game.sendPacketToServer(packet);
+                changeCursorToDefault();
+            }
+        });
+
+        InputListener inputListener = new InputListener() {
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, com.badlogic.gdx.scenes.scene2d.Actor fromActor) {
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, com.badlogic.gdx.scenes.scene2d.Actor toActor) {
+                // Change cursor back to default when mouse exits the button
+                changeCursorToDefault();
+            }
+        };
+
+        startGame.addListener(inputListener);
+
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override

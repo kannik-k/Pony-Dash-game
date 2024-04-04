@@ -11,12 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
-import ee.taltech.pony_dash_for_spikes_salvation.lobby.Lobby;
-import ee.taltech.pony_dash_for_spikes_salvation.packets.PacketLobby;
+import ee.taltech.pony_dash_for_spikes_salvation.packets.PlayerJoinPacket;
 
 public class CreateLobbyScreen implements Screen {
     private final Main game;
@@ -85,21 +83,10 @@ public class CreateLobbyScreen implements Screen {
         centerTable.row();
         centerTable.add(name).pad(10).fillX().uniformX().left();
 
-        TextButton createLobby = new TextButton("Create lobby", skin);
-        createLobby.setColor(Color.WHITE); // Määra tekstinupu tekstivärv valgeks
-        centerTable.row();
-        centerTable.add(createLobby).pad(10).fillX().uniformX().left();
-
         TextButton joinLobby = new TextButton("Join lobby", skin);
         joinLobby.setColor(Color.WHITE); // Määra tekstinupu tekstivärv valgeks
         centerTable.row();
         centerTable.add(joinLobby).pad(10).fillX().uniformX().left();
-
-        TextField lobbyIdField = new TextField("", skin);
-        lobbyIdField.setColor(Color.WHITE); // Määra tekstivälja taustavärv valgeks
-        centerTable.row();
-        centerTable.add(lobbyIdField).pad(10).fillX().uniformX().left();
-
 
         Table backTable = new Table();
         TextButton back = new TextButton("Back", skin);
@@ -117,13 +104,10 @@ public class CreateLobbyScreen implements Screen {
             }
         });
 
-        createLobby.addListener(new ChangeListener() {
+        joinLobby.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Lobby newLobby = new Lobby();
-                newLobby.addPlayer(game.getMyPlayer().getPlayerName());
-                newLobby.incrementLobbyId();
-                PacketLobby packet = new PacketLobby(newLobby.getLobbyId(), newLobby.getPlayers());
+                PlayerJoinPacket packet = new PlayerJoinPacket();
                 game.sendPacketToServer(packet);
                 game.setScreen(new LobbyScreen(game));
                 changeCursorToDefault();
@@ -143,7 +127,6 @@ public class CreateLobbyScreen implements Screen {
         };
 
         name.addListener(inputListener);
-        createLobby.addListener(inputListener);
         joinLobby.addListener(inputListener);
         back.addListener(inputListener);
 
