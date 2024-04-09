@@ -4,9 +4,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import ee.taltech.pony_dash_for_spikes_salvation.exceptions.ConnectionException;
-import ee.taltech.pony_dash_for_spikes_salvation.packets.OnStartGame;
-import ee.taltech.pony_dash_for_spikes_salvation.packets.PacketPlayerConnect;
-import ee.taltech.pony_dash_for_spikes_salvation.packets.PacketSendCoordinates;
+import ee.taltech.pony_dash_for_spikes_salvation.packets.*;
 import ee.taltech.pony_dash_for_spikes_salvation.screens.CreateLobbyScreen;
 import ee.taltech.pony_dash_for_spikes_salvation.screens.LobbyScreen;
 import ee.taltech.pony_dash_for_spikes_salvation.screens.MenuScreen;
@@ -61,8 +59,6 @@ public class Main extends Game {
 		myPlayer = new Player("player");
 		PlayScreen playScreen = new PlayScreen(this);
 		MenuScreen menuScreen = new MenuScreen(this);
-		CreateLobbyScreen createLobby = new CreateLobbyScreen(this);
-		LobbyScreen lobbyScreen = new LobbyScreen(this);
 		setScreen(menuScreen);
 		try {
 			client.connect(5000, "localhost", 8080, 8081); // Use this to play on local host
@@ -105,7 +101,18 @@ public class Main extends Game {
 				}
 				if (object instanceof OnStartGame) {
 					System.out.println("I recived OnStartGamePacket");
-					setScreen(playScreen);
+					playScreen.show();
+					setScreen((PlayScreen ) playScreen);
+				}
+				if (object instanceof OnLobbyJoin) {
+					System.out.println("I recived OnLobbyJoin");
+					playScreen.show();
+					setScreen((PlayScreen ) playScreen);
+				}
+				if (object instanceof OnLobbyList) {
+					System.out.println("I recived OnLobbyList>");
+					playScreen.show();
+					setScreen((PlayScreen ) playScreen);
 				}
 			}
 		}));

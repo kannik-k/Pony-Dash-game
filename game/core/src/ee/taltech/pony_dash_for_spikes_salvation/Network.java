@@ -27,8 +27,12 @@ public class Network {
         kryo.register(ArrayList.class);
         kryo.register(List.class);
         kryo.register(ee.taltech.pony_dash_for_spikes_salvation.Player.class);
+        kryo.register(int.class);
 
         kryo.register(PlayerJoinPacket.class);
         kryo.register(OnStartGame.class);
+        kryo.register(Game.class);
+        kryo.register(OnLobbyJoin.class);
+        kryo.register(OnLobbyList.class);
     }
 }
