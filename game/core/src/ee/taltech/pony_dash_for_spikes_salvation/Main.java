@@ -1,5 +1,6 @@
 package ee.taltech.pony_dash_for_spikes_salvation;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -101,18 +102,18 @@ public class Main extends Game {
 				}
 				if (object instanceof OnStartGame) {
 					System.out.println("I recived OnStartGamePacket");
-					playScreen.show();
-					setScreen((PlayScreen ) playScreen);
+					Gdx.app.postRunnable(new Runnable() {
+						@Override
+						public void run() {
+							setScreen(playScreen);
+						}
+					});
 				}
 				if (object instanceof OnLobbyJoin) {
 					System.out.println("I recived OnLobbyJoin");
-					playScreen.show();
-					setScreen((PlayScreen ) playScreen);
 				}
 				if (object instanceof OnLobbyList) {
 					System.out.println("I recived OnLobbyList>");
-					playScreen.show();
-					setScreen((PlayScreen ) playScreen);
 				}
 			}
 		}));

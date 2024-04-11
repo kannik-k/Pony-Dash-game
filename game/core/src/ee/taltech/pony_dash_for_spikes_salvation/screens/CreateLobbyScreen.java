@@ -109,7 +109,12 @@ public class CreateLobbyScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 PlayerJoinPacket packet = new PlayerJoinPacket();
                 game.sendPacketToServer(packet);
-                game.setScreen(new LobbyScreen(game));
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        game.setScreen(new LobbyScreen(game));
+                    }
+                });
                 changeCursorToDefault();
             }
         });
