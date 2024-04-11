@@ -127,6 +127,7 @@ public class LobbyScreen implements Screen {
         InputListener inputListener = new InputListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, com.badlogic.gdx.scenes.scene2d.Actor fromActor) {
+                // This is empty.
             }
 
             @Override
