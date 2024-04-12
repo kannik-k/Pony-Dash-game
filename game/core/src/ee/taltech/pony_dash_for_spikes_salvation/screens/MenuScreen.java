@@ -133,6 +133,7 @@ public class MenuScreen implements Screen {
 
         TextButton singlePlayer = new TextButton("Single player", skin);
         TextButton multiplayer = new TextButton("Multiplayer", skin);
+        TextButton tutorial = new TextButton("Tutorial", skin);
         TextButton exit = new TextButton("Exit", skin);
 
 
@@ -140,6 +141,8 @@ public class MenuScreen implements Screen {
         buttonTable.add(singlePlayer).fillX().uniformX();
         buttonTable.row().pad(0, 0, 10, 0);
         buttonTable.add(multiplayer).fillX().uniformX();
+        buttonTable.row().pad(0, 0, 10, 0);
+        buttonTable.add(tutorial).fillX().uniformX();
         buttonTable.row();
         buttonTable.add(exit).fillX().uniformX();
 
@@ -167,6 +170,14 @@ public class MenuScreen implements Screen {
             }
         });
 
+        tutorial.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new TutorialScreen(game));
+                changeCursorToDefault();
+            }
+        });
+
         InputListener inputListener = new InputListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, com.badlogic.gdx.scenes.scene2d.Actor fromActor) {
@@ -184,6 +195,7 @@ public class MenuScreen implements Screen {
         exit.addListener(inputListener);
         singlePlayer.addListener(inputListener);
         multiplayer.addListener(inputListener);
+        tutorial.addListener(inputListener);
 
         Gdx.input.setInputProcessor(stage);
     }
