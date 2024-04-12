@@ -12,7 +12,7 @@ public class Coin extends InteractiveTileObject {
     private static TiledMapTileSet set;
     public Coin(World world, TiledMap map, Rectangle bounds) {
         super(world, map, bounds);
-        set = map.getTileSets().getTileSet("MonedaD.tsx");
+        set = map.getTileSets().getTileSet("Tiled assets/MonedaD.tsx");
         tile = set.getTile(0);
         fixture.setUserData(this);
         setCategoryFilter(Main.COIN_BIT);
