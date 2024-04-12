@@ -7,6 +7,7 @@ public class Player {
     private float x = 0.32f;
     private float y = 0.8f;
     private PonySprite sprite;
+    private int spriteId;
 
     public Player(String playerName) {
         this.playerName = playerName;
@@ -42,5 +43,13 @@ public class Player {
 
     public void setSprite(PonySprite sprite) {
         this.sprite = sprite;
+    }
+
+    public int getSpriteId() {
+        return spriteId;
+    }
+
+    public void setSpriteId(int spriteId) {
+        this.spriteId = spriteId;
     }
 }

@@ -3,27 +3,25 @@ package ee.taltech.pony_dash_for_spikes_salvation.sprites;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import ee.taltech.pony_dash_for_spikes_salvation.Player;
 import ee.taltech.pony_dash_for_spikes_salvation.screens.PlayScreen;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static ee.taltech.pony_dash_for_spikes_salvation.screens.PlayScreen.getPPM;
 
 public class PonySprite extends Sprite {
-
 
     private enum State {FALLING, JUMPING, STANDING, RUN}
     private State currentState;
     private State previousState;
     private final World world;
     private Body b2body;
-    // Animation
 
+    // Animation
     private final TextureRegion ponyStill;
     private final Animation<TextureRegion> ponyRun;
     private final TextureRegion ponyJump;
@@ -31,6 +29,7 @@ public class PonySprite extends Sprite {
     private boolean runningRight;
     private float stateTimer;
     private Player player;
+    private List<Integer> animationInformation = Arrays.asList(2, 546, 512, 418, 2, 15, 18, 0, 0);
 
     /**
      * Gets b 2 body.
@@ -48,34 +47,51 @@ public class PonySprite extends Sprite {
      * @param screen the screen
      * @param player the player
      */
-    public PonySprite(World world, PlayScreen screen, Player player) {
-        super(screen.getAtlas().findRegion("twilight"));
+    public PonySprite(World world, PlayScreen screen, Player player, int id) {
+        super(screen.getAtlas().findRegion("applejack"));
         this.world = world;
         this.player = player;
         currentState = State.STANDING;
         previousState = State.STANDING;
         this.runningRight = true;
         this.stateTimer = 0;
-
         Array<TextureRegion> frames = new Array<>();
 
+        if (id == 1) {
+            this.animationInformation = Arrays.asList(2, 480, 512, 418, 2, 15, 18, 0, 0);
+        } else if (id == 5) {
+            this.animationInformation = Arrays.asList(10, 480, 512, 418, 3, 15, 18, 3, 3);
+        } else if (id == 4) {
+            this.animationInformation = Arrays.asList(18, 480, 512, 418, 2, 15, 18, 4, 2);
+        } else if (id == 2) {
+            this.animationInformation = Arrays.asList(2, 96, 128, 32, 2, 2, 5, 0, 0);
+        } else if (id == 3) {
+            this.animationInformation = Arrays.asList(18, 96, 128, 32, 0, 2, 5, 4, 3);
+        } else if (id == 6) {
+            this.animationInformation = Arrays.asList(10, 96, 128, 32, 2, 2, 5, 3, 1);
+        }
+
         // Pony run animation
-        for (int i = 15; i < 18; i++) {
-            frames.add(new TextureRegion(getTexture(), i * 32 + 2, 64, 32, 32));
+        for (int i = animationInformation.get(5); i < animationInformation.get(6); i++) {
+            frames.add(new TextureRegion(getTexture(), i * 32 + animationInformation.get(4),
+                    32 * animationInformation.get(0) + animationInformation.get(7), 32, 32));
         }
         ponyRun = new Animation<>(0.18f, frames);
 
         frames.clear();
 
         // Pony jump animation
-        ponyJump = new TextureRegion(getTexture(), 546, 64, 32, 32);
+        ponyJump = new TextureRegion(getTexture(), animationInformation.get(1) + animationInformation.get(8),
+                32 * animationInformation.get(0) + animationInformation.get(7), 32, 32);
 
         // Pony fall animation
 
-        ponyFall = new TextureRegion(getTexture(), 512, 64, 32, 32);
+        ponyFall = new TextureRegion(getTexture(), animationInformation.get(2) + animationInformation.get(4),
+                32 * animationInformation.get(0) + animationInformation.get(7), 32, 32);
 
         // Pony standing still
-        ponyStill = new TextureRegion(getTexture(), 418, 64, 32, 32);
+        ponyStill = new TextureRegion(getTexture(), animationInformation.get(3),
+                32 * animationInformation.get(0) + animationInformation.get(7), 32, 32);
 
         definePony();
 
@@ -201,7 +217,6 @@ public class PonySprite extends Sprite {
         }
     }
 
-
     /**
      * Define pony.
      */
@@ -212,8 +227,8 @@ public class PonySprite extends Sprite {
         b2body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
-        CircleShape shape = new CircleShape();
-        shape.setRadius(14 / getPPM());
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(14 / getPPM(), 14 / getPPM());
 
         fdef.shape = shape;
         b2body.createFixture(fdef);

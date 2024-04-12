@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -25,13 +24,14 @@ import java.util.Map;
 
 public class PlayScreen implements Screen {
     private final Main game;
-    private static final Texture texture = new Texture("twilight_sparkle_one.png");
     private TextureAtlas atlas;
     private static final int WIDTH = 620;
     private static final int HEIGHT = 408;
     private static final float PPM = 100f; // pixels per meter
     private final OrthographicCamera gameCam;
     private final Viewport gamePort;
+
+    private int ponyId;
 
     // Tiled
     private TmxMapLoader mapLoader;
@@ -53,15 +53,6 @@ public class PlayScreen implements Screen {
     }
 
     /**
-     * Gets texture.
-     *
-     * @return the texture
-     */
-    public static Texture getTexture() {
-        return texture;
-    }
-
-    /**
      * Instantiates a new Play screen.
      * Temporarily has body defining and collision.
      *
@@ -73,6 +64,7 @@ public class PlayScreen implements Screen {
         gamePort = new FitViewport(WIDTH / PPM, HEIGHT / PPM, gameCam);
 
         atlas = new TextureAtlas("pony_sprites.pack");
+        ponyId = game.getMyPlayer().getSpriteId();
 
         // Loading map
         mapLoader = new TmxMapLoader();
@@ -84,7 +76,7 @@ public class PlayScreen implements Screen {
         world = new World(new Vector2(0, -10), true);
         b2dr = new Box2DDebugRenderer();
 
-        player = new PonySprite(world, this, game.getMyPlayer());
+        player = new PonySprite(world, this, game.getMyPlayer(), ponyId);
         game.getMyPlayer().setSprite(player);
 
         // Ajutine, tuleb hiljem ümber tõsta
@@ -119,19 +111,6 @@ public class PlayScreen implements Screen {
             fdef.shape = shape;
             body.createFixture(fdef);
         }
-
-        for (RectangleMapObject object : map.getLayers().get(10).getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rectangle = (object).getRectangle();
-
-            bdef.type = BodyDef.BodyType.DynamicBody;
-            bdef.position.set((rectangle.getX() + rectangle.getWidth() / 2) / PPM, (rectangle.getY() + rectangle.getHeight() / 2) / PPM);
-
-            body = world.createBody(bdef);
-
-            shape.setAsBox(rectangle.getWidth() / 2 / PPM, rectangle.getHeight() / 2 / PPM);
-            fdef.shape = shape;
-            body.createFixture(fdef);
-        }
     }
 
     /**
@@ -140,7 +119,7 @@ public class PlayScreen implements Screen {
      * @param player the player
      */
     public void createNewSprite(Player player) {
-        PonySprite sprite = new PonySprite(world, this, player);
+        PonySprite sprite = new PonySprite(world, this, player, ponyId);
         player.setSprite(sprite);
     }
 
@@ -156,30 +135,25 @@ public class PlayScreen implements Screen {
     /**
      * Handle input and define movements.
      */
-    public void handleInput() {
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            if (player.getB2body().getPosition().x >= 0.15) {
-                player.getB2body().setLinearVelocity(-2f, player.getB2body().getLinearVelocity().y);
-                game.sendPositionInfoToServer();
-            } else {
-                player.getB2body().setLinearVelocity(0, player.getB2body().getLinearVelocity().y);
-            }
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            player.getB2body().setLinearVelocity(2f, player.getB2body().getLinearVelocity().y);
-            game.sendPositionInfoToServer();
-        } else {
-            player.getB2body().setLinearVelocity(0, player.getB2body().getLinearVelocity().y);
-        }
-
+    public  void handleInput() {
+        Player myPlayer = game.getMyPlayer();
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && (player.getCurrentState().equals("run")
                 || player.getCurrentState().equals("standing"))) {
-            player.getB2body().applyLinearImpulse(0, 5f, player.getB2body().getWorldCenter().x,
-                    player.getB2body().getWorldCenter().y, true);
-            game.sendPositionInfoToServer();
+            player.getB2body().applyLinearImpulse(new Vector2(0, 4.5f), player.getB2body().getWorldCenter(), true);
+            myPlayer.setX(player.getB2body().getPosition().x);
+            myPlayer.setY(player.getB2body().getPosition().y);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.getB2body().getLinearVelocity().x <= 2) {
+            player.getB2body().applyLinearImpulse(new Vector2(0.1f, 0), player.getB2body().getWorldCenter(), true);
+            myPlayer.setX(player.getB2body().getPosition().x);
+            myPlayer.setY(player.getB2body().getPosition().y);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.getB2body().getLinearVelocity().x >= -2) {
+            player.getB2body().applyLinearImpulse(new Vector2(-0.1f, 0), player.getB2body().getWorldCenter(), true);
+            myPlayer.setX(player.getB2body().getPosition().x);
+            myPlayer.setY(player.getB2body().getPosition().y);
         }
     }
-
-
 
     /**
      * Update screen.
