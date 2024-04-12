@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
 import ee.taltech.pony_dash_for_spikes_salvation.Player;
+import ee.taltech.pony_dash_for_spikes_salvation.items.Coin;
 import ee.taltech.pony_dash_for_spikes_salvation.sprites.PonySprite;
 
 import java.util.Map;
@@ -110,6 +111,11 @@ public class PlayScreen implements Screen {
             shape.setAsBox(rectangle.getWidth() / 2 / PPM, rectangle.getHeight() / 2 / PPM);
             fdef.shape = shape;
             body.createFixture(fdef);
+        }
+        // Coin
+        for(RectangleMapObject object: map.getLayers().get(15).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            new Coin(world, map, rect);
         }
     }
 

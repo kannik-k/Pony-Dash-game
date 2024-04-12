@@ -23,6 +23,11 @@ public class Main extends Game {
 	private Map<Integer, Player> players = new HashMap<>();
 	private Player myPlayer;
 	private int playerSpriteId;
+	public static final short DEFAULT_BIT = 1;
+	public static final short KEY_BIT = 2;
+	public static final short COLLECTED_BIT = 4;
+	public static final short COIN_BIT = 8;
+	public static final short CHAR_BIT = 16;
 
 	public SpriteBatch getBatch() {
 		return batch;
