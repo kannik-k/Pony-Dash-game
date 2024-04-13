@@ -4,8 +4,10 @@ import ee.taltech.pony_dash_for_spikes_salvation.sprites.PonySprite;
 
 public class Player {
     private String playerName;
-    private float x = 0.32f;
+    private float x = 0.32f; // Box2D world coordinates
     private float y = 0.8f;
+    private int tiledX = Math.round(x * 100); // PPM = 100, this is in pixels
+    private int tiledY = Math.round(y * 100); // In pixels
     private PonySprite sprite;
     private int spriteId;
 
@@ -51,5 +53,21 @@ public class Player {
 
     public void setSpriteId(int spriteId) {
         this.spriteId = spriteId;
+    }
+
+    public int getTiledX() {
+        return tiledX;
+    }
+
+    public void setTiledX(int tiledX) {
+        this.tiledX = tiledX;
+    }
+
+    public int getTiledY() {
+        return tiledY;
+    }
+
+    public void setTiledY(int tiledY) {
+        this.tiledY = tiledY;
     }
 }
