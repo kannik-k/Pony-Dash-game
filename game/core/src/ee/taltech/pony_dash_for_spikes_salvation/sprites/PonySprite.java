@@ -3,8 +3,10 @@ package ee.taltech.pony_dash_for_spikes_salvation.sprites;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import ee.taltech.pony_dash_for_spikes_salvation.Main;
 import ee.taltech.pony_dash_for_spikes_salvation.Player;
 import ee.taltech.pony_dash_for_spikes_salvation.screens.PlayScreen;
 
@@ -229,8 +231,10 @@ public class PonySprite extends Sprite {
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(14 / getPPM(), 14 / getPPM());
+        fdef.filter.categoryBits = Main.CHAR_BIT;
+        fdef.filter.maskBits = Main.DEFAULT_BIT | Main.COIN_BIT | Main.KEY_BIT;
 
         fdef.shape = shape;
-        b2body.createFixture(fdef);
+        b2body.createFixture(fdef).setUserData("pony");
     }
 }

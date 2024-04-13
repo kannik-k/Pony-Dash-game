@@ -14,6 +14,11 @@ public class Key extends InteractiveTileObject {
         setCategoryFilter(Main.KEY_BIT);
     }
 
+    @Override
+    public void onHeadHit() {
+
+    }
+
     public void collected() {
         setCategoryFilter(Main.COLLECTED_BIT);
         getCell().setTile(null);

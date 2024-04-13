@@ -2,6 +2,7 @@ package ee.taltech.pony_dash_for_spikes_salvation.items;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 import ee.taltech.pony_dash_for_spikes_salvation.screens.PlayScreen;
@@ -32,9 +33,15 @@ public abstract class InteractiveTileObject {
         fdef.shape = shape;
         fixture = body.createFixture(fdef);
     }
+    public abstract void onHeadHit();
     public void setCategoryFilter(short filterBit) {
         Filter filter = new Filter();
         filter.categoryBits = filterBit;
         fixture.setFilterData(filter);
+    }
+    public TiledMapTileLayer.Cell getCell() {
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(16);
+        return layer.getCell((int)(body.getPosition().x * PlayScreen.getPPM() / 16),
+                (int)(body.getPosition().y * PlayScreen.getPPM() / 16));
     }
 }

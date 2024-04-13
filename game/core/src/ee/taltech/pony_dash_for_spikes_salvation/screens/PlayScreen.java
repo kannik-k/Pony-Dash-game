@@ -20,6 +20,7 @@ import ee.taltech.pony_dash_for_spikes_salvation.Main;
 import ee.taltech.pony_dash_for_spikes_salvation.Player;
 import ee.taltech.pony_dash_for_spikes_salvation.items.Coin;
 import ee.taltech.pony_dash_for_spikes_salvation.sprites.PonySprite;
+import ee.taltech.pony_dash_for_spikes_salvation.tools.WorldContactListener;
 
 import java.util.Map;
 
@@ -79,7 +80,7 @@ public class PlayScreen implements Screen {
 
         player = new PonySprite(world, this, game.getMyPlayer(), ponyId);
         game.getMyPlayer().setSprite(player);
-
+        world.setContactListener(new WorldContactListener());
         // Ajutine, tuleb hiljem ümber tõsta
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
