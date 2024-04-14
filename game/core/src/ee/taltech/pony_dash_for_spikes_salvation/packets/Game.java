@@ -1,7 +1,5 @@
 package ee.taltech.pony_dash_for_spikes_salvation.packets;
 
-import ee.taltech.pony_dash_for_spikes_salvation.packets.PlayerJoinPacket;
-
 import java.util.ArrayList;
 import java.util.List;
 
