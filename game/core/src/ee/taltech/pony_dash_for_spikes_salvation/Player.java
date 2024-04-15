@@ -10,6 +10,7 @@ public class Player {
     private int tiledY = Math.round(y * 100); // In pixels
     private PonySprite sprite;
     private int spriteId;
+    private int gameID;
 
     public Player(String playerName) {
         this.playerName = playerName;
@@ -69,5 +70,13 @@ public class Player {
 
     public void setTiledY(int tiledY) {
         this.tiledY = tiledY;
+    }
+
+    public int getGameID() {
+        return gameID;
+    }
+
+    public void setGameID(int gameID) {
+        this.gameID = gameID;
     }
 }

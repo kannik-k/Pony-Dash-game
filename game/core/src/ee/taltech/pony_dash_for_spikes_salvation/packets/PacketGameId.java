@@ -1,6 +1,6 @@
 package ee.taltech.pony_dash_for_spikes_salvation.packets;
 
-public class OnStartGame {
+public class PacketGameId {
     private int gameId;
 
     public int getGameId() {
