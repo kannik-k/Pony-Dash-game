@@ -7,10 +7,10 @@ import java.util.List;
 
 public class Game {
 
-     // game ID
+    // game ID
     private final int gameId;
 
-     // List of players currently in the game
+    // List of players currently in the game
     private final List<PlayerJoinPacket> players = new ArrayList<>();
 
     public Game(int gameId) {

@@ -30,6 +30,7 @@ public class Main extends Game {
 	private Player myPlayer;
 	private int playerSpriteId;
 	private PlayScreen playScreen;
+	private int gameId;
 
 	public SpriteBatch getBatch() {
 		return batch;
@@ -83,6 +84,7 @@ public class Main extends Game {
 		}
 		PacketPlayerConnect packetPlayerConnect = new PacketPlayerConnect();
 		packetPlayerConnect.setPlayerName("player");
+		packetPlayerConnect.setGameID(gameId);
 		client.sendTCP(packetPlayerConnect); // Send server info that client has connected
 		client.addListener(new Listener.ThreadedListener(new Listener() {
 			/**
@@ -105,6 +107,10 @@ public class Main extends Game {
 			 */
 			@Override
 			public void received(Connection connection, Object object) {
+				if (object instanceof PacketGameId) {
+					myPlayer.setGameID(((PacketGameId) object).getGameId());
+					System.out.println("packet game id");
+				}
 				if (object instanceof PacketPlayerConnect) {
 					if (((PacketPlayerConnect) object).getPlayerID() == connection.getID()) {
 						players.put(connection.getID(), myPlayer);
@@ -113,25 +119,34 @@ public class Main extends Game {
 						players.put(((PacketPlayerConnect) object).getPlayerID(), player);
 						playScreen.createNewSprite(player);
 					}
+					System.out.println("Player connect " + ((PacketPlayerConnect) object).getPlayerID());
 				}
 				if (object instanceof PacketSendCoordinates) {
 					Player player = players.get(((PacketSendCoordinates) object).getPlayerID());
-					player.setX(((PacketSendCoordinates) object).getX());
-					player.setY(((PacketSendCoordinates) object).getY());
+					if (player != null) {
+						player.setX(((PacketSendCoordinates) object).getX());
+						player.setY(((PacketSendCoordinates) object).getY());
+						player.setGameID(myPlayer.getGameID());
+					}
+					System.out.println("packet send coordinates");
 				}
 				if (object instanceof OnStartGame) {
 					Gdx.app.postRunnable(new Runnable() {
 						@Override
 						public void run() {
 							setScreen(playScreen);
+							myPlayer.setGameID(((OnStartGame) object).getGameId());
+							gameId = myPlayer.getGameID();
 						}
 					});
+					System.out.println("On Start game");
 				}
 				if (object instanceof OnLobbyJoin) {
 					// Will use later
 				}
 				if (object instanceof OnLobbyList) {
-					// Will use later
+					System.out.println("I have recieved lobby list:" + (((OnLobbyList) object).getPeers()));
+					List<OnLobbyJoin> lobbyPlayers = ((OnLobbyList) object).getPeers();
 				}
 
 				if (object instanceof PacketOnSpawnNpc) {
@@ -183,6 +198,7 @@ public class Main extends Game {
 		packetSendCoordinates.setTiledX(Math.round(box2DX * 100)); // PPM = 100
 		packetSendCoordinates.setTiledY(Math.round(box2DY * 100));
 		packetSendCoordinates.setPlayerID(client.getID());
+		packetSendCoordinates.setGameID(myPlayer.getGameID());
 		client.sendUDP(packetSendCoordinates);
 	}
 
