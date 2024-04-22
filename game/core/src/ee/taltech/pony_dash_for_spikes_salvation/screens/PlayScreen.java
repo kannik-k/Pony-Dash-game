@@ -45,7 +45,6 @@ public class PlayScreen implements Screen {
     private World world;
     private Box2DDebugRenderer b2dr;
     private PonySprite player;
-
     /**
      * Gets ppm.
      *
@@ -81,7 +80,9 @@ public class PlayScreen implements Screen {
 
         player = new PonySprite(world, this, game.getMyPlayer(), ponyId);
         game.getMyPlayer().setSprite(player);
+        // collision types
         world.setContactListener(new WorldContactListener());
+
         // Ajutine, tuleb hiljem ümber tõsta
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
@@ -116,8 +117,7 @@ public class PlayScreen implements Screen {
         }
         // Coin
         for(RectangleMapObject object: map.getLayers().get(15).getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            new Coin(world, map, rect);
+            new Coin(world, map, object);
         }
     }
 

@@ -2,6 +2,7 @@ package ee.taltech.pony_dash_for_spikes_salvation.items;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.utils.Collision;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
@@ -12,8 +13,8 @@ import ee.taltech.pony_dash_for_spikes_salvation.screens.PlayScreen;
 
 public class Coin extends InteractiveTileObject {
     private static TiledMapTileSet set;
-    public Coin(World world, TiledMap map, Rectangle bounds) {
-        super(world, map, bounds);
+    public Coin(World world, TiledMap map, MapObject object) {
+        super(world, map, object);
         // set = map.getTileSets().getTileSet("MonedaD.tsx");
         // tile = set.getTile(0);
         fixture.setUserData(this);
