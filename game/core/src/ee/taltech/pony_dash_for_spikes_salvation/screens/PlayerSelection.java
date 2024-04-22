@@ -213,7 +213,10 @@ public class PlayerSelection implements Screen {
         start.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new PlayScreen(game));
+                game.setPlayerSpriteId(spriteId);
+                PlayScreen playScreen = game.getPlayScreen();
+                playScreen.updatePonyIdAndSprite(spriteId);
+                game.setScreen(playScreen);
                 changeCursorToDefault();
             }
         });

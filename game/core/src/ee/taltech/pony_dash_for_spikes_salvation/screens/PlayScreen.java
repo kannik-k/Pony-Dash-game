@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
 import ee.taltech.pony_dash_for_spikes_salvation.Player;
+import ee.taltech.pony_dash_for_spikes_salvation.ai.NPC;
 import ee.taltech.pony_dash_for_spikes_salvation.items.Coin;
 import ee.taltech.pony_dash_for_spikes_salvation.sprites.PonySprite;
 import ee.taltech.pony_dash_for_spikes_salvation.tools.WorldContactListener;
@@ -66,7 +67,7 @@ public class PlayScreen implements Screen {
         gamePort = new FitViewport(WIDTH / PPM, HEIGHT / PPM, gameCam);
 
         atlas = new TextureAtlas("pony_sprites.pack");
-        ponyId = game.getMyPlayer().getSpriteId();
+        ponyId = game.getPlayerSpriteId();
 
         // Loading map
         mapLoader = new TmxMapLoader();
@@ -120,6 +121,12 @@ public class PlayScreen implements Screen {
         }
     }
 
+    public void updatePonyIdAndSprite(int ponyId) {
+        this.ponyId = ponyId;
+        player = new PonySprite(world, this, game.getMyPlayer(), ponyId);
+        game.getMyPlayer().setSprite(player);
+    }
+
     /**
      * Create new sprite.
      *
@@ -147,18 +154,30 @@ public class PlayScreen implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && (player.getCurrentState().equals("run")
                 || player.getCurrentState().equals("standing"))) {
             player.getB2body().applyLinearImpulse(new Vector2(0, 4.5f), player.getB2body().getWorldCenter(), true);
-            myPlayer.setX(player.getB2body().getPosition().x);
-            myPlayer.setY(player.getB2body().getPosition().y);
+            float box2DX = player.getB2body().getPosition().x;
+            float box2DY = player.getB2body().getPosition().y;
+            myPlayer.setX(box2DX);
+            myPlayer.setY(box2DY);
+            myPlayer.setTiledX(Math.round(box2DX * PPM));
+            myPlayer.setTiledY(Math.round(box2DY * PPM));
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.getB2body().getLinearVelocity().x <= 2) {
             player.getB2body().applyLinearImpulse(new Vector2(0.1f, 0), player.getB2body().getWorldCenter(), true);
-            myPlayer.setX(player.getB2body().getPosition().x);
-            myPlayer.setY(player.getB2body().getPosition().y);
+            float box2DX = player.getB2body().getPosition().x;
+            float box2DY = player.getB2body().getPosition().y;
+            myPlayer.setX(box2DX);
+            myPlayer.setY(box2DY);
+            myPlayer.setTiledX(Math.round(box2DX * PPM));
+            myPlayer.setTiledY(Math.round(box2DY * PPM));
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.getB2body().getLinearVelocity().x >= -2) {
             player.getB2body().applyLinearImpulse(new Vector2(-0.1f, 0), player.getB2body().getWorldCenter(), true);
-            myPlayer.setX(player.getB2body().getPosition().x);
-            myPlayer.setY(player.getB2body().getPosition().y);
+            float box2DX = player.getB2body().getPosition().x;
+            float box2DY = player.getB2body().getPosition().y;
+            myPlayer.setX(box2DX);
+            myPlayer.setY(box2DY);
+            myPlayer.setTiledX(Math.round(box2DX * PPM));
+            myPlayer.setTiledY(Math.round(box2DY * PPM));
         }
     }
 
@@ -212,13 +231,14 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         b2dr.render(world, gameCam.combined);
         renderer.render();
-        // b2dr.render(world, gameCam.combined); renders box2drender lines
+        // b2dr.render(world, gameCam.combined); // renders box2drender lines
         game.getBatch().begin(); // Opens window
         update(delta);
 
         game.getBatch().setProjectionMatrix(gameCam.combined); // Renders the game-cam
-        player.draw(game.getBatch());
+        renderNPCs();
         renderAllPlayers();
+        player.draw(game.getBatch());
 
         game.getBatch().end();
         game.sendPositionInfoToServer();
@@ -231,6 +251,13 @@ public class PlayScreen implements Screen {
                 currentPlayer.getSprite().update(Gdx.graphics.getDeltaTime());
                 currentPlayer.getSprite().draw(game.getBatch());
             }
+        }
+    }
+
+    private void renderNPCs() {
+        for (NPC npc: game.getBots()) {
+            npc.update(Gdx.graphics.getDeltaTime());
+            npc.draw(game.getBatch());
         }
     }
 

@@ -1,9 +1,12 @@
 package ee.taltech.pony_dash_for_spikes_salvation;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import ee.taltech.pony_dash_for_spikes_salvation.ai.NPC;
 import ee.taltech.pony_dash_for_spikes_salvation.exceptions.ConnectionException;
 import ee.taltech.pony_dash_for_spikes_salvation.packets.*;
 import ee.taltech.pony_dash_for_spikes_salvation.screens.MenuScreen;
@@ -13,7 +16,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.esotericsoftware.kryonet.Client;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Main extends Game {
@@ -21,8 +26,10 @@ public class Main extends Game {
 	private BitmapFont font;
 	private Client client;
 	private Map<Integer, Player> players = new HashMap<>();
+	private List<NPC> bots = new ArrayList<>();
 	private Player myPlayer;
 	private int playerSpriteId;
+	private PlayScreen playScreen;
 	public static final short DEFAULT_BIT = 1;
 	public static final short CHAR_BIT = 2;
 	public static final short KEY_BIT = 4;
@@ -45,6 +52,14 @@ public class Main extends Game {
 		return players;
 	}
 
+	public List<NPC> getBots() {
+		return bots;
+	}
+
+	public PlayScreen getPlayScreen() {
+		return playScreen;
+	}
+
 	/**
 	 * Create a new client and player, create listener.
 	 * <p>
@@ -62,7 +77,7 @@ public class Main extends Game {
 		Network.register(client);
 		batch = new SpriteBatch();
 		myPlayer = new Player("player");
-		PlayScreen playScreen = new PlayScreen(this);
+		playScreen = new PlayScreen(this);
 		MenuScreen menuScreen = new MenuScreen(this);
 		setScreen(menuScreen);
 		try {
@@ -78,12 +93,17 @@ public class Main extends Game {
 			/**
 			 * Create listener for different packets sent to the client.
 			 * <p>
-			 *     There are two kinds of packets that the listener receives.
+			 *     There are six kinds of packets that the listener receives.
 			 *     1. The PacketPlayerConnect packet is received when someone joins the game. If the packet contains the
 			 *     same player that the packet was sent to then the player and their id are added to the players map.
 			 *     Otherwise a new player is created and added to the map. A new sprite is created for the new player.
 			 *     2. The PacketSendCoordinates packet is received when a player moves in the game. Next the
 			 *     moving players coordinates are set accordingly.
+			 *     3. OnStartGame
+			 *     4. OnLobbyJoin
+			 *     5. OnLobbyList
+			 *     6. The PacketOnSpawn packets are received after the player connects to the server. One packet contains
+			 *     an npc-s id and tiled coordinates. Then a new npc is added.
 			 * </p>
 			 * @param connection (TCP or UDP)
 			 * @param object that is received
@@ -118,8 +138,25 @@ public class Main extends Game {
 				if (object instanceof OnLobbyList) {
 					// Will use later
 				}
+
+				if (object instanceof PacketOnSpawnNpc) {
+					final PacketOnSpawnNpc onSpawnNpc = (PacketOnSpawnNpc) object;
+					Gdx.app.postRunnable(new Runnable() {
+						@Override
+						public void run() {
+							addNpc(onSpawnNpc.getId(), onSpawnNpc.getTiledX(), onSpawnNpc.getTiledY());
+						}
+					});
+				}
 			}
 		}));
+	}
+
+	private void addNpc(int id, int tiledX, int tiledY) {
+		Sprite sprite = new Sprite(new Texture("twilight_sparkle_one.png"));
+		sprite.setSize(32, 32);
+		NPC npc = new NPC(id, tiledX, tiledY, sprite, playScreen.getWorld());
+		bots.add(npc);
 	}
 
 	public int getPlayerSpriteId() {
@@ -144,8 +181,12 @@ public class Main extends Game {
 	 */
 	public void sendPositionInfoToServer() {
 		PacketSendCoordinates packetSendCoordinates = new PacketSendCoordinates();
-		packetSendCoordinates.setX(myPlayer.getSprite().getB2body().getPosition().x);
-		packetSendCoordinates.setY(myPlayer.getSprite().getB2body().getPosition().y);
+		float box2DX = myPlayer.getSprite().getB2body().getPosition().x;
+		float box2DY = myPlayer.getSprite().getB2body().getPosition().y;
+		packetSendCoordinates.setX(box2DX);
+		packetSendCoordinates.setY(box2DY);
+		packetSendCoordinates.setTiledX(Math.round(box2DX * 100)); // PPM = 100
+		packetSendCoordinates.setTiledY(Math.round(box2DY * 100));
 		packetSendCoordinates.setPlayerID(client.getID());
 		client.sendUDP(packetSendCoordinates);
 	}
