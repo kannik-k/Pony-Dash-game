@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
+import ee.taltech.pony_dash_for_spikes_salvation.packets.PacketSinglePlayer;
 
 public class PlayerSelection implements Screen {
     private final Main game;
@@ -213,6 +214,8 @@ public class PlayerSelection implements Screen {
         start.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                PacketSinglePlayer packet = new PacketSinglePlayer();
+                game.sendPacketToServer(packet);
                 game.setPlayerSpriteId(spriteId);
                 PlayScreen playScreen = game.getPlayScreen();
                 playScreen.updatePonyIdAndSprite(spriteId);
