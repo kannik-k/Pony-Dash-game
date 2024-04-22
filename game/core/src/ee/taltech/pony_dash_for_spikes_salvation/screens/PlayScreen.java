@@ -20,6 +20,7 @@ import ee.taltech.pony_dash_for_spikes_salvation.Main;
 import ee.taltech.pony_dash_for_spikes_salvation.Player;
 import ee.taltech.pony_dash_for_spikes_salvation.ai.NPC;
 import ee.taltech.pony_dash_for_spikes_salvation.items.Coin;
+import ee.taltech.pony_dash_for_spikes_salvation.items.Key;
 import ee.taltech.pony_dash_for_spikes_salvation.sprites.PonySprite;
 import ee.taltech.pony_dash_for_spikes_salvation.tools.WorldContactListener;
 
@@ -118,6 +119,10 @@ public class PlayScreen implements Screen {
         // Coin
         for(RectangleMapObject object: map.getLayers().get(15).getObjects().getByType(RectangleMapObject.class)) {
             new Coin(world, map, object);
+        }
+        //Key
+        for(RectangleMapObject object: map.getLayers().get(17).getObjects().getByType(RectangleMapObject.class)) {
+            new Key(world, map, object);
         }
     }
 

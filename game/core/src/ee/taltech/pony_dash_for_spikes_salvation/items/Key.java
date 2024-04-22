@@ -1,5 +1,6 @@
 package ee.taltech.pony_dash_for_spikes_salvation.items;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -16,16 +17,12 @@ public class Key extends InteractiveTileObject {
 
     @Override
     public void onHeadHit() {
-
+        Gdx.app.log("Key", "Collision");
+        collected();
     }
 
     public void collected() {
         setCategoryFilter(Main.COLLECTED_BIT);
         getCell().setTile(null);
-    }
-    public TiledMapTileLayer.Cell getCell() {
-        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(16);
-        return layer.getCell((int)(body.getPosition().x * PlayScreen.getPPM() / 16),
-                (int)(body.getPosition().y * PlayScreen.getPPM() / 16));
     }
 }

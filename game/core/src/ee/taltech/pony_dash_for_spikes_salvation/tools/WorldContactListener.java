@@ -16,6 +16,7 @@ public class WorldContactListener implements ContactListener {
 
             if (object.getUserData() != null && InteractiveTileObject.class.isAssignableFrom(object.getUserData().getClass())) {
                 ((InteractiveTileObject) object.getUserData()).onHeadHit();
+
             }
         }
     }

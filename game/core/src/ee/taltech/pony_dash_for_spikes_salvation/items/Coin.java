@@ -9,14 +9,14 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.World;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
+import ee.taltech.pony_dash_for_spikes_salvation.Player;
+import ee.taltech.pony_dash_for_spikes_salvation.packets.Game;
 import ee.taltech.pony_dash_for_spikes_salvation.screens.PlayScreen;
 
 public class Coin extends InteractiveTileObject {
-    private static TiledMapTileSet set;
+
     public Coin(World world, TiledMap map, MapObject object) {
         super(world, map, object);
-        // set = map.getTileSets().getTileSet("MonedaD.tsx");
-        // tile = set.getTile(0);
         fixture.setUserData(this);
         setCategoryFilter(Main.COIN_BIT);
     }
