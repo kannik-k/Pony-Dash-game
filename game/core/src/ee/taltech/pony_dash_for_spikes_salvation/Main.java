@@ -109,6 +109,7 @@ public class Main extends Game {
 			public void received(Connection connection, Object object) {
 				if (object instanceof PacketGameId) {
 					myPlayer.setGameID(((PacketGameId) object).getGameId());
+					System.out.println("packet game id");
 				}
 				if (object instanceof PacketPlayerConnect) {
 					if (((PacketPlayerConnect) object).getPlayerID() == connection.getID()) {
@@ -118,6 +119,7 @@ public class Main extends Game {
 						players.put(((PacketPlayerConnect) object).getPlayerID(), player);
 						playScreen.createNewSprite(player);
 					}
+					System.out.println("Player connect " + ((PacketPlayerConnect) object).getPlayerID());
 				}
 				if (object instanceof PacketSendCoordinates) {
 					Player player = players.get(((PacketSendCoordinates) object).getPlayerID());
@@ -126,6 +128,7 @@ public class Main extends Game {
 						player.setY(((PacketSendCoordinates) object).getY());
 						player.setGameID(myPlayer.getGameID());
 					}
+					System.out.println("packet send coordinates");
 				}
 				if (object instanceof OnStartGame) {
 					Gdx.app.postRunnable(new Runnable() {
@@ -136,6 +139,7 @@ public class Main extends Game {
 							gameId = myPlayer.getGameID();
 						}
 					});
+					System.out.println("On Start game");
 				}
 				if (object instanceof OnLobbyJoin) {
 					// Will use later
