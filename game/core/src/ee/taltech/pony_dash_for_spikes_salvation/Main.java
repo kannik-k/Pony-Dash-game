@@ -121,9 +121,11 @@ public class Main extends Game {
 				}
 				if (object instanceof PacketSendCoordinates) {
 					Player player = players.get(((PacketSendCoordinates) object).getPlayerID());
-					player.setX(((PacketSendCoordinates) object).getX());
-					player.setY(((PacketSendCoordinates) object).getY());
-					player.setGameID(myPlayer.getGameID());
+					if (player != null) {
+						player.setX(((PacketSendCoordinates) object).getX());
+						player.setY(((PacketSendCoordinates) object).getY());
+						player.setGameID(myPlayer.getGameID());
+					}
 				}
 				if (object instanceof OnStartGame) {
 					Gdx.app.postRunnable(new Runnable() {
