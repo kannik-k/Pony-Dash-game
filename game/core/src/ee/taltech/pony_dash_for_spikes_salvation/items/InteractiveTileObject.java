@@ -8,9 +8,11 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import ee.taltech.pony_dash_for_spikes_salvation.scenes.Hud;
 import ee.taltech.pony_dash_for_spikes_salvation.screens.PlayScreen;
 
 public abstract class InteractiveTileObject {
+    protected Hud hud;
     protected  Fixture fixture;
     protected World world;
     protected TiledMap map;
@@ -20,11 +22,12 @@ public abstract class InteractiveTileObject {
     protected Vector2 velocity;
     protected MapObject object;
 
-    public InteractiveTileObject(World world, TiledMap map, MapObject object) {
+    public InteractiveTileObject(World world, TiledMap map, MapObject object, Hud hud) {
         this.object = object;
         this.world = world;
         this.map = map;
         this.bounds = ((RectangleMapObject)object).getRectangle();
+        this.hud = hud;
 
         BodyDef bdef = new BodyDef();
         FixtureDef fdef = new FixtureDef();

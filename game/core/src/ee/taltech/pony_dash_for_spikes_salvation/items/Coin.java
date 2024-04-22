@@ -11,12 +11,13 @@ import com.badlogic.gdx.physics.box2d.World;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
 import ee.taltech.pony_dash_for_spikes_salvation.Player;
 import ee.taltech.pony_dash_for_spikes_salvation.packets.Game;
+import ee.taltech.pony_dash_for_spikes_salvation.scenes.Hud;
 import ee.taltech.pony_dash_for_spikes_salvation.screens.PlayScreen;
 
 public class Coin extends InteractiveTileObject {
 
-    public Coin(World world, TiledMap map, MapObject object) {
-        super(world, map, object);
+    public Coin(World world, TiledMap map, MapObject object, Hud hud) {
+        super(world, map, object, hud);
         fixture.setUserData(this);
         setCategoryFilter(Main.COIN_BIT);
     }
@@ -25,10 +26,12 @@ public class Coin extends InteractiveTileObject {
     public void onHeadHit() {
         Gdx.app.log("Coin", "Collision");
         collected();
+        hud.addScore(1);
     }
 
     public void collected() {
         setCategoryFilter(Main.COLLECTED_BIT);
         getCell().setTile(null);
+
     }
 }

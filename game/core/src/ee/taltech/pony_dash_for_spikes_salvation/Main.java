@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 public class Main extends Game {
+	public static final int V_WIDTH = 620;
+	public static final int V_HEIGHT = 408;
 	private SpriteBatch batch; // holds stuff, for example maps. One is enough.
 	private BitmapFont font;
 	private Client client;
