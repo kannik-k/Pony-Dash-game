@@ -248,6 +248,12 @@ public class CreateLobbyScreen implements Screen {
 
         joinLobby.addListener(inputListener);
         back.addListener(inputListener);
+        twilight.addListener(inputListener);
+        rainbow.addListener(inputListener);
+        applejack.addListener(inputListener);
+        pinkie.addListener(inputListener);
+        rarity.addListener(inputListener);
+        fluttershy.addListener(inputListener);
 
         Gdx.input.setInputProcessor(stage);
     }

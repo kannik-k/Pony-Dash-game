@@ -19,8 +19,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
 import ee.taltech.pony_dash_for_spikes_salvation.packets.OnStartGame;
 
-
-public class LobbyScreen implements Screen {
+public class GameOverScreen implements Screen {
     private final Main game;
     private Stage stage;
     private final OrthographicCamera gameCam;
@@ -34,7 +33,7 @@ public class LobbyScreen implements Screen {
      *
      * @param game  Main game.
      */
-    public LobbyScreen(Main game) {
+    public GameOverScreen(Main game) {
         this.game = game;
         spriteBatch = game.getBatch();
         backgroundTexture = new Texture("Game Assets/Sunny land winter forest sky.png");
@@ -119,24 +118,22 @@ public class LobbyScreen implements Screen {
         skin = new Skin(Gdx.files.internal("Skin/terramotherui/terra-mother-ui.json"));
 
         // Table for the buttons visible on screen.
-        Table buttonTable = new Table();
-        buttonTable.setFillParent(true);
-        stage.addActor(buttonTable);
+        Table backTable = new Table();
+        TextButton back = new TextButton("Back", skin);
+        backTable.top().left();
+        backTable.setFillParent(true);
+        backTable.add(back).pad(10);
 
+        stage.addActor(backTable);
 
-        TextButton startGame = new TextButton("Start game", skin);
-
-        buttonTable.row().pad(100, 0, 10, 0);
-        buttonTable.add(startGame).fillX().uniformX();
-
-        startGame.addListener(new ChangeListener() {
+        back.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                OnStartGame packet = new OnStartGame();
-                game.sendPacketToServer(packet);
+                game.setScreen(new MenuScreen(game));
                 changeCursorToDefault();
             }
         });
+
 
         InputListener inputListener = new InputListener() {
             @Override
@@ -146,7 +143,7 @@ public class LobbyScreen implements Screen {
             }
         };
 
-        startGame.addListener(inputListener);
+        back.addListener(inputListener);
 
         Gdx.input.setInputProcessor(stage);
     }

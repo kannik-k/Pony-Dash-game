@@ -223,7 +223,7 @@ public class PonySprite extends Sprite {
      */
     public void definePony() {
         BodyDef bdef = new BodyDef();
-        bdef.position.set(64 / getPPM(), 420 / getPPM());
+        bdef.position.set(40000 / getPPM(), 620 / getPPM()); // original: bdef.position.set(64 / getPPM(), 420 / getPPM());
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
