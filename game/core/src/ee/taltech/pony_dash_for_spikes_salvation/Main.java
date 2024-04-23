@@ -128,7 +128,6 @@ public class Main extends Game {
 						player.setY(((PacketSendCoordinates) object).getY());
 						player.setGameID(myPlayer.getGameID());
 					}
-					System.out.println("packet send coordinates");
 				}
 				if (object instanceof OnStartGame) {
 					Gdx.app.postRunnable(new Runnable() {
@@ -139,13 +138,11 @@ public class Main extends Game {
 							gameId = myPlayer.getGameID();
 						}
 					});
-					System.out.println("On Start game");
 				}
 				if (object instanceof OnLobbyJoin) {
 					// Will use later
 				}
 				if (object instanceof OnLobbyList) {
-					System.out.println("I have recieved lobby list:" + (((OnLobbyList) object).getPeers()));
 					List<OnLobbyJoin> lobbyPlayers = ((OnLobbyList) object).getPeers();
 				}
 
