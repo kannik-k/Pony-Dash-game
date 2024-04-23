@@ -19,15 +19,15 @@ public class Hud {
     private float timeCount;
     private Integer score;
 
-    private Label countdownLabel;
-    private Label scoreLabel;
+    private Label timerLabel;
+    private Label coinAmountLabel;
     private Label timeLabel;
-    private Label levelLabel;
-    private Label worldLabel;
-    private Label marioLabel;
+    private Label isKeyLabel;
+    private Label keyLabel;
+    private Label coinLabel;
 
     public Hud(SpriteBatch sb) {
-        worldTimer = 300;
+        worldTimer = 0;
         timeCount = 0;
         score = 0;
 
@@ -38,39 +38,39 @@ public class Hud {
         table.top();
         table.setFillParent(true);
 
-        countdownLabel = new Label(String.format("%03d", worldTimer), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        scoreLabel = new Label(String.format("%02d", score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        timerLabel = new Label(String.format("%03d", worldTimer), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        coinAmountLabel = new Label(String.format("%02d", score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         timeLabel = new Label("Time", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        levelLabel = new Label("0", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        worldLabel = new Label("Key", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        marioLabel = new Label("Coins", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        isKeyLabel = new Label("0", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        keyLabel = new Label("Key", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        coinLabel = new Label("Coins", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 
-        table.add(marioLabel).expandX().padTop(10);
-        table.add(worldLabel).expandX().padTop(10);
+        table.add(coinLabel).expandX().padTop(10);
+        table.add(keyLabel).expandX().padTop(10);
         table.add(timeLabel).expandX().padTop(10);
         table.row();
-        table.add(scoreLabel).expandX();
-        table.add(levelLabel).expandX();
-        table.add(countdownLabel).expandX();
+        table.add(coinAmountLabel).expandX();
+        table.add(isKeyLabel).expandX();
+        table.add(timerLabel).expandX();
 
         stage.addActor(table);
     }
     public void update(float dt) {
         timeCount += dt;
         if (timeCount >= 1) {
-            worldTimer--;
-            countdownLabel.setText(String.format("%03d", worldTimer));
+            worldTimer++;
+            timerLabel.setText(String.format("%03d", worldTimer));
             timeCount = 0;
         }
     }
 
     public void addScore(int value) {
         score += value;
-        scoreLabel.setText(String.format("%02d", score));
+        coinAmountLabel.setText(String.format("%02d", score));
     }
 
     public void addKey() {
-        levelLabel.setText("1");
+        isKeyLabel.setText("1");
     }
 
     // @Override
