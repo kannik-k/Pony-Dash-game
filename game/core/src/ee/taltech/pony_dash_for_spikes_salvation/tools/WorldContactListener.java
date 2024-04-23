@@ -1,6 +1,5 @@
 package ee.taltech.pony_dash_for_spikes_salvation.tools;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.*;
 import ee.taltech.pony_dash_for_spikes_salvation.items.InteractiveTileObject;
 
