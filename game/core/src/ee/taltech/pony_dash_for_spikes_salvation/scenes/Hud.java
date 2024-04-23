@@ -17,7 +17,8 @@ public class Hud {
 
     private Integer worldTimer;
     private float timeCount;
-    private Integer score;
+    private Integer coins;
+    private boolean isKeyCollected;
 
     private Label timerLabel;
     private Label coinAmountLabel;
@@ -26,10 +27,19 @@ public class Hud {
     private Label keyLabel;
     private Label coinLabel;
 
+    public Integer getCoins() {
+        return coins;
+    }
+
+    public boolean isKeyCollected() {
+        return isKeyCollected;
+    }
+
     public Hud(SpriteBatch sb) {
         worldTimer = 0;
         timeCount = 0;
-        score = 0;
+        coins = 0;
+        isKeyCollected = false;
 
         viewport = new FitViewport(Main.V_WIDTH, Main.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, sb);
@@ -39,7 +49,7 @@ public class Hud {
         table.setFillParent(true);
 
         timerLabel = new Label(String.format("%03d", worldTimer), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        coinAmountLabel = new Label(String.format("%02d", score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        coinAmountLabel = new Label(String.format("%02d", coins), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         timeLabel = new Label("Time", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         isKeyLabel = new Label("0", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         keyLabel = new Label("Key", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
@@ -65,12 +75,13 @@ public class Hud {
     }
 
     public void addScore(int value) {
-        score += value;
-        coinAmountLabel.setText(String.format("%02d", score));
+        coins += value;
+        coinAmountLabel.setText(String.format("%02d", coins));
     }
 
     public void addKey() {
         isKeyLabel.setText("1");
+        isKeyCollected = true;
     }
 
     // @Override
