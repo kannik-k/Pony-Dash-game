@@ -48,7 +48,7 @@ public class Hud {
         table.top();
         table.setFillParent(true);
 
-        timerLabel = new Label(String.format("%03d", worldTimer), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        timerLabel = new Label(String.format("%06d", worldTimer), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         coinAmountLabel = new Label(String.format("%02d", coins), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         timeLabel = new Label("Time", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         isKeyLabel = new Label("0", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
