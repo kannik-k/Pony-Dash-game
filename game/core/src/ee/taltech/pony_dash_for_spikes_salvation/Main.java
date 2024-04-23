@@ -119,11 +119,10 @@ public class Main extends Game {
 						players.put(((PacketPlayerConnect) object).getPlayerID(), player);
 						playScreen.createNewSprite(player);
 					}
-					System.out.println("Player connect " + ((PacketPlayerConnect) object).getPlayerID());
 				}
 				if (object instanceof PacketSendCoordinates) {
 					Player player = players.get(((PacketSendCoordinates) object).getPlayerID());
-					if (player != null) {
+					if (player != null && player != myPlayer) {
 						player.setX(((PacketSendCoordinates) object).getX());
 						player.setY(((PacketSendCoordinates) object).getY());
 						player.setGameID(myPlayer.getGameID());
