@@ -1,18 +1,11 @@
 package ee.taltech.pony_dash_for_spikes_salvation.items;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.ai.utils.Collision;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.World;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
-import ee.taltech.pony_dash_for_spikes_salvation.Player;
-import ee.taltech.pony_dash_for_spikes_salvation.packets.Game;
 import ee.taltech.pony_dash_for_spikes_salvation.scenes.Hud;
-import ee.taltech.pony_dash_for_spikes_salvation.screens.PlayScreen;
 
 public class Coin extends InteractiveTileObject {
 
