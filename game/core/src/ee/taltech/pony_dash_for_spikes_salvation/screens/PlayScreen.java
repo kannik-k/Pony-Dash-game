@@ -19,12 +19,17 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
 import ee.taltech.pony_dash_for_spikes_salvation.Player;
 import ee.taltech.pony_dash_for_spikes_salvation.ai.NPC;
+import ee.taltech.pony_dash_for_spikes_salvation.items.Coin;
+import ee.taltech.pony_dash_for_spikes_salvation.items.Key;
+import ee.taltech.pony_dash_for_spikes_salvation.scenes.Hud;
 import ee.taltech.pony_dash_for_spikes_salvation.sprites.PonySprite;
+import ee.taltech.pony_dash_for_spikes_salvation.tools.WorldContactListener;
 
 import java.util.Map;
 
 public class PlayScreen implements Screen {
     private final Main game;
+    private Hud hud;
     private TextureAtlas atlas;
     private static final int WIDTH = 620;
     private static final int HEIGHT = 408;
@@ -43,7 +48,6 @@ public class PlayScreen implements Screen {
     private World world;
     private Box2DDebugRenderer b2dr;
     private PonySprite player;
-
     /**
      * Gets ppm.
      *
@@ -79,6 +83,10 @@ public class PlayScreen implements Screen {
 
         player = new PonySprite(world, this, game.getMyPlayer(), ponyId);
         game.getMyPlayer().setSprite(player);
+        // collision types
+        world.setContactListener(new WorldContactListener());
+
+        hud = new Hud(game.getBatch());
 
         // Ajutine, tuleb hiljem ümber tõsta
         BodyDef bdef = new BodyDef();
@@ -111,6 +119,14 @@ public class PlayScreen implements Screen {
             shape.setAsBox(rectangle.getWidth() / 2 / PPM, rectangle.getHeight() / 2 / PPM);
             fdef.shape = shape;
             body.createFixture(fdef);
+        }
+        // Coin
+        for(RectangleMapObject object: map.getLayers().get(15).getObjects().getByType(RectangleMapObject.class)) {
+            new Coin(world, map, object, hud);
+        }
+        //Key
+        for(RectangleMapObject object: map.getLayers().get(17).getObjects().getByType(RectangleMapObject.class)) {
+            new Key(world, map, object, hud);
         }
     }
 
@@ -184,6 +200,7 @@ public class PlayScreen implements Screen {
      */
     public void update(float dt) {
         player.update(dt);
+        hud.update(dt);
         handleInput();
         updateAllPlayers(dt);
 
@@ -231,12 +248,15 @@ public class PlayScreen implements Screen {
         game.getBatch().begin(); // Opens window
         update(delta);
 
-        game.getBatch().setProjectionMatrix(gameCam.combined); // Renders the game-cam
+        game.getBatch().setProjectionMatrix(gameCam.combined);
+        // game.getBatch().setProjectionMatrix(hud.stage.getCamera().combined); // Renders the game-cam
+
         renderNPCs();
         renderAllPlayers();
         player.draw(game.getBatch());
 
         game.getBatch().end();
+        hud.stage.draw();
         game.sendPositionInfoToServer();
     }
 
