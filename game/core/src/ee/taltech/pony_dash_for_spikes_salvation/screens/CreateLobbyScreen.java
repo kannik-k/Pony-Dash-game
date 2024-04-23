@@ -23,6 +23,7 @@ public class CreateLobbyScreen implements Screen {
     private final ExtendViewport viewport;
     private SpriteBatch spriteBatch;
     private final Texture backgroundTexture;
+    private int spriteId;
 
     /**
      * Constructor.
@@ -36,6 +37,7 @@ public class CreateLobbyScreen implements Screen {
         gameCam = new OrthographicCamera();
         viewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), gameCam);
         stage = new Stage(viewport, spriteBatch);
+        this.spriteId = 1;
     }
 
     /**
@@ -73,20 +75,131 @@ public class CreateLobbyScreen implements Screen {
 
         skin = new Skin(Gdx.files.internal("Skin/terramotherui/terra-mother-ui.json"));
 
-        // Tabel nuppude jaoks ekraani keskele
-        Table centerTable = new Table();
-        centerTable.setFillParent(true);
-        stage.addActor(centerTable);
+        TextButton.TextButtonStyle defaultStyle = skin.get("default", TextButton.TextButtonStyle.class);
+        TextButton.TextButtonStyle greenStyle = new TextButton.TextButtonStyle(defaultStyle);
+        greenStyle.fontColor = Color.GREEN;
 
-        TextButton name = new TextButton("Name", skin);
-        name.setColor(Color.WHITE); // Määra tekstinupu tekstivärv valgeks
-        centerTable.row();
-        centerTable.add(name).pad(10).fillX().uniformX().left();
+        // Tabel nuppude jaoks ekraani keskele
+        Table buttonTable = new Table();
+        buttonTable.setFillParent(true);
+        stage.addActor(buttonTable);
+
+
+        TextButton twilight = new TextButton("Twilight", skin);
+        TextButton rainbow = new TextButton("Rainbow", skin);
+        TextButton applejack = new TextButton("Applejack", skin);
+        TextButton fluttershy = new TextButton("Fluttershy", skin);
+        TextButton pinkie = new TextButton("Pinkie", skin);
+        TextButton rarity = new TextButton("Rarity", skin);
+
+
+        buttonTable.row().pad(100, 0, 10, 0);
+        buttonTable.add(twilight).fillX().uniformX();
+        buttonTable.row().pad(0, 0, 10, 0);
+        buttonTable.add(rainbow).fillX().uniformX();
+        buttonTable.row().pad(0, 0, 10, 0);
+        buttonTable.add(applejack).fillX().uniformX();
+        buttonTable.row().pad(0, 0, 10, 0);
+        buttonTable.add(fluttershy).fillX().uniformX();
+        buttonTable.row().pad(0, 0, 10, 0);
+        buttonTable.add(pinkie).fillX().uniformX();
+        buttonTable.row().pad(0, 0, 10, 0);
+        buttonTable.add(rarity).fillX().uniformX();
+
+        twilight.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                spriteId = 1;
+                twilight.setStyle(greenStyle);
+                rainbow.setStyle(defaultStyle);
+                applejack.setStyle(defaultStyle);
+                pinkie.setStyle(defaultStyle);
+                rarity.setStyle(defaultStyle);
+                fluttershy.setStyle(defaultStyle);
+                game.setPlayerSpriteId(spriteId);
+                changeCursorToDefault();
+            }
+        });
+
+        rainbow.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                spriteId = 2;
+                twilight.setStyle(defaultStyle);
+                rainbow.setStyle(greenStyle);
+                applejack.setStyle(defaultStyle);
+                pinkie.setStyle(defaultStyle);
+                rarity.setStyle(defaultStyle);
+                fluttershy.setStyle(defaultStyle);
+                game.setPlayerSpriteId(spriteId);
+                changeCursorToDefault();
+            }
+        });
+
+        applejack.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                spriteId = 3;
+                twilight.setStyle(defaultStyle);
+                rainbow.setStyle(defaultStyle);
+                applejack.setStyle(greenStyle);
+                pinkie.setStyle(defaultStyle);
+                rarity.setStyle(defaultStyle);
+                fluttershy.setStyle(defaultStyle);
+                game.setPlayerSpriteId(spriteId);
+                changeCursorToDefault();
+            }
+        });
+
+        pinkie.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                spriteId = 4;
+                twilight.setStyle(defaultStyle);
+                rainbow.setStyle(defaultStyle);
+                applejack.setStyle(defaultStyle);
+                pinkie.setStyle(greenStyle);
+                rarity.setStyle(defaultStyle);
+                fluttershy.setStyle(defaultStyle);
+                game.setPlayerSpriteId(spriteId);
+                changeCursorToDefault();
+            }
+        });
+
+        rarity.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                spriteId = 5;
+                twilight.setStyle(defaultStyle);
+                rainbow.setStyle(defaultStyle);
+                applejack.setStyle(defaultStyle);
+                pinkie.setStyle(defaultStyle);
+                rarity.setStyle(greenStyle);
+                fluttershy.setStyle(defaultStyle);
+                game.setPlayerSpriteId(spriteId);
+                changeCursorToDefault();
+            }
+        });
+
+        fluttershy.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                spriteId = 6;
+                twilight.setStyle(defaultStyle);
+                rainbow.setStyle(defaultStyle);
+                applejack.setStyle(defaultStyle);
+                pinkie.setStyle(defaultStyle);
+                rarity.setStyle(defaultStyle);
+                fluttershy.setStyle(greenStyle);
+                game.setPlayerSpriteId(spriteId);
+                changeCursorToDefault();
+            }
+        });
 
         TextButton joinLobby = new TextButton("Join lobby", skin);
         joinLobby.setColor(Color.WHITE); // Määra tekstinupu tekstivärv valgeks
-        centerTable.row();
-        centerTable.add(joinLobby).pad(10).fillX().uniformX().left();
+        buttonTable.row();
+        buttonTable.add(joinLobby).pad(10).fillX().uniformX().left();
 
         Table backTable = new Table();
         TextButton back = new TextButton("Back", skin);
@@ -108,6 +221,8 @@ public class CreateLobbyScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 PlayerJoinPacket packet = new PlayerJoinPacket();
+                PlayScreen playScreen = game.getPlayScreen();
+                playScreen.updatePonyIdAndSprite(spriteId);
                 game.sendPacketToServer(packet);
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
@@ -131,7 +246,6 @@ public class CreateLobbyScreen implements Screen {
             }
         };
 
-        name.addListener(inputListener);
         joinLobby.addListener(inputListener);
         back.addListener(inputListener);
 
