@@ -40,6 +40,7 @@ public abstract class InteractiveTileObject {
         fdef.shape = shape;
         fixture = body.createFixture(fdef);
         this.velocity = new Vector2(0, 0);
+
     }
     public abstract void onHeadHit();
     public void setCategoryFilter(short filterBit) {
