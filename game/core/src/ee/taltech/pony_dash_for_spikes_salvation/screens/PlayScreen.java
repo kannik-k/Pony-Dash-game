@@ -158,36 +158,39 @@ public class PlayScreen implements Screen {
     /**
      * Handle input and define movements.
      */
-    public  void handleInput() {
-        Player myPlayer = game.getMyPlayer();
+    public void handleInput() {
+        float xVelocity = player.getB2body().getLinearVelocity().x;
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && (player.getCurrentState().equals("run")
                 || player.getCurrentState().equals("standing"))) {
             player.getB2body().applyLinearImpulse(new Vector2(0, 4.5f), player.getB2body().getWorldCenter(), true);
-            float box2DX = player.getB2body().getPosition().x;
-            float box2DY = player.getB2body().getPosition().y;
-            myPlayer.setX(box2DX);
-            myPlayer.setY(box2DY);
-            myPlayer.setTiledX(Math.round(box2DX * PPM));
-            myPlayer.setTiledY(Math.round(box2DY * PPM));
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.getB2body().getLinearVelocity().x <= 2) {
+
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && xVelocity <= 2) {
             player.getB2body().applyLinearImpulse(new Vector2(0.1f, 0), player.getB2body().getWorldCenter(), true);
-            float box2DX = player.getB2body().getPosition().x;
-            float box2DY = player.getB2body().getPosition().y;
-            myPlayer.setX(box2DX);
-            myPlayer.setY(box2DY);
-            myPlayer.setTiledX(Math.round(box2DX * PPM));
-            myPlayer.setTiledY(Math.round(box2DY * PPM));
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.getB2body().getLinearVelocity().x >= -2) {
+
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && xVelocity >= -2) {
             player.getB2body().applyLinearImpulse(new Vector2(-0.1f, 0), player.getB2body().getWorldCenter(), true);
-            float box2DX = player.getB2body().getPosition().x;
-            float box2DY = player.getB2body().getPosition().y;
-            myPlayer.setX(box2DX);
-            myPlayer.setY(box2DY);
-            myPlayer.setTiledX(Math.round(box2DX * PPM));
-            myPlayer.setTiledY(Math.round(box2DY * PPM));
         }
+
+        // If button is not pressed down, moving stops
+        if (!Gdx.input.isKeyPressed(Input.Keys.RIGHT) && !Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            player.getB2body().setLinearVelocity(0, player.getB2body().getLinearVelocity().y);
+        }
+
+        // Update player's position
+        updatePlayerPosition();
+    }
+
+    private void updatePlayerPosition() {
+        Player myPlayer = game.getMyPlayer();
+        float box2DX = player.getB2body().getPosition().x;
+        float box2DY = player.getB2body().getPosition().y;
+        myPlayer.setX(box2DX);
+        myPlayer.setY(box2DY);
+        myPlayer.setTiledX(Math.round(box2DX * PPM));
+        myPlayer.setTiledY(Math.round(box2DY * PPM));
     }
 
     /**
