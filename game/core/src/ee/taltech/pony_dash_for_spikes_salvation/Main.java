@@ -36,6 +36,7 @@ public class Main extends Game {
 	private GameOverScreen gameOverScreen;
 	private int gameId;
 	private int playerId;
+	private boolean singlePlayer;
 	public static final short DEFAULT_BIT = 1;
 	public static final short CHAR_BIT = 2;
 	public static final short KEY_BIT = 4;
@@ -88,6 +89,7 @@ public class Main extends Game {
 		myPlayer = new Player("player");
 		playScreen = new PlayScreen(this);
 		gameOverScreen = new GameOverScreen(this);
+		singlePlayer = false;
 		MenuScreen menuScreen = new MenuScreen(this);
 		setScreen(menuScreen);
 		try {
@@ -200,6 +202,14 @@ public class Main extends Game {
 
 	public int getPlayerId() {
 		return playerId;
+	}
+
+	public boolean isSinglePlayer() {
+		return singlePlayer;
+	}
+
+	public void setSinglePlayer(boolean singlePlayer) {
+		this.singlePlayer = singlePlayer;
 	}
 
 	public Player getMyPlayer() {

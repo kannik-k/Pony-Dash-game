@@ -8,13 +8,16 @@ import ee.taltech.pony_dash_for_spikes_salvation.Main;
 import ee.taltech.pony_dash_for_spikes_salvation.Player;
 import ee.taltech.pony_dash_for_spikes_salvation.packets.PacketGameOver;
 import ee.taltech.pony_dash_for_spikes_salvation.scenes.Hud;
+import ee.taltech.pony_dash_for_spikes_salvation.screens.GameOverScreen;
 
 public class Finish extends InteractiveObject {
     private Main main;
+    private GameOverScreen gameOverScreen;
 
     public Finish(World world, TiledMap map, MapObject object, Hud hud, Main main) {
         super(world, map, object, hud);
         this.main = main;
+        this.gameOverScreen = new GameOverScreen(main);
         fixture.setUserData(this);
         setCategoryFilter(Main.FINISH_BIT);
     }
@@ -28,8 +31,10 @@ public class Finish extends InteractiveObject {
             PacketGameOver packet = new PacketGameOver();
             packet.setPlayerId(main.getPlayerId());
             packet.setGameId(player.getGameID());
-            System.out.println("Packet for server " + packet);
             main.sendPacketToServer(packet);
+            if (main.isSinglePlayer()) {
+                main.setScreen(gameOverScreen);
+            }
         }
     }
 }
