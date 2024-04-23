@@ -77,8 +77,8 @@ public class Main extends Game {
 		MenuScreen menuScreen = new MenuScreen(this);
 		setScreen(menuScreen);
 		try {
-			// client.connect(5000, "localhost", 8080, 8081); // Use this to play on local host
-			client.connect(5000, "193.40.255.33", 8080, 8081); // Use this to play on the school server
+			client.connect(5000, "localhost", 8080, 8081); // Use this to play on local host
+			// client.connect(5000, "193.40.255.33", 8080, 8081); // Use this to play on the school server
 		} catch (IOException e) {
 			throw new ConnectionException(e.getMessage());
 		}
