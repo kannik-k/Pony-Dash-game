@@ -23,5 +23,6 @@ public class Key extends InteractiveTileObject {
     public void collected() {
         setCategoryFilter(Main.COLLECTED_BIT);
         getCell().setTile(null);
+        hud.addKey();
     }
 }
