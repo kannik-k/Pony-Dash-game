@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
 import ee.taltech.pony_dash_for_spikes_salvation.scenes.Hud;
 
+
 public class Key extends InteractiveTileObject {
     public Key(World world, TiledMap map, MapObject object, Hud hud) {
         super(world, map, object, hud);
@@ -23,5 +24,6 @@ public class Key extends InteractiveTileObject {
     public void collected() {
         setCategoryFilter(Main.COLLECTED_BIT);
         getCell().setTile(null);
+        hud.addKey();
     }
 }

@@ -2,6 +2,7 @@ package ee.taltech.pony_dash_for_spikes_salvation.tools;
 
 import com.badlogic.gdx.physics.box2d.*;
 import ee.taltech.pony_dash_for_spikes_salvation.items.InteractiveTileObject;
+import objects.InteractiveObject;
 
 public class WorldContactListener implements ContactListener {
     @Override
@@ -15,6 +16,10 @@ public class WorldContactListener implements ContactListener {
 
             if (object.getUserData() != null && InteractiveTileObject.class.isAssignableFrom(object.getUserData().getClass())) {
                 ((InteractiveTileObject) object.getUserData()).onHeadHit();
+
+            }
+            else if (object.getUserData() != null && InteractiveObject.class.isAssignableFrom(object.getUserData().getClass())) {
+                ((InteractiveObject) object.getUserData()).onHeadHit();
 
             }
         }

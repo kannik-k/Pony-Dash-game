@@ -38,6 +38,9 @@ public class Main extends Game {
 	public static final short KEY_BIT = 4;
 	public static final short COIN_BIT = 8;
 	public static final short COLLECTED_BIT = 16;
+	public static final short SPIKE_2_BIT = 32;
+	public static final short SPIKE_3_BIT = 64;
+	public static final short FINISH_BIT = 128;
 
 	public SpriteBatch getBatch() {
 		return batch;
