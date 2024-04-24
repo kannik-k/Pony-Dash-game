@@ -178,7 +178,6 @@ public class Main extends Game {
 						@Override
 						public void run() {
 							changeNpcLocation(move.getNetId(), move.getTiledX(), move.getTiledY());
-							System.out.println("received npc location to: " + move.getTiledX() / 16 + " " + move.getTiledY() / 16);
 						}
 					});
 				}

@@ -47,6 +47,7 @@ public class NPC extends Sprite {
      */
     public void update(float dt) {
         double speed = (dt / (receiveDifference)) * 1000;
+        System.out.println(speed);
         if (tiledX > moveX) {
             tiledX -= (int) (16 * speed);
             x = tiledX / PPM;
@@ -64,6 +65,7 @@ public class NPC extends Sprite {
             y = tiledY / PPM;
         }
         setPosition(x, y);
+        System.out.println(" updated spot:" + tiledX / 16 + " " + tiledY / 16);
         // b2body.getPosition().set(x, y);
         // setRegion(getFrame(dt)); // Will use later for animation maybe
     }
