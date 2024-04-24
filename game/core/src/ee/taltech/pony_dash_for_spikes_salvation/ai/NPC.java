@@ -47,7 +47,6 @@ public class NPC extends Sprite {
      */
     public void update(float dt) {
         double speed = (dt / (receiveDifference)) * 1000;
-        System.out.println(speed);
         if (tiledX > moveX) {
             tiledX -= (int) (16 * speed);
             x = tiledX / PPM;
