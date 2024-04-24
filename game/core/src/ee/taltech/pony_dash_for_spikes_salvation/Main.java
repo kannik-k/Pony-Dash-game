@@ -9,6 +9,7 @@ import com.esotericsoftware.kryonet.Listener;
 import ee.taltech.pony_dash_for_spikes_salvation.ai.NPC;
 import ee.taltech.pony_dash_for_spikes_salvation.exceptions.ConnectionException;
 import ee.taltech.pony_dash_for_spikes_salvation.packets.*;
+import ee.taltech.pony_dash_for_spikes_salvation.screens.GameOverScreen;
 import ee.taltech.pony_dash_for_spikes_salvation.screens.MenuScreen;
 import ee.taltech.pony_dash_for_spikes_salvation.screens.PlayScreen;
 import com.badlogic.gdx.Game;
@@ -32,7 +33,10 @@ public class Main extends Game {
 	private Player myPlayer;
 	private int playerSpriteId;
 	private PlayScreen playScreen;
+	private GameOverScreen gameOverScreen;
 	private int gameId;
+	private int playerId;
+	private boolean singlePlayer;
 	public static final short DEFAULT_BIT = 1;
 	public static final short CHAR_BIT = 2;
 	public static final short KEY_BIT = 4;
@@ -84,6 +88,8 @@ public class Main extends Game {
 		batch = new SpriteBatch();
 		myPlayer = new Player("player");
 		playScreen = new PlayScreen(this);
+		gameOverScreen = new GameOverScreen(this);
+		singlePlayer = false;
 		MenuScreen menuScreen = new MenuScreen(this);
 		setScreen(menuScreen);
 		try {
@@ -124,6 +130,7 @@ public class Main extends Game {
 				if (object instanceof PacketPlayerConnect) {
 					if (((PacketPlayerConnect) object).getPlayerID() == connection.getID()) {
 						players.put(connection.getID(), myPlayer);
+						playerId = connection.getID();
 					} else {
 						Player player = new Player(((PacketPlayerConnect) object).getPlayerName());
 						players.put(((PacketPlayerConnect) object).getPlayerID(), player);
@@ -175,6 +182,16 @@ public class Main extends Game {
 						}
 					});
 				}
+
+				if (object instanceof PacketGameOver) {
+					System.out.println("I have received game over packet from server");
+					Gdx.app.postRunnable(new Runnable() {
+						@Override
+						public void run() {
+							setScreen(gameOverScreen);
+						}
+					});
+				}
 			}
 		}));
 	}
@@ -204,6 +221,18 @@ public class Main extends Game {
 	public void setPlayerSpriteId(int playerSpriteId) {
 		this.playerSpriteId = playerSpriteId;
 		myPlayer.setSpriteId(playerSpriteId);
+	}
+
+	public int getPlayerId() {
+		return playerId;
+	}
+
+	public boolean isSinglePlayer() {
+		return singlePlayer;
+	}
+
+	public void setSinglePlayer(boolean singlePlayer) {
+		this.singlePlayer = singlePlayer;
 	}
 
 	public Player getMyPlayer() {

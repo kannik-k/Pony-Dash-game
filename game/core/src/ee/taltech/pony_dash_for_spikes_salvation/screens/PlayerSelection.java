@@ -215,6 +215,7 @@ public class PlayerSelection implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 PacketSinglePlayer packet = new PacketSinglePlayer();
+                game.setSinglePlayer(true);
                 game.sendPacketToServer(packet);
                 game.setPlayerSpriteId(spriteId);
                 PlayScreen playScreen = game.getPlayScreen();

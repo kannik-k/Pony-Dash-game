@@ -141,7 +141,7 @@ public class PlayScreen implements Screen {
         }
         //Finish
         for(RectangleMapObject object: map.getLayers().get(12).getObjects().getByType(RectangleMapObject.class)) {
-            new Finish(world, map, object, hud);
+            new Finish(world, map, object, hud, game);
         }
     }
 
