@@ -10,9 +10,11 @@ public class NPC extends Sprite {
     private float y;
     private int tiledX; // Tiled coordinate in pixels
     private int tiledY;
-    private float moveX; // Will use later for movement
+    private float moveX; // Coordinates (pixels) where the NPC is moving to at the moment
     private float moveY;
     private final int id;
+    private long receiveDifference = 0;
+    private long lastReceive = 0;
     private Body b2body;
     private final World world;
     private static final float PPM = 100f; // pixels per meter
@@ -35,7 +37,7 @@ public class NPC extends Sprite {
         this.world = world;
         this.moveX = tiledX;
         this.moveY = tiledY;
-        defineNPC();
+        // defineNPC();
         setBounds(tiledX, tiledY, 32 / PPM, 32 / PPM);
     }
 
@@ -44,9 +46,26 @@ public class NPC extends Sprite {
      * @param dt delta time
      */
     public void update(float dt) {
+        double speed = (dt / (receiveDifference)) * 1000;
+        if (tiledX > moveX) {
+            tiledX -= (int) (16 * speed);
+            x = tiledX / PPM;
+        }
+        if (tiledX < moveX) {
+            tiledX += (int) (16 * speed);
+            x = tiledX / PPM;
+        }
+        if (tiledY > moveY) {
+            tiledY -= (int) (16 * speed);
+            y = tiledY / PPM;
+        }
+        if (tiledY < moveY) {
+            tiledY += (int) (16 * speed);
+            y = tiledY / PPM;
+        }
         setPosition(x, y);
-        b2body.getPosition().set(x, y);
-        // setRegion(getFrame(dt)); // Will use later for animation
+        // b2body.getPosition().set(x, y);
+        // setRegion(getFrame(dt)); // Will use later for animation maybe
     }
 
     /**
@@ -64,5 +83,29 @@ public class NPC extends Sprite {
 
         fdef.shape = shape;
         b2body.createFixture(fdef);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setMoveX(float moveX) {
+        this.moveX = moveX;
+    }
+
+    public void setMoveY(float moveY) {
+        this.moveY = moveY;
+    }
+
+    public void setReceiveDifference(long receiveDifference) {
+        this.receiveDifference = receiveDifference;
+    }
+
+    public void setLastReceive(long lastReceive) {
+        this.lastReceive = lastReceive;
+    }
+
+    public long getLastReceive() {
+        return lastReceive;
     }
 }

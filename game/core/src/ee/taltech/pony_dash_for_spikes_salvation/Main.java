@@ -164,6 +164,17 @@ public class Main extends Game {
 						}
 					});
 				}
+
+				if (object instanceof PacketOnNpcMove) {
+					final PacketOnNpcMove move = (PacketOnNpcMove) object;
+					Gdx.app.postRunnable(new Runnable() {
+						@Override
+						public void run() {
+							changeNpcLocation(move.getNetId(), move.getTiledX(), move.getTiledY());
+							System.out.println("received npc location to: " + move.getTiledX() / 16 + " " + move.getTiledY() / 16);
+						}
+					});
+				}
 			}
 		}));
 	}
@@ -173,6 +184,17 @@ public class Main extends Game {
 		sprite.setSize(32, 32);
 		NPC npc = new NPC(id, tiledX, tiledY, sprite, playScreen.getWorld());
 		bots.add(npc);
+	}
+
+	private void changeNpcLocation(int netId, int tiledX, int tiledY) {
+		for (NPC npc : bots) {
+			if (npc.getId() == netId) {
+				npc.setReceiveDifference(System.currentTimeMillis() - npc.getLastReceive()); // Save how many millisecond it has been between sent packets - for smooth rendering
+				npc.setLastReceive(System.currentTimeMillis());
+				npc.setMoveX(tiledX);
+				npc.setMoveY(tiledY);
+			}
+		}
 	}
 
 	public int getPlayerSpriteId() {
