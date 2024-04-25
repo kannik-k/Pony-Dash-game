@@ -33,6 +33,7 @@ public class Finish extends InteractiveObject {
             packet.setGameId(player.getGameID());
             main.sendPacketToServer(packet);
             if (main.isSinglePlayer()) {
+                gameOverScreen.setWinnerId(main.getPlayerId());
                 main.setScreen(gameOverScreen);
             }
         }

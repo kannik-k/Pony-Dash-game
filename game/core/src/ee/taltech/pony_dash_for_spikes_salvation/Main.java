@@ -91,7 +91,7 @@ public class Main extends Game {
 		gameOverScreen = new GameOverScreen(this);
 		singlePlayer = false;
 		MenuScreen menuScreen = new MenuScreen(this);
-		setScreen(menuScreen);
+		setScreen(gameOverScreen);
 		try {
 			client.connect(5000, "localhost", 8080, 8081); // Use this to play on local host
 			// client.connect(5000, "193.40.255.33", 8080, 8081); // Use this to play on the school server
@@ -176,6 +176,7 @@ public class Main extends Game {
 					Gdx.app.postRunnable(new Runnable() {
 						@Override
 						public void run() {
+							gameOverScreen.setWinnerId(((PacketGameOver) object).getPlayerId());
 							setScreen(gameOverScreen);
 						}
 					});
