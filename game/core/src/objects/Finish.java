@@ -25,7 +25,6 @@ public class Finish extends InteractiveObject {
     @Override
     public void onHeadHit() {
         Gdx.app.log("Finish", "Collision");
-        System.out.println(hud.isKeyCollected());
         if (hud.isKeyCollected()) {
             Player player = main.getMyPlayer();
             PacketGameOver packet = new PacketGameOver();
@@ -33,6 +32,7 @@ public class Finish extends InteractiveObject {
             packet.setGameId(player.getGameID());
             main.sendPacketToServer(packet);
             if (main.isSinglePlayer()) {
+                gameOverScreen.setWinnerId(main.getPlayerId());
                 main.setScreen(gameOverScreen);
             }
         }

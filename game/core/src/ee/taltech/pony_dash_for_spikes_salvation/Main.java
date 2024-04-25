@@ -154,12 +154,6 @@ public class Main extends Game {
 						}
 					});
 				}
-				if (object instanceof OnLobbyJoin) {
-					// Will use later
-				}
-				if (object instanceof OnLobbyList) {
-					List<OnLobbyJoin> lobbyPlayers = ((OnLobbyList) object).getPeers();
-				}
 
 				if (object instanceof PacketOnSpawnNpc) {
 					final PacketOnSpawnNpc onSpawnNpc = (PacketOnSpawnNpc) object;
@@ -172,10 +166,10 @@ public class Main extends Game {
 				}
 
 				if (object instanceof PacketGameOver) {
-					System.out.println("I have received game over packet from server");
 					Gdx.app.postRunnable(new Runnable() {
 						@Override
 						public void run() {
+							gameOverScreen.setWinnerId(((PacketGameOver) object).getPlayerId());
 							setScreen(gameOverScreen);
 						}
 					});
