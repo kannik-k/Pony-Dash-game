@@ -61,9 +61,15 @@ public class GameOverScreen implements Screen {
         // Draw the background image
         spriteBatch.begin();
         spriteBatch.draw(backgroundTexture, 0, 0, stage.getWidth(), stage.getHeight());
-        font.draw(spriteBatch, "Game Over", Gdx.graphics.getWidth() / 2 - 50, 350);
-        String savedText = "Spike has been saved by player " + winnerId + "!";
-        font.draw(spriteBatch, savedText, Gdx.graphics.getWidth() / 2 - 150, 300);
+
+        float gameOverX = (Gdx.graphics.getWidth() - font.getXHeight() * "Game Over".length()) / 2f;
+        float gameOverY = (Gdx.graphics.getHeight() - font.getXHeight()) / 2f + 50;
+        float savedTextX = (Gdx.graphics.getWidth() - font.getXHeight() * ("Spike has been saved by player " + winnerId + "!").length()) - 70;
+        float savedTextY = (Gdx.graphics.getHeight() - font.getXHeight()) / 2f;
+
+        font.draw(spriteBatch, "Game Over", gameOverX, gameOverY);
+        font.draw(spriteBatch, "Spike has been saved by player " + winnerId + "!", savedTextX, savedTextY);
+
         spriteBatch.end();
 
         // tell our stage to do actions and draw itself
