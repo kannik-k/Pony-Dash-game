@@ -240,6 +240,7 @@ public class CreateLobbyScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 System.out.println("Name saved");
                 playerName = playerNameTextField.getText();
+                game.setPlayerName(playerName);
                 changeCursorToDefault();
             }
         });
@@ -284,6 +285,7 @@ public class CreateLobbyScreen implements Screen {
 
         joinLobby.addListener(inputListener);
         back.addListener(inputListener);
+        okButton.addListener(inputListener);
         twilight.addListener(inputListener);
         rainbow.addListener(inputListener);
         applejack.addListener(inputListener);

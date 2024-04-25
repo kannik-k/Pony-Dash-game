@@ -31,6 +31,7 @@ public class Finish extends InteractiveObject {
             packet.setPlayerId(main.getPlayerId());
             packet.setGameId(player.getGameID());
             packet.setPlayerName(main.getPlayerName());
+            System.out.println(main.getPlayerName());
             main.sendPacketToServer(packet);
             if (main.isSinglePlayer()) {
                 gameOverScreen.setWinnerName(main.getPlayerName());
