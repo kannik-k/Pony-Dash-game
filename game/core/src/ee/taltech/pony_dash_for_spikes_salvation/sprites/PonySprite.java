@@ -231,7 +231,7 @@ public class PonySprite extends Sprite {
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(14 / getPPM(), 14 / getPPM());
         fdef.filter.categoryBits = Main.CHAR_BIT;
-        fdef.filter.maskBits = Main.DEFAULT_BIT | Main.COIN_BIT | Main.KEY_BIT | Main.FINISH_BIT | Main.SPIKE_2_BIT | Main.SPIKE_3_BIT;
+        fdef.filter.maskBits = Main.DEFAULT_BIT | Main.COIN_BIT | Main.KEY_BIT | Main.FINISH_BIT | Main.SPIKE_2_BIT | Main.SPIKE_3_BIT | Main.STAGE_BLOCK_BIT;
 
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData("pony");
