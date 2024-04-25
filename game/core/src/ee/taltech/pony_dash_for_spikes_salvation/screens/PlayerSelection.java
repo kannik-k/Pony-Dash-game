@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
 import ee.taltech.pony_dash_for_spikes_salvation.packets.PacketSinglePlayer;
@@ -25,6 +26,8 @@ public class PlayerSelection implements Screen {
     private SpriteBatch spriteBatch;
     private Texture backgroundTexture;
     private int spriteId;
+    private TextField playerNameTextField;
+    private String playerName = "";
 
     /**
      * Constructor.
@@ -61,7 +64,7 @@ public class PlayerSelection implements Screen {
         TextButton.TextButtonStyle greenStyle = new TextButton.TextButtonStyle(defaultStyle);
         greenStyle.fontColor = Color.GREEN;
 
-        heading = new Label("Select player:", skin);
+        heading = new Label("Enter your name:\tSelect player:", skin);
         Table textTable = new Table();
         textTable.setFillParent(true);
         textTable.row().pad(0, 0, 220, 0);
@@ -69,12 +72,29 @@ public class PlayerSelection implements Screen {
         textTable.row();
         stage.addActor(textTable);
 
-        // Table for the buttons visible on screen.
+        // Create text field for entering player name
+        playerNameTextField = new TextField("", skin);
+        playerNameTextField.setMessageText("Enter your name");
+        playerNameTextField.setSize(200, 585);
+        float newX = stage.getWidth() / 2 - playerNameTextField.getWidth() / 2 - 38;
+        playerNameTextField.setPosition(newX, playerNameTextField.getY());
+        stage.addActor(playerNameTextField);
+
+        TextButton okButton = new TextButton("OK", skin);
+
+        Table okTable = new Table();
+        okTable.setFillParent(true);
+        stage.addActor(okTable);
+        okTable.row().pad(-22, 0, 0, 150);
+        okTable.add(okButton).fillX().uniformX();
+        okTable.row();
+
+        // Create button table for player selection
         Table buttonTable = new Table();
         buttonTable.setFillParent(true);
         stage.addActor(buttonTable);
 
-
+        // Create buttons for selecting player
         TextButton twilight = new TextButton("Twilight", skin);
         TextButton rainbow = new TextButton("Rainbow", skin);
         TextButton applejack = new TextButton("Applejack", skin);
@@ -83,40 +103,44 @@ public class PlayerSelection implements Screen {
         TextButton rarity = new TextButton("Rarity", skin);
         TextButton start = new TextButton("Start", skin);
 
-
-        buttonTable.row().pad(100, 0, 10, 0);
+        // Add buttons to the button table
+        buttonTable.row().pad(100, 168, 10, 0);
         buttonTable.add(twilight).fillX().uniformX();
-        buttonTable.row().pad(0, 0, 10, 0);
+        buttonTable.row().pad(0, 168, 10, 0);
         buttonTable.add(rainbow).fillX().uniformX();
-        buttonTable.row().pad(0, 0, 10, 0);
+        buttonTable.row().pad(0, 168, 10, 0);
         buttonTable.add(applejack).fillX().uniformX();
-        buttonTable.row().pad(0, 0, 10, 0);
+        buttonTable.row().pad(0, 168, 10, 0);
         buttonTable.add(fluttershy).fillX().uniformX();
-        buttonTable.row().pad(0, 0, 10, 0);
+        buttonTable.row().pad(0, 168, 10, 0);
         buttonTable.add(pinkie).fillX().uniformX();
-        buttonTable.row().pad(0, 0, 10, 0);
+        buttonTable.row().pad(0, 168, 10, 0);
         buttonTable.add(rarity).fillX().uniformX();
 
+        // Create table for "Back" button
         Table backTable = new Table();
         TextButton back = new TextButton("Back", skin);
         backTable.top().left();
         backTable.setFillParent(true);
         backTable.add(back).pad(10);
-
         stage.addActor(backTable);
 
+        // Create table for "Start" button
         Table startTable = new Table();
         startTable.setFillParent(true);
         stage.addActor(startTable);
-
         startTable.row().pad(0, 0, -400, 0);
         startTable.add(start).fillX().uniformX();
         startTable.row();
 
-        back.addListener(new ChangeListener() {
+        // Add listeners to buttons
+        okButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new MenuScreen(game));
+                System.out.println("Name saved");
+                playerName = playerNameTextField.getText();
+                game.setPlayerName(playerName);
+                game.getMyPlayer().setPlayerName(playerName);
                 changeCursorToDefault();
             }
         });
@@ -214,13 +238,14 @@ public class PlayerSelection implements Screen {
         start.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                PacketSinglePlayer packet = new PacketSinglePlayer();
-                game.setSinglePlayer(true);
-                game.sendPacketToServer(packet);
-                game.setPlayerSpriteId(spriteId);
-                PlayScreen playScreen = game.getPlayScreen();
-                playScreen.updatePonyIdAndSprite(spriteId);
-                game.setScreen(playScreen);
+                startGame();
+            }
+        });
+
+        back.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new MenuScreen(game));
                 changeCursorToDefault();
             }
         });
@@ -228,11 +253,17 @@ public class PlayerSelection implements Screen {
         InputListener inputListener = new InputListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, com.badlogic.gdx.scenes.scene2d.Actor fromActor) {
-                // Change cursor to pointer when mouse enters the button
                 changeCursorToPointer();
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, com.badlogic.gdx.scenes.scene2d.Actor toActor) {
+                changeCursorToDefault();
             }
         };
 
+        back.addListener(inputListener);
+        okButton.addListener(inputListener);
         twilight.addListener(inputListener);
         rainbow.addListener(inputListener);
         applejack.addListener(inputListener);
@@ -241,6 +272,7 @@ public class PlayerSelection implements Screen {
         fluttershy.addListener(inputListener);
         start.addListener(inputListener);
 
+        // Set input processor
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -251,7 +283,7 @@ public class PlayerSelection implements Screen {
      */
     @Override
     public void render(float delta) {
-        // clear the screen ready for next set of images to be drawn
+        // Clear the screen
         Gdx.gl.glClearColor(.1f, .1f, .15f, 1);  // screen color
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -260,7 +292,7 @@ public class PlayerSelection implements Screen {
         spriteBatch.draw(backgroundTexture, 0, 0, stage.getWidth(), stage.getHeight());
         spriteBatch.end();
 
-        // tell our stage to do actions and draw itself
+        // Render the stage
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }
@@ -268,8 +300,8 @@ public class PlayerSelection implements Screen {
     /**
      * Updates the size of the viewport.
      *
-     * @param width of viewport
-     * @param height of viewport
+     * @param width  Width of the viewport
+     * @param height Height of the viewport
      */
     @Override
     public void resize(int width, int height) {
@@ -277,12 +309,48 @@ public class PlayerSelection implements Screen {
     }
 
     /**
+     * Dispose of resources when the screen is hidden or closed.
+     */
+    @Override
+    public void hide() {
+        // Dispose of resources
+        dispose();
+    }
+
+    /**
+     * Pause method required by Screen interface.
+     */
+    @Override
+    public void pause() {
+        // Called when the application is paused
+    }
+
+    /**
+     * Resume method required by Screen interface.
+     */
+    @Override
+    public void resume() {
+        // Called when the application is resumed from paused state
+    }
+
+    /**
+     * Dispose of resources when the screen is closed.
+     */
+    @Override
+    public void dispose() {
+        // Dispose of stage and textures
+        stage.dispose();
+        backgroundTexture.dispose();
+        spriteBatch.dispose();
+    }
+
+    /**
      * Change cursor to pointer.
      */
     private void changeCursorToPointer() {
-        Pixmap originalPixmap = new Pixmap(Gdx.files.internal("cursor-png-1115.png")); // Replace with your pointer image path
-        int desiredWidth = 32; // Desired width of the cursor
-        int desiredHeight = 32; // Desired height of the cursor
+        Pixmap originalPixmap = new Pixmap(Gdx.files.internal("cursor-png-1115.png"));
+        int desiredWidth = 32;
+        int desiredHeight = 32;
         Pixmap resizedPixmap = new Pixmap(desiredWidth, desiredHeight, originalPixmap.getFormat());
         resizedPixmap.drawPixmap(originalPixmap, 0, 0, originalPixmap.getWidth(), originalPixmap.getHeight(), 0, 0, desiredWidth, desiredHeight);
         Gdx.graphics.setCursor(Gdx.graphics.newCursor(resizedPixmap, 0, 0));
@@ -294,9 +362,9 @@ public class PlayerSelection implements Screen {
      * Change cursor to default.
      */
     private void changeCursorToDefault() {
-        Pixmap originalPixmap = new Pixmap(Gdx.files.internal("cursor-png-1127.png")); // Replace with your default cursor image path
-        int desiredWidth = 32; // Desired width of the cursor
-        int desiredHeight = 32; // Desired height of the cursor
+        Pixmap originalPixmap = new Pixmap(Gdx.files.internal("cursor-png-1127.png"));
+        int desiredWidth = 32;
+        int desiredHeight = 32;
         Pixmap resizedPixmap = new Pixmap(desiredWidth, desiredHeight, originalPixmap.getFormat());
         resizedPixmap.drawPixmap(originalPixmap, 0, 0, originalPixmap.getWidth(), originalPixmap.getHeight(), 0, 0, desiredWidth, desiredHeight);
         Gdx.graphics.setCursor(Gdx.graphics.newCursor(resizedPixmap, 0, 0));
@@ -304,30 +372,24 @@ public class PlayerSelection implements Screen {
         resizedPixmap.dispose();
     }
 
-    @Override
-    public void hide() {
-        // Called when this screen is no longer the current screen
-    }
-
-    @Override
-    public void pause() {
-        // Called when the application is paused
-    }
-
-    @Override
-    public void resume() {
-        // Called when the application is resumed from paused state
-    }
-
     /**
-     * Dispose of stage, background and spriteBatch when the menu-screen is closed.
+     * Method to start the game.
      */
-    @Override
-    public void dispose() {
-        stage.dispose();
-        backgroundTexture.dispose();
-        spriteBatch.dispose();
+    private void startGame() {
 
-        Gdx.input.setInputProcessor(null);
+        // Send packet to server
+        PacketSinglePlayer packet = new PacketSinglePlayer();
+        game.setSinglePlayer(true);
+        game.sendPacketToServer(packet);
+
+        // Update player sprite ID
+        PlayScreen playScreen = game.getPlayScreen();
+        playScreen.updatePonyIdAndSprite(spriteId);
+
+        // Set the play screen
+        game.setScreen(playScreen);
+
+        // Change cursor to default
+        changeCursorToDefault();
     }
 }

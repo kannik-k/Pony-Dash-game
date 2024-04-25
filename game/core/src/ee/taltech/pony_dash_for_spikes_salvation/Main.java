@@ -36,6 +36,7 @@ public class Main extends Game {
 	private GameOverScreen gameOverScreen;
 	private int gameId;
 	private int playerId;
+	private String playerName;
 	private boolean singlePlayer;
 	public static final short DEFAULT_BIT = 1;
 	public static final short CHAR_BIT = 2;
@@ -170,6 +171,7 @@ public class Main extends Game {
 						@Override
 						public void run() {
 							gameOverScreen.setWinnerId(((PacketGameOver) object).getPlayerId());
+							gameOverScreen.setWinnerName(((PacketGameOver) object).getPlayerName());
 							setScreen(gameOverScreen);
 						}
 					});
@@ -208,6 +210,15 @@ public class Main extends Game {
 
 	public Player getMyPlayer() {
 		return myPlayer;
+	}
+
+	public String getPlayerName() {
+		return playerName;
+	}
+
+	public void setPlayerName(String playerName) {
+		this.playerName = playerName;
+		this.myPlayer.setPlayerName(this.playerName);
 	}
 
 	/**
