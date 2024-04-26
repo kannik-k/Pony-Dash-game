@@ -1,8 +1,6 @@
 package ee.taltech.pony_dash_for_spikes_salvation.sprites;
 
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
@@ -30,6 +28,7 @@ public class PonySprite extends Sprite {
     private boolean runningRight;
     private float stateTimer;
     private Player player;
+    private String playerName;
     private List<Integer> animationInformation = Arrays.asList(2, 546, 512, 418, 2, 15, 18, 0, 0);
 
     /**
@@ -56,6 +55,7 @@ public class PonySprite extends Sprite {
         previousState = State.STANDING;
         this.runningRight = true;
         this.stateTimer = 0;
+        this.playerName = this.player.getPlayerName();
         Array<TextureRegion> frames = new Array<>();
 
         if (id == 1) {
@@ -223,7 +223,7 @@ public class PonySprite extends Sprite {
      */
     public void definePony() {
         BodyDef bdef = new BodyDef();
-        bdef.position.set(64 / getPPM(), 420 / getPPM());  // test data: bdef.position.set(40000 / getPPM(), 620 / getPPM());
+        bdef.position.set(64 / getPPM(), 420 / getPPM());
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 

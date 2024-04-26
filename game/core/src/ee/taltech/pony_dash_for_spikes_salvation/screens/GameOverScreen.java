@@ -6,18 +6,19 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
-import ee.taltech.pony_dash_for_spikes_salvation.packets.OnStartGame;
 
 public class GameOverScreen implements Screen {
     private final Main game;
@@ -26,6 +27,9 @@ public class GameOverScreen implements Screen {
     private ExtendViewport viewport;
     private SpriteBatch spriteBatch;
     private Texture backgroundTexture;
+    private BitmapFont font;
+    private int winnerId;
+    private String winnerName;
 
 
     /**
@@ -39,6 +43,7 @@ public class GameOverScreen implements Screen {
         backgroundTexture = new Texture("Game Assets/Sunny land winter forest sky.png");
         changeCursorToDefault();
         gameCam = new OrthographicCamera();
+        font = new BitmapFont();
         viewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), gameCam);
         stage = new Stage(viewport);
     }
@@ -57,6 +62,15 @@ public class GameOverScreen implements Screen {
         // Draw the background image
         spriteBatch.begin();
         spriteBatch.draw(backgroundTexture, 0, 0, stage.getWidth(), stage.getHeight());
+
+        float gameOverX = (Gdx.graphics.getWidth() - font.getXHeight() * "Game Over".length()) / 2f;
+        float gameOverY = (Gdx.graphics.getHeight() - font.getXHeight()) / 2f + 50;
+        float savedTextX = (Gdx.graphics.getWidth() - font.getXHeight() * ("Spike has been saved by player " + winnerName + "!").length()) - 30;
+        float savedTextY = (Gdx.graphics.getHeight() - font.getXHeight()) / 2f;
+
+        font.draw(spriteBatch, "Game Over", gameOverX, gameOverY);
+        font.draw(spriteBatch, "Spike has been saved by player " + winnerName + "!", savedTextX, savedTextY);
+
         spriteBatch.end();
 
         // tell our stage to do actions and draw itself
@@ -117,6 +131,9 @@ public class GameOverScreen implements Screen {
 
         skin = new Skin(Gdx.files.internal("Skin/terramotherui/terra-mother-ui.json"));
 
+        Label.LabelStyle labelStyle = skin.get("default", Label.LabelStyle.class);
+        font = labelStyle.font;
+
         // Table for the buttons visible on screen.
         Table backTable = new Table();
         TextButton back = new TextButton("Back", skin);
@@ -146,6 +163,22 @@ public class GameOverScreen implements Screen {
         back.addListener(inputListener);
 
         Gdx.input.setInputProcessor(stage);
+    }
+
+    public int getWinnerId() {
+        return winnerId;
+    }
+
+    public void setWinnerId(int winnerId) {
+        this.winnerId = winnerId;
+    }
+
+    public String getWinnerName() {
+        return winnerName;
+    }
+
+    public void setWinnerName(String winnerName) {
+        this.winnerName = winnerName;
     }
 
     @Override

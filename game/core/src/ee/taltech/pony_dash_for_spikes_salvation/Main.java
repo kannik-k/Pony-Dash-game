@@ -36,6 +36,7 @@ public class Main extends Game {
 	private GameOverScreen gameOverScreen;
 	private int gameId;
 	private int playerId;
+	private String playerName;
 	private boolean singlePlayer;
 	public static final short DEFAULT_BIT = 1;
 	public static final short CHAR_BIT = 2;
@@ -155,12 +156,6 @@ public class Main extends Game {
 						}
 					});
 				}
-				if (object instanceof OnLobbyJoin) {
-					// Will use later
-				}
-				if (object instanceof OnLobbyList) {
-					List<OnLobbyJoin> lobbyPlayers = ((OnLobbyList) object).getPeers();
-				}
 
 				if (object instanceof PacketOnSpawnNpc) {
 					final PacketOnSpawnNpc onSpawnNpc = (PacketOnSpawnNpc) object;
@@ -183,10 +178,11 @@ public class Main extends Game {
 				}
 
 				if (object instanceof PacketGameOver) {
-					System.out.println("I have received game over packet from server");
 					Gdx.app.postRunnable(new Runnable() {
 						@Override
 						public void run() {
+							gameOverScreen.setWinnerId(((PacketGameOver) object).getPlayerId());
+							gameOverScreen.setWinnerName(((PacketGameOver) object).getPlayerName());
 							setScreen(gameOverScreen);
 						}
 					});
@@ -236,6 +232,15 @@ public class Main extends Game {
 
 	public Player getMyPlayer() {
 		return myPlayer;
+	}
+
+	public String getPlayerName() {
+		return playerName;
+	}
+
+	public void setPlayerName(String playerName) {
+		this.playerName = playerName;
+		this.myPlayer.setPlayerName(this.playerName);
 	}
 
 	/**
