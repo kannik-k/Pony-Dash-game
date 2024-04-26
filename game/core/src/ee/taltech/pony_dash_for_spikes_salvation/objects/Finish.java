@@ -1,4 +1,4 @@
-package objects;
+package ee.taltech.pony_dash_for_spikes_salvation.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapObject;
@@ -31,7 +31,6 @@ public class Finish extends InteractiveObject {
             packet.setPlayerId(main.getPlayerId());
             packet.setGameId(player.getGameID());
             packet.setPlayerName(main.getPlayerName());
-            System.out.println(main.getPlayerName());
             main.sendPacketToServer(packet);
             if (main.isSinglePlayer()) {
                 gameOverScreen.setWinnerName(main.getPlayerName());

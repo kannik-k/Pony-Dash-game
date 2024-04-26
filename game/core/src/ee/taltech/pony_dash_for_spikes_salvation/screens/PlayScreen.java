@@ -24,9 +24,9 @@ import ee.taltech.pony_dash_for_spikes_salvation.items.Key;
 import ee.taltech.pony_dash_for_spikes_salvation.scenes.Hud;
 import ee.taltech.pony_dash_for_spikes_salvation.sprites.PonySprite;
 import ee.taltech.pony_dash_for_spikes_salvation.tools.WorldContactListener;
-import objects.Finish;
-import objects.Stage2Spike;
-import objects.Stage3Spike;
+import ee.taltech.pony_dash_for_spikes_salvation.objects.Finish;
+import ee.taltech.pony_dash_for_spikes_salvation.objects.Stage2Spike;
+import ee.taltech.pony_dash_for_spikes_salvation.objects.Stage3Spike;
 
 import java.util.Map;
 

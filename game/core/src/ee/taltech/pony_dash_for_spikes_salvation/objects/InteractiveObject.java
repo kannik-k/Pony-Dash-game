@@ -1,4 +1,4 @@
-package objects;
+package ee.taltech.pony_dash_for_spikes_salvation.objects;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -16,7 +16,7 @@ public abstract class InteractiveObject {
     protected Body body;
     protected MapObject object;
 
-    public InteractiveObject(World world, TiledMap map, MapObject object, Hud hud) {
+    protected InteractiveObject(World world, TiledMap map, MapObject object, Hud hud) {
         this.object = object;
         this.world = world;
         this.map = map;

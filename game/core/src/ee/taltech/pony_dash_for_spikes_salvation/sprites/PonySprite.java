@@ -28,7 +28,6 @@ public class PonySprite extends Sprite {
     private boolean runningRight;
     private float stateTimer;
     private Player player;
-    private String playerName;
     private List<Integer> animationInformation = Arrays.asList(2, 546, 512, 418, 2, 15, 18, 0, 0);
 
     /**
@@ -55,7 +54,6 @@ public class PonySprite extends Sprite {
         previousState = State.STANDING;
         this.runningRight = true;
         this.stateTimer = 0;
-        this.playerName = this.player.getPlayerName();
         Array<TextureRegion> frames = new Array<>();
 
         if (id == 1) {

@@ -2,7 +2,7 @@ package ee.taltech.pony_dash_for_spikes_salvation.tools;
 
 import com.badlogic.gdx.physics.box2d.*;
 import ee.taltech.pony_dash_for_spikes_salvation.items.InteractiveTileObject;
-import objects.InteractiveObject;
+import ee.taltech.pony_dash_for_spikes_salvation.objects.InteractiveObject;
 
 public class WorldContactListener implements ContactListener {
     @Override
@@ -27,16 +27,16 @@ public class WorldContactListener implements ContactListener {
 
     @Override
     public void endContact(Contact contact) {
-
+        // Possibly will use later
     }
 
     @Override
     public void preSolve(Contact contact, Manifold manifold) {
-
+        // Possibly will use later
     }
 
     @Override
     public void postSolve(Contact contact, ContactImpulse contactImpulse) {
-
+        // Possibly will use later
     }
 }
