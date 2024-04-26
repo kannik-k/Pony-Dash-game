@@ -28,6 +28,7 @@ public class PlayerSelection implements Screen {
     private int spriteId;
     private TextField playerNameTextField;
     private String playerName = "";
+    private boolean isNameSelected;
 
     /**
      * Constructor.
@@ -43,6 +44,7 @@ public class PlayerSelection implements Screen {
         viewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), gameCam);
         stage = new Stage(viewport);
         this.spriteId = 1;
+        this.isNameSelected = false;
     }
 
     /**
@@ -138,6 +140,7 @@ public class PlayerSelection implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 System.out.println("Name saved");
+                isNameSelected = true;
                 playerName = playerNameTextField.getText();
                 game.setPlayerName(playerName);
                 game.getMyPlayer().setPlayerName(playerName);
@@ -238,7 +241,9 @@ public class PlayerSelection implements Screen {
         start.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                startGame();
+                if (isNameSelected) {
+                    startGame();
+                }
             }
         });
 
