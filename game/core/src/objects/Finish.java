@@ -30,8 +30,11 @@ public class Finish extends InteractiveObject {
             PacketGameOver packet = new PacketGameOver();
             packet.setPlayerId(main.getPlayerId());
             packet.setGameId(player.getGameID());
+            packet.setPlayerName(main.getPlayerName());
+            System.out.println(main.getPlayerName());
             main.sendPacketToServer(packet);
             if (main.isSinglePlayer()) {
+                gameOverScreen.setWinnerName(main.getPlayerName());
                 gameOverScreen.setWinnerId(main.getPlayerId());
                 main.setScreen(gameOverScreen);
             }

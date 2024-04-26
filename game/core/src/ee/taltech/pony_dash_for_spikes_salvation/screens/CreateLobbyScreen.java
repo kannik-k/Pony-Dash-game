@@ -8,9 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
@@ -24,6 +22,8 @@ public class CreateLobbyScreen implements Screen {
     private SpriteBatch spriteBatch;
     private final Texture backgroundTexture;
     private int spriteId;
+    private TextField playerNameTextField;
+    private String playerName = "";
 
     /**
      * Constructor.
@@ -71,6 +71,7 @@ public class CreateLobbyScreen implements Screen {
     @Override
     public void show() {
         Skin skin;
+        Label heading;
         spriteBatch = new SpriteBatch();
 
         skin = new Skin(Gdx.files.internal("Skin/terramotherui/terra-mother-ui.json"));
@@ -78,6 +79,31 @@ public class CreateLobbyScreen implements Screen {
         TextButton.TextButtonStyle defaultStyle = skin.get("default", TextButton.TextButtonStyle.class);
         TextButton.TextButtonStyle greenStyle = new TextButton.TextButtonStyle(defaultStyle);
         greenStyle.fontColor = Color.GREEN;
+
+        heading = new Label("Enter your name:\tSelect player:", skin);
+        Table textTable = new Table();
+        textTable.setFillParent(true);
+        textTable.row().pad(0, 0, 220, 0);
+        textTable.add(heading).fillX().uniformX();
+        textTable.row();
+        stage.addActor(textTable);
+
+        // Create text field for entering player name
+        playerNameTextField = new TextField("", skin);
+        playerNameTextField.setMessageText("Enter your name");
+        playerNameTextField.setSize(200, 585);
+        float newX = stage.getWidth() / 2 - playerNameTextField.getWidth() / 2 - 38;
+        playerNameTextField.setPosition(newX, playerNameTextField.getY());
+        stage.addActor(playerNameTextField);
+
+        TextButton okButton = new TextButton("OK", skin);
+
+        Table okTable = new Table();
+        okTable.setFillParent(true);
+        stage.addActor(okTable);
+        okTable.row().pad(-22, 0, 0, 150);
+        okTable.add(okButton).fillX().uniformX();
+        okTable.row();
 
         // Tabel nuppude jaoks ekraani keskele
         Table buttonTable = new Table();
@@ -93,17 +119,17 @@ public class CreateLobbyScreen implements Screen {
         TextButton rarity = new TextButton("Rarity", skin);
 
 
-        buttonTable.row().pad(100, 0, 10, 0);
+        buttonTable.row().pad(100, 168, 10, 0);
         buttonTable.add(twilight).fillX().uniformX();
-        buttonTable.row().pad(0, 0, 10, 0);
+        buttonTable.row().pad(0, 168, 10, 0);
         buttonTable.add(rainbow).fillX().uniformX();
-        buttonTable.row().pad(0, 0, 10, 0);
+        buttonTable.row().pad(0, 168, 10, 0);
         buttonTable.add(applejack).fillX().uniformX();
-        buttonTable.row().pad(0, 0, 10, 0);
+        buttonTable.row().pad(0, 168, 10, 0);
         buttonTable.add(fluttershy).fillX().uniformX();
-        buttonTable.row().pad(0, 0, 10, 0);
+        buttonTable.row().pad(0, 168, 10, 0);
         buttonTable.add(pinkie).fillX().uniformX();
-        buttonTable.row().pad(0, 0, 10, 0);
+        buttonTable.row().pad(0, 168, 10, 0);
         buttonTable.add(rarity).fillX().uniformX();
 
         twilight.addListener(new ChangeListener() {
@@ -209,6 +235,16 @@ public class CreateLobbyScreen implements Screen {
 
         stage.addActor(backTable);
 
+        okButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                System.out.println("Name saved");
+                playerName = playerNameTextField.getText();
+                game.setPlayerName(playerName);
+                changeCursorToDefault();
+            }
+        });
+
         back.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -221,6 +257,7 @@ public class CreateLobbyScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 PlayerJoinPacket packet = new PlayerJoinPacket();
+                packet.setUserName(playerName);
                 PlayScreen playScreen = game.getPlayScreen();
                 playScreen.updatePonyIdAndSprite(spriteId);
                 game.sendPacketToServer(packet);
@@ -248,6 +285,7 @@ public class CreateLobbyScreen implements Screen {
 
         joinLobby.addListener(inputListener);
         back.addListener(inputListener);
+        okButton.addListener(inputListener);
         twilight.addListener(inputListener);
         rainbow.addListener(inputListener);
         applejack.addListener(inputListener);
