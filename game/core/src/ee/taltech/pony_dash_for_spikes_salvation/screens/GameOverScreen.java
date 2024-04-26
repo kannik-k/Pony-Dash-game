@@ -29,6 +29,7 @@ public class GameOverScreen implements Screen {
     private Texture backgroundTexture;
     private BitmapFont font;
     private int winnerId;
+    private String winnerName;
 
 
     /**
@@ -64,11 +65,11 @@ public class GameOverScreen implements Screen {
 
         float gameOverX = (Gdx.graphics.getWidth() - font.getXHeight() * "Game Over".length()) / 2f;
         float gameOverY = (Gdx.graphics.getHeight() - font.getXHeight()) / 2f + 50;
-        float savedTextX = (Gdx.graphics.getWidth() - font.getXHeight() * ("Spike has been saved by player " + winnerId + "!").length()) - 70;
+        float savedTextX = (Gdx.graphics.getWidth() - font.getXHeight() * ("Spike has been saved by player " + winnerName + "!").length()) - 30;
         float savedTextY = (Gdx.graphics.getHeight() - font.getXHeight()) / 2f;
 
         font.draw(spriteBatch, "Game Over", gameOverX, gameOverY);
-        font.draw(spriteBatch, "Spike has been saved by player " + winnerId + "!", savedTextX, savedTextY);
+        font.draw(spriteBatch, "Spike has been saved by player " + winnerName + "!", savedTextX, savedTextY);
 
         spriteBatch.end();
 
@@ -170,6 +171,14 @@ public class GameOverScreen implements Screen {
 
     public void setWinnerId(int winnerId) {
         this.winnerId = winnerId;
+    }
+
+    public String getWinnerName() {
+        return winnerName;
+    }
+
+    public void setWinnerName(String winnerName) {
+        this.winnerName = winnerName;
     }
 
     @Override
