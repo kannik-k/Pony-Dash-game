@@ -24,6 +24,7 @@ public class CreateLobbyScreen implements Screen {
     private int spriteId;
     private TextField playerNameTextField;
     private String playerName = "";
+    private boolean isNameSelected;
 
     /**
      * Constructor.
@@ -38,6 +39,7 @@ public class CreateLobbyScreen implements Screen {
         viewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), gameCam);
         stage = new Stage(viewport, spriteBatch);
         this.spriteId = 1;
+        this.isNameSelected = false;
     }
 
     /**
@@ -241,6 +243,7 @@ public class CreateLobbyScreen implements Screen {
                 playerName = playerNameTextField.getText();
                 game.setPlayerName(playerName);
                 changeCursorToDefault();
+                isNameSelected = true;
             }
         });
 
@@ -255,18 +258,20 @@ public class CreateLobbyScreen implements Screen {
         joinLobby.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                PlayerJoinPacket packet = new PlayerJoinPacket();
-                packet.setUserName(playerName);
-                PlayScreen playScreen = game.getPlayScreen();
-                playScreen.updatePonyIdAndSprite(spriteId);
-                game.sendPacketToServer(packet);
-                Gdx.app.postRunnable(new Runnable() {
-                    @Override
-                    public void run() {
-                        game.setScreen(new LobbyScreen(game));
-                    }
-                });
-                changeCursorToDefault();
+                if (isNameSelected) {
+                    PlayerJoinPacket packet = new PlayerJoinPacket();
+                    packet.setUserName(playerName);
+                    PlayScreen playScreen = game.getPlayScreen();
+                    playScreen.updatePonyIdAndSprite(spriteId);
+                    game.sendPacketToServer(packet);
+                    Gdx.app.postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            game.setScreen(new LobbyScreen(game));
+                        }
+                    });
+                    changeCursorToDefault();
+                }
             }
         });
 

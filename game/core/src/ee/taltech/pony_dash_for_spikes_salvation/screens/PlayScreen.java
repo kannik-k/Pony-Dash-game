@@ -143,6 +143,14 @@ public class PlayScreen implements Screen {
         for(RectangleMapObject object: map.getLayers().get(12).getObjects().getByType(RectangleMapObject.class)) {
             new Finish(world, map, object, hud, game);
         }
+        //Stage2
+        for(RectangleMapObject object: map.getLayers().get(18).getObjects().getByType(RectangleMapObject.class)) {
+            new Stage2(world, map, object, hud);
+        }
+        //Stage3
+        for(RectangleMapObject object: map.getLayers().get(19).getObjects().getByType(RectangleMapObject.class)) {
+            new Stage3(world, map, object, hud);
+        }
     }
 
     public void updatePonyIdAndSprite(int ponyId) {
