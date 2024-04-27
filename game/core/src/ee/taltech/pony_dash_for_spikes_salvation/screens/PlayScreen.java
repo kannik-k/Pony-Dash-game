@@ -145,11 +145,11 @@ public class PlayScreen implements Screen {
         }
         //Stage2
         for(RectangleMapObject object: map.getLayers().get(18).getObjects().getByType(RectangleMapObject.class)) {
-            new Stage2(world, map, object, hud);
+            new objects.Stage2(world, map, object, hud);
         }
         //Stage3
         for(RectangleMapObject object: map.getLayers().get(19).getObjects().getByType(RectangleMapObject.class)) {
-            new Stage3(world, map, object, hud);
+            new objects.Stage3(world, map, object, hud);
         }
     }
 
