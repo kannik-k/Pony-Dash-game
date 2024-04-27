@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
 
 public class Hud {
-    public Stage stage;
+    public final Stage stage;
     private Viewport viewport;
 
     private Integer worldTimer;

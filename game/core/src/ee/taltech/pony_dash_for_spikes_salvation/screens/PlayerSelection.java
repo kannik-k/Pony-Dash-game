@@ -139,7 +139,6 @@ public class PlayerSelection implements Screen {
         okButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("Name saved");
                 isNameSelected = true;
                 playerName = playerNameTextField.getText();
                 game.setPlayerName(playerName);

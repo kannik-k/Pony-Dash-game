@@ -240,7 +240,6 @@ public class CreateLobbyScreen implements Screen {
         okButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("Name saved");
                 playerName = playerNameTextField.getText();
                 game.setPlayerName(playerName);
                 changeCursorToDefault();

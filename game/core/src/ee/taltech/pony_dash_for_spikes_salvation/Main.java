@@ -108,17 +108,19 @@ public class Main extends Game {
 			/**
 			 * Create listener for different packets sent to the client.
 			 * <p>
-			 *     There are six kinds of packets that the listener receives.
-			 *     1. The PacketPlayerConnect packet is received when someone joins the game. If the packet contains the
+			 *     There are seven kinds of packets that the listener receives.
+			 *     1. PacketGameId
+			 *     2. The PacketPlayerConnect packet is received when someone joins the game. If the packet contains the
 			 *     same player that the packet was sent to then the player and their id are added to the players map.
 			 *     Otherwise a new player is created and added to the map. A new sprite is created for the new player.
-			 *     2. The PacketSendCoordinates packet is received when a player moves in the game. Next the
+			 *     3. The PacketSendCoordinates packet is received when a player moves in the game. Next the
 			 *     moving players coordinates are set accordingly.
-			 *     3. OnStartGame
-			 *     4. OnLobbyJoin
-			 *     5. OnLobbyList
-			 *     6. The PacketOnSpawn packets are received after the player connects to the server. One packet contains
-			 *     an npc-s id and tiled coordinates. Then a new npc is added.
+			 *     4. OnStartGame
+			 *     5. The PacketOnSpawnNpc is received when the player joins a game. The player is given the initial
+			 *     location of all of the bots.
+			 *     6. The PacketOnNpcMove is received constantly as the bots moved. This gives the updated position of
+			 *     the bots.
+			 *     7. PacketGameOver
 			 * </p>
 			 * @param connection (TCP or UDP)
 			 * @param object that is received
@@ -167,6 +169,16 @@ public class Main extends Game {
 					});
 				}
 
+				if (object instanceof PacketOnNpcMove) {
+					final PacketOnNpcMove move = (PacketOnNpcMove) object;
+					Gdx.app.postRunnable(new Runnable() {
+						@Override
+						public void run() {
+							changeNpcLocation(move.getNetId(), move.getTiledX(), move.getTiledY());
+						}
+					});
+				}
+
 				if (object instanceof PacketGameOver) {
 					Gdx.app.postRunnable(new Runnable() {
 						@Override
@@ -184,8 +196,19 @@ public class Main extends Game {
 	private void addNpc(int id, int tiledX, int tiledY) {
 		Sprite sprite = new Sprite(new Texture("twilight_sparkle_one.png"));
 		sprite.setSize(32, 32);
-		NPC npc = new NPC(id, tiledX, tiledY, sprite, playScreen.getWorld());
+		NPC npc = new NPC(id, tiledX, tiledY, sprite);
 		bots.add(npc);
+	}
+
+	private void changeNpcLocation(int netId, int tiledX, int tiledY) {
+		for (NPC npc : bots) {
+			if (npc.getId() == netId) {
+				npc.setReceiveDifference(System.currentTimeMillis() - npc.getLastReceive()); // Save how many millisecond it has been between sent packets - for smooth rendering
+				npc.setLastReceive(System.currentTimeMillis());
+				npc.setMoveX(tiledX);
+				npc.setMoveY(tiledY);
+			}
+		}
 	}
 
 	public int getPlayerSpriteId() {

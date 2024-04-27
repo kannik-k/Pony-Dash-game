@@ -24,7 +24,9 @@ import ee.taltech.pony_dash_for_spikes_salvation.items.Key;
 import ee.taltech.pony_dash_for_spikes_salvation.scenes.Hud;
 import ee.taltech.pony_dash_for_spikes_salvation.sprites.PonySprite;
 import ee.taltech.pony_dash_for_spikes_salvation.tools.WorldContactListener;
-import objects.*;
+import ee.taltech.pony_dash_for_spikes_salvation.objects.Finish;
+import ee.taltech.pony_dash_for_spikes_salvation.objects.Stage2Spike;
+import ee.taltech.pony_dash_for_spikes_salvation.objects.Stage3Spike;
 
 import java.util.Map;
 
@@ -143,11 +145,11 @@ public class PlayScreen implements Screen {
         }
         //Stage2
         for(RectangleMapObject object: map.getLayers().get(18).getObjects().getByType(RectangleMapObject.class)) {
-            new Stage2(world, map, object, hud);
+            new objects.Stage2(world, map, object, hud);
         }
         //Stage3
         for(RectangleMapObject object: map.getLayers().get(19).getObjects().getByType(RectangleMapObject.class)) {
-            new Stage3(world, map, object, hud);
+            new objects.Stage3(world, map, object, hud);
         }
     }
 
