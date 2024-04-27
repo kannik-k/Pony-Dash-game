@@ -12,13 +12,14 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
 
 public class Hud {
-    public Stage stage;
+    public final Stage stage;
     private Viewport viewport;
 
     private Integer worldTimer;
     private float timeCount;
     private Integer coins;
     private boolean isKeyCollected;
+    private Integer mapStage;
 
     private Label timerLabel;
     private Label coinAmountLabel;
@@ -35,11 +36,20 @@ public class Hud {
         return isKeyCollected;
     }
 
+    public void setCoinAmountLabel(Label coinAmountLabel) {
+        this.coinAmountLabel = coinAmountLabel;
+    }
+
+    public void setMapStage(Integer mapStage) {
+        this.mapStage = mapStage;
+    }
+
     public Hud(SpriteBatch sb) {
         worldTimer = 0;
         timeCount = 0;
         coins = 0;
         isKeyCollected = false;
+        mapStage = 1;
 
         viewport = new FitViewport(Main.V_WIDTH, Main.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, sb);
@@ -49,7 +59,7 @@ public class Hud {
         table.setFillParent(true);
 
         timerLabel = new Label(String.format("%06d", worldTimer), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        coinAmountLabel = new Label(String.format("%02d", coins), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        coinAmountLabel = new Label(String.format("%02d", coins) + "/15", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         timeLabel = new Label("Time", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         isKeyLabel = new Label("0", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         keyLabel = new Label("Key", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
@@ -76,7 +86,11 @@ public class Hud {
 
     public void addScore(int value) {
         coins += value;
-        coinAmountLabel.setText(String.format("%02d", coins));
+        if (mapStage == 1) {
+            coinAmountLabel.setText(String.format("%02d", coins) + "/15");
+        } else {
+            coinAmountLabel.setText(String.format("%02d", coins) + "/35");
+        }
     }
 
     public void addKey() {

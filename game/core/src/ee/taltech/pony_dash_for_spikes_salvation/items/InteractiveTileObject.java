@@ -20,7 +20,7 @@ public abstract class InteractiveTileObject {
     protected Vector2 velocity;
     protected MapObject object;
 
-    public InteractiveTileObject(World world, TiledMap map, MapObject object, Hud hud) {
+    protected InteractiveTileObject(World world, TiledMap map, MapObject object, Hud hud) {
         this.object = object;
         this.world = world;
         this.map = map;
