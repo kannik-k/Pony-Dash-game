@@ -184,7 +184,7 @@ public class PlayScreen implements Screen {
      * Handle input and define movements.
      */
     public void handleInput() {
-        if (Duration.between(game.getMyPlayer().getCaptureTime(), LocalDateTime.now()).toMinutes() > (10 / 60)) { // Player is captured for 10 seconds and cannot move
+        if (Duration.between(game.getMyPlayer().getCaptureTime(), LocalDateTime.now()).toMillis() > (5000)) { // Player is captured for 10 seconds and cannot move
             float xVelocity = player.getB2body().getLinearVelocity().x;
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && (player.getCurrentState().equals("run")

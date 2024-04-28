@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.esotericsoftware.kryonet.Client;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -132,7 +133,6 @@ public class Main extends Game {
 			 */
 			@Override
 			public void received(Connection connection, Object object) {
-				System.out.println(object);
 				if (object instanceof PacketGameId) {
 					myPlayer.setGameID(((PacketGameId) object).getGameId());
 				}
@@ -195,11 +195,12 @@ public class Main extends Game {
 				}
 
 				if (object instanceof PacketCaptured) {
+					System.out.println("YAY");
 					Gdx.app.postRunnable(new Runnable() {
 						@Override
 						public void run() {
 							System.out.println("received captured packet");
-							myPlayer.setCaptureTime(((PacketCaptured) object).getTime());
+							myPlayer.setCaptureTime(LocalDateTime.parse(((PacketCaptured) object).getTime()));
 						}
 					});
 				}
