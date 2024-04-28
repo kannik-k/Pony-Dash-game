@@ -10,6 +10,7 @@ import ee.taltech.pony_dash_for_spikes_salvation.ai.NPC;
 import ee.taltech.pony_dash_for_spikes_salvation.exceptions.ConnectionException;
 import ee.taltech.pony_dash_for_spikes_salvation.packets.*;
 import ee.taltech.pony_dash_for_spikes_salvation.screens.GameOverScreen;
+import ee.taltech.pony_dash_for_spikes_salvation.screens.LobbyScreen;
 import ee.taltech.pony_dash_for_spikes_salvation.screens.MenuScreen;
 import ee.taltech.pony_dash_for_spikes_salvation.screens.PlayScreen;
 import com.badlogic.gdx.Game;
@@ -34,6 +35,7 @@ public class Main extends Game {
 	private int playerSpriteId;
 	private PlayScreen playScreen;
 	private GameOverScreen gameOverScreen;
+	private LobbyScreen lobbyScreen;
 	private int gameId;
 	private int playerId;
 	private String playerName;
@@ -91,6 +93,7 @@ public class Main extends Game {
 		myPlayer = new Player("player");
 		playScreen = new PlayScreen(this);
 		gameOverScreen = new GameOverScreen(this);
+		lobbyScreen = new LobbyScreen(this);
 		singlePlayer = false;
 		MenuScreen menuScreen = new MenuScreen(this);
 		setScreen(menuScreen);
@@ -115,12 +118,14 @@ public class Main extends Game {
 			 *     Otherwise a new player is created and added to the map. A new sprite is created for the new player.
 			 *     3. The PacketSendCoordinates packet is received when a player moves in the game. Next the
 			 *     moving players coordinates are set accordingly.
-			 *     4. OnStartGame
-			 *     5. The PacketOnSpawnNpc is received when the player joins a game. The player is given the initial
-			 *     location of all of the bots.
-			 *     6. The PacketOnNpcMove is received constantly as the bots moved. This gives the updated position of
-			 *     the bots.
-			 *     7. PacketGameOver
+			 *     3. OnStartGame is received when someone presses "Start game" button. If server sends client this
+			 *     packet, the lobby screen is switched to the play screen and game id is saved for the player.
+			 *     4. OnLobbyList is sent to the client every time someone joins lobby. It contains list of players in
+			 *     the lobby.
+			 *     5. PacketGameOver contains winner id and name. Id and name will be saved in class GameOverScreen. The
+			 *     screen is switched to the GameOverScreen and winner's name is displayed.
+			 *     6. The PacketOnSpawn packets are received after the player connects to the server. One packet contains
+			 *     an npc-s id and tiled coordinates. Then a new npc is added.
 			 * </p>
 			 * @param connection (TCP or UDP)
 			 * @param object that is received
@@ -157,6 +162,13 @@ public class Main extends Game {
 							gameId = myPlayer.getGameID();
 						}
 					});
+				}
+
+				if (object instanceof OnLobbyList) {
+					List<OnLobbyJoin> names = new ArrayList<OnLobbyJoin>(((OnLobbyList) object).getPeers());
+					for (OnLobbyJoin name : names) {
+						System.out.println(name.getName());
+					}
 				}
 
 				if (object instanceof PacketOnSpawnNpc) {
