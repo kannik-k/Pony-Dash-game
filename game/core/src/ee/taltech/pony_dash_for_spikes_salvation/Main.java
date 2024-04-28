@@ -132,6 +132,7 @@ public class Main extends Game {
 			 */
 			@Override
 			public void received(Connection connection, Object object) {
+				System.out.println(object);
 				if (object instanceof PacketGameId) {
 					myPlayer.setGameID(((PacketGameId) object).getGameId());
 				}
@@ -139,6 +140,8 @@ public class Main extends Game {
 					if (((PacketPlayerConnect) object).getPlayerID() == connection.getID()) {
 						players.put(connection.getID(), myPlayer);
 						playerId = connection.getID();
+						gameId = ((PacketPlayerConnect) object).getGameID();
+						myPlayer.setGameID(gameId);
 					} else {
 						Player player = new Player(((PacketPlayerConnect) object).getPlayerName());
 						players.put(((PacketPlayerConnect) object).getPlayerID(), player);
@@ -187,6 +190,16 @@ public class Main extends Game {
 						@Override
 						public void run() {
 							changeNpcLocation(move.getNetId(), move.getTiledX(), move.getTiledY());
+						}
+					});
+				}
+
+				if (object instanceof PacketCaptured) {
+					Gdx.app.postRunnable(new Runnable() {
+						@Override
+						public void run() {
+							System.out.println("received captured packet");
+							myPlayer.setCaptureTime(((PacketCaptured) object).getTime());
 						}
 					});
 				}
