@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class Main extends Game {
 	public static final int V_WIDTH = 620;
@@ -35,12 +36,13 @@ public class Main extends Game {
 	private Player myPlayer;
 	private int playerSpriteId;
 	private PlayScreen playScreen;
-	private GameOverScreen gameOverScreen;
 	private LobbyScreen lobbyScreen;
+	private GameOverScreen gameOverScreen;
 	private int gameId;
 	private int playerId;
 	private String playerName;
 	private boolean singlePlayer;
+	private Logger logger = Logger.getLogger(getClass().getName());
 	public static final short DEFAULT_BIT = 1;
 	public static final short CHAR_BIT = 2;
 	public static final short KEY_BIT = 4;
@@ -168,9 +170,9 @@ public class Main extends Game {
 				}
 
 				if (object instanceof OnLobbyList) {
-					List<OnLobbyJoin> names = new ArrayList<OnLobbyJoin>(((OnLobbyList) object).getPeers());
+					List<OnLobbyJoin> names = new ArrayList<>(((OnLobbyList) object).getPeers());
 					for (OnLobbyJoin name : names) {
-						System.out.println(name.getName());
+						logger.info(name.getName());
 					}
 				}
 
@@ -195,11 +197,9 @@ public class Main extends Game {
 				}
 
 				if (object instanceof PacketCaptured) {
-					System.out.println("YAY");
 					Gdx.app.postRunnable(new Runnable() {
 						@Override
 						public void run() {
-							System.out.println("received captured packet");
 							myPlayer.setCaptureTime(LocalDateTime.parse(((PacketCaptured) object).getTime()));
 						}
 					});
