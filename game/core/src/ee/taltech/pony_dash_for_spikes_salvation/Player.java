@@ -2,6 +2,8 @@ package ee.taltech.pony_dash_for_spikes_salvation;
 
 import ee.taltech.pony_dash_for_spikes_salvation.sprites.PonySprite;
 
+import java.time.LocalDateTime;
+
 public class Player {
     private String playerName;
     private float x = 0.32f; // Box2D world coordinates
@@ -11,6 +13,7 @@ public class Player {
     private PonySprite sprite;
     private int spriteId;
     private int gameID;
+    private LocalDateTime captureTime = LocalDateTime.of(2000, 6, 6, 12, 12, 12); // Old date
 
     public Player(String playerName) {
         this.playerName = playerName;
@@ -78,5 +81,13 @@ public class Player {
 
     public void setGameID(int gameID) {
         this.gameID = gameID;
+    }
+
+    public LocalDateTime getCaptureTime() {
+        return captureTime;
+    }
+
+    public void setCaptureTime(LocalDateTime captureTime) {
+        this.captureTime = captureTime;
     }
 }

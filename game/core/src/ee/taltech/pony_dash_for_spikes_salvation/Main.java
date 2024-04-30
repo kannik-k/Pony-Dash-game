@@ -18,10 +18,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.esotericsoftware.kryonet.Client;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class Main extends Game {
 	public static final int V_WIDTH = 620;
@@ -34,12 +36,13 @@ public class Main extends Game {
 	private Player myPlayer;
 	private int playerSpriteId;
 	private PlayScreen playScreen;
-	private GameOverScreen gameOverScreen;
 	private LobbyScreen lobbyScreen;
+	private GameOverScreen gameOverScreen;
 	private int gameId;
 	private int playerId;
 	private String playerName;
 	private boolean singlePlayer;
+	private Logger logger = Logger.getLogger(getClass().getName());
 	public static final short DEFAULT_BIT = 1;
 	public static final short CHAR_BIT = 2;
 	public static final short KEY_BIT = 4;
@@ -139,6 +142,8 @@ public class Main extends Game {
 					if (((PacketPlayerConnect) object).getPlayerID() == connection.getID()) {
 						players.put(connection.getID(), myPlayer);
 						playerId = connection.getID();
+						gameId = ((PacketPlayerConnect) object).getGameID();
+						myPlayer.setGameID(gameId);
 					} else {
 						Player player = new Player(((PacketPlayerConnect) object).getPlayerName());
 						players.put(((PacketPlayerConnect) object).getPlayerID(), player);
@@ -165,9 +170,9 @@ public class Main extends Game {
 				}
 
 				if (object instanceof OnLobbyList) {
-					List<OnLobbyJoin> names = new ArrayList<OnLobbyJoin>(((OnLobbyList) object).getPeers());
+					List<OnLobbyJoin> names = new ArrayList<>(((OnLobbyList) object).getPeers());
 					for (OnLobbyJoin name : names) {
-						System.out.println(name.getName());
+						logger.info(name.getName());
 					}
 				}
 
@@ -187,6 +192,15 @@ public class Main extends Game {
 						@Override
 						public void run() {
 							changeNpcLocation(move.getNetId(), move.getTiledX(), move.getTiledY());
+						}
+					});
+				}
+
+				if (object instanceof PacketCaptured) {
+					Gdx.app.postRunnable(new Runnable() {
+						@Override
+						public void run() {
+							myPlayer.setCaptureTime(LocalDateTime.parse(((PacketCaptured) object).getTime()));
 						}
 					});
 				}

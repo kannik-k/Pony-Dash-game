@@ -28,6 +28,8 @@ import ee.taltech.pony_dash_for_spikes_salvation.objects.Finish;
 import ee.taltech.pony_dash_for_spikes_salvation.objects.Stage2Spike;
 import ee.taltech.pony_dash_for_spikes_salvation.objects.Stage3Spike;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 public class PlayScreen implements Screen {
@@ -182,28 +184,30 @@ public class PlayScreen implements Screen {
      * Handle input and define movements.
      */
     public void handleInput() {
-        float xVelocity = player.getB2body().getLinearVelocity().x;
+        if (Duration.between(game.getMyPlayer().getCaptureTime(), LocalDateTime.now()).toMillis() > (5000)) { // Player is captured for 10 seconds and cannot move
+            float xVelocity = player.getB2body().getLinearVelocity().x;
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && (player.getCurrentState().equals("run")
-                || player.getCurrentState().equals("standing"))) {
-            player.getB2body().applyLinearImpulse(new Vector2(0, 4.5f), player.getB2body().getWorldCenter(), true);
+            if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && (player.getCurrentState().equals("run")
+                    || player.getCurrentState().equals("standing"))) {
+                player.getB2body().applyLinearImpulse(new Vector2(0, 4.5f), player.getB2body().getWorldCenter(), true);
+            }
+
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && xVelocity <= 2) {
+                player.getB2body().applyLinearImpulse(new Vector2(0.1f, 0), player.getB2body().getWorldCenter(), true);
+            }
+
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && xVelocity >= -2) {
+                player.getB2body().applyLinearImpulse(new Vector2(-0.1f, 0), player.getB2body().getWorldCenter(), true);
+            }
+
+            // If button is not pressed down, moving stops
+            if (!Gdx.input.isKeyPressed(Input.Keys.RIGHT) && !Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                player.getB2body().setLinearVelocity(0, player.getB2body().getLinearVelocity().y);
+            }
+
+            // Update player's position
+            updatePlayerPosition();
         }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && xVelocity <= 2) {
-            player.getB2body().applyLinearImpulse(new Vector2(0.1f, 0), player.getB2body().getWorldCenter(), true);
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && xVelocity >= -2) {
-            player.getB2body().applyLinearImpulse(new Vector2(-0.1f, 0), player.getB2body().getWorldCenter(), true);
-        }
-
-        // If button is not pressed down, moving stops
-        if (!Gdx.input.isKeyPressed(Input.Keys.RIGHT) && !Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            player.getB2body().setLinearVelocity(0, player.getB2body().getLinearVelocity().y);
-        }
-
-        // Update player's position
-        updatePlayerPosition();
     }
 
     private void updatePlayerPosition() {
