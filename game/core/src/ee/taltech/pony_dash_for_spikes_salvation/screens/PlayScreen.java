@@ -19,6 +19,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
 import ee.taltech.pony_dash_for_spikes_salvation.Player;
 import ee.taltech.pony_dash_for_spikes_salvation.ai.NPC;
+import ee.taltech.pony_dash_for_spikes_salvation.items.Apple;
+import ee.taltech.pony_dash_for_spikes_salvation.items.Cherry;
 import ee.taltech.pony_dash_for_spikes_salvation.items.Coin;
 import ee.taltech.pony_dash_for_spikes_salvation.items.Key;
 import ee.taltech.pony_dash_for_spikes_salvation.scenes.Hud;
@@ -152,6 +154,14 @@ public class PlayScreen implements Screen {
         //Stage3
         for(RectangleMapObject object: map.getLayers().get(19).getObjects().getByType(RectangleMapObject.class)) {
             new objects.Stage3(world, map, object, hud);
+        }
+        //Cherries
+        for(RectangleMapObject object: map.getLayers().get(20).getObjects().getByType(RectangleMapObject.class)) {
+            new Cherry(world, map, object, hud);
+        }
+        //Apples
+        for(RectangleMapObject object: map.getLayers().get(21).getObjects().getByType(RectangleMapObject.class)) {
+            new Apple(world, map, object, hud);
         }
     }
 
