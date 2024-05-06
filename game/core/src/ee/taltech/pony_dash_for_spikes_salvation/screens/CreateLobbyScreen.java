@@ -244,6 +244,7 @@ public class CreateLobbyScreen implements Screen {
                 game.setPlayerName(playerName);
                 changeCursorToDefault();
                 isNameSelected = true;
+                okButton.setStyle(greenStyle);
             }
         });
 

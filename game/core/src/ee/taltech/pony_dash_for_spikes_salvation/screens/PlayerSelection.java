@@ -144,6 +144,7 @@ public class PlayerSelection implements Screen {
                 game.setPlayerName(playerName);
                 game.getMyPlayer().setPlayerName(playerName);
                 changeCursorToDefault();
+                okButton.setStyle(greenStyle);
             }
         });
 
