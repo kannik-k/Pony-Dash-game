@@ -1,6 +1,6 @@
 package ee.taltech.pony_dash_for_spikes_salvation.packets;
 
-public class PacketSendCoordinates extends Packet{
+public class PacketSendCoordinates extends Packet {
     private float x;
     private float y;
     private int tiledX;
