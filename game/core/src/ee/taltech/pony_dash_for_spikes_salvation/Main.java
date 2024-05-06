@@ -1,6 +1,8 @@
 package ee.taltech.pony_dash_for_spikes_salvation;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -52,6 +54,11 @@ public class Main extends Game {
 	public static final short SPIKE_3_BIT = 64;
 	public static final short FINISH_BIT = 128;
 	public static final short STAGE_BLOCK_BIT = 516;
+	/* Using AssetManager in a static way can cause issues, especially on Android.
+	Instead, you may want to pass around AssetManager to those classes that need it.
+	Currently static to save time and test.
+	 */
+	public static AssetManager manager;
 
 	public SpriteBatch getBatch() {
 		return batch;
@@ -93,6 +100,9 @@ public class Main extends Game {
 		client.start();
 		Network.register(client);
 		batch = new SpriteBatch();
+		manager = new AssetManager();
+		manager.load("Game Assets/Mlp Gameloft Background Music Extended.mp3", Music.class);
+		manager.finishLoading();
 		myPlayer = new Player("player");
 		playScreen = new PlayScreen(this);
 		gameOverScreen = new GameOverScreen(this);
@@ -311,5 +321,6 @@ public class Main extends Game {
 			throw new ConnectionException(e.getMessage());
 		}
 		batch.dispose();
+		manager.dispose();
 	}
 }

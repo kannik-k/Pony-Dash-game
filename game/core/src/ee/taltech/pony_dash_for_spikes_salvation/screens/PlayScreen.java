@@ -3,6 +3,7 @@ package ee.taltech.pony_dash_for_spikes_salvation.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -53,6 +54,9 @@ public class PlayScreen implements Screen {
     private World world;
     private Box2DDebugRenderer b2dr;
     private PonySprite player;
+
+    //Sound
+    private Music music;
     /**
      * Gets ppm.
      *
@@ -92,6 +96,10 @@ public class PlayScreen implements Screen {
         world.setContactListener(new WorldContactListener());
 
         hud = new Hud(game.getBatch());
+
+        music = Main.manager.get("Game Assets/Mlp Gameloft Background Music Extended.mp3", Music.class);
+        music.setLooping(true);
+        music.play();
 
         // Ajutine, tuleb hiljem ümber tõsta
         BodyDef bdef = new BodyDef();
