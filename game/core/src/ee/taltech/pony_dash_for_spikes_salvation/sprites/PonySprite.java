@@ -28,7 +28,7 @@ public class PonySprite extends Sprite {
     private boolean runningRight;
     private float stateTimer;
     private Player player;
-    private List<Integer> animationInformation = Arrays.asList(2, 546, 512, 418, 2, 15, 18, 0, 0);
+    List<Integer> animationInformation = Arrays.asList(2, 546, 560, 418, 2, 15, 18, 0, 0);
 
     /**
      * Gets b 2 body.
@@ -57,17 +57,17 @@ public class PonySprite extends Sprite {
         Array<TextureRegion> frames = new Array<>();
 
         if (id == 1) {
-            this.animationInformation = Arrays.asList(2, 480, 512, 418, 2, 15, 18, 0, 0);
+            this.animationInformation = Arrays.asList(2, 482, 512, 418, 2, 15, 18, 0, 0);
         } else if (id == 5) {
-            this.animationInformation = Arrays.asList(10, 480, 512, 418, 3, 15, 18, 3, 3);
+            this.animationInformation = Arrays.asList(10, 480, 512, 419, 3, 15, 18, 3, 3);
         } else if (id == 4) {
-            this.animationInformation = Arrays.asList(18, 480, 512, 418, 2, 15, 18, 4, 2);
+            this.animationInformation = Arrays.asList(18, 480, 512, 419, 3, 15, 18, 4, 3);
         } else if (id == 2) {
             this.animationInformation = Arrays.asList(2, 96, 128, 32, 2, 2, 5, 0, 0);
         } else if (id == 3) {
             this.animationInformation = Arrays.asList(18, 96, 128, 32, 0, 2, 5, 4, 3);
         } else if (id == 6) {
-            this.animationInformation = Arrays.asList(10, 96, 128, 32, 2, 2, 5, 3, 1);
+            this.animationInformation = Arrays.asList(10, 96, 128, 33, 2, 2, 5, 3, 1);
         }
 
         // Pony run animation
@@ -114,15 +114,6 @@ public class PonySprite extends Sprite {
      */
     public void setPlayer(Player player) {
         this.player = player;
-    }
-
-    /**
-     * Get state timer float.
-     *
-     * @return the float
-     */
-    public float getStateTimer(){
-        return stateTimer;
     }
 
     /**
