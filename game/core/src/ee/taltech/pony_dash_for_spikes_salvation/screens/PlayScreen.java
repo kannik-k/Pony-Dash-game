@@ -157,11 +157,11 @@ public class PlayScreen implements Screen {
         }
         //Cherries
         for(RectangleMapObject object: map.getLayers().get(20).getObjects().getByType(RectangleMapObject.class)) {
-            new Cherry(world, map, object, hud);
+            new Cherry(world, map, object, hud, game.getMyPlayer());
         }
         //Apples
         for(RectangleMapObject object: map.getLayers().get(21).getObjects().getByType(RectangleMapObject.class)) {
-            new Apple(world, map, object, hud);
+            new Apple(world, map, object, hud, game.getMyPlayer());
         }
     }
 
@@ -194,20 +194,35 @@ public class PlayScreen implements Screen {
      * Handle input and define movements.
      */
     public void handleInput() {
-        if (Duration.between(game.getMyPlayer().getCaptureTime(), LocalDateTime.now()).toMillis() > (5000)) { // Player is captured for 10 seconds and cannot move
+        if (Duration.between(game.getMyPlayer().getCaptureTime(), LocalDateTime.now()).toMillis() > (5000)) { // Player is captured for 5 seconds and cannot move
             float xVelocity = player.getB2body().getLinearVelocity().x;
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && (player.getCurrentState().equals("run")
                     || player.getCurrentState().equals("standing"))) {
-                player.getB2body().applyLinearImpulse(new Vector2(0, 4.5f), player.getB2body().getWorldCenter(), true);
+                if (Duration.between(game.getMyPlayer().getGotCherryTime(), LocalDateTime.now()).toMillis() > (20000)) {
+                    player.getB2body().applyLinearImpulse(new Vector2(0, 4.5f), player.getB2body().getWorldCenter(), true);
+                } else {
+                    // Give extra jumping height for 20 seconds
+                    player.getB2body().applyLinearImpulse(new Vector2(0, 7f), player.getB2body().getWorldCenter(), true);
+                }
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && xVelocity <= 2) {
-                player.getB2body().applyLinearImpulse(new Vector2(0.1f, 0), player.getB2body().getWorldCenter(), true);
+                if (Duration.between(game.getMyPlayer().getGotAppleTime(), LocalDateTime.now()).toMillis() > (20000)) {
+                    player.getB2body().applyLinearImpulse(new Vector2(0.1f, 0), player.getB2body().getWorldCenter(), true);
+                } else {
+                    // Give extra speed with apple for 20 seconds
+                    player.getB2body().applyLinearImpulse(new Vector2(0.8f, 0), player.getB2body().getWorldCenter(), true);
+                }
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && xVelocity >= -2) {
-                player.getB2body().applyLinearImpulse(new Vector2(-0.1f, 0), player.getB2body().getWorldCenter(), true);
+                if (Duration.between(game.getMyPlayer().getGotAppleTime(), LocalDateTime.now()).toMillis() > (20000)) {
+                    player.getB2body().applyLinearImpulse(new Vector2(-0.1f, 0), player.getB2body().getWorldCenter(), true);
+                } else {
+                    // Give extra speed with apple for 20 seconds
+                    player.getB2body().applyLinearImpulse(new Vector2(-0.8f, 0), player.getB2body().getWorldCenter(), true);
+                }
             }
 
             // If button is not pressed down, moving stops
