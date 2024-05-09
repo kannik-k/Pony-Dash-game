@@ -14,6 +14,8 @@ public class Player {
     private int spriteId;
     private int gameID;
     private LocalDateTime captureTime = LocalDateTime.of(2000, 6, 6, 12, 12, 12); // Old date
+    private LocalDateTime gotAppleTime = LocalDateTime.of(2000, 6, 6, 12, 12, 12); // Old date
+    private LocalDateTime gotCherryTime = LocalDateTime.of(2000, 6, 6, 12, 12, 12); // Old date
 
     public Player(String playerName) {
         this.playerName = playerName;
@@ -89,5 +91,21 @@ public class Player {
 
     public void setCaptureTime(LocalDateTime captureTime) {
         this.captureTime = captureTime;
+    }
+
+    public LocalDateTime getGotAppleTime() {
+        return gotAppleTime;
+    }
+
+    public void setGotAppleTime(LocalDateTime gotAppleTime) {
+        this.gotAppleTime = gotAppleTime;
+    }
+
+    public LocalDateTime getGotCherryTime() {
+        return gotCherryTime;
+    }
+
+    public void setGotCherryTime(LocalDateTime gotCherryTime) {
+        this.gotCherryTime = gotCherryTime;
     }
 }

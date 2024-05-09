@@ -42,6 +42,7 @@ public abstract class InteractiveTileObject {
         this.velocity = new Vector2(0, 0);
 
     }
+
     public abstract void onHeadHit();
     public void setCategoryFilter(short filterBit) {
         Filter filter = new Filter();
@@ -52,5 +53,17 @@ public abstract class InteractiveTileObject {
         TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(16);
         return layer.getCell((int)(body.getPosition().x * PlayScreen.getPPM() / 16),
                 (int)(body.getPosition().y * PlayScreen.getPPM() / 16));
+    }
+
+    public float getCellX() {
+        return body.getPosition().x;
+    }
+
+    public float getCellY() {
+        return body.getPosition().y;
+    }
+
+    public Fixture getFixture() {
+        return fixture;
     }
 }
