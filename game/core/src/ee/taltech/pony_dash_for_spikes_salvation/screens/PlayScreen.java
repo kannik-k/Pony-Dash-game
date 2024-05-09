@@ -5,9 +5,12 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
@@ -19,8 +22,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
 import ee.taltech.pony_dash_for_spikes_salvation.Player;
 import ee.taltech.pony_dash_for_spikes_salvation.ai.NPC;
-import ee.taltech.pony_dash_for_spikes_salvation.items.Coin;
-import ee.taltech.pony_dash_for_spikes_salvation.items.Key;
+import ee.taltech.pony_dash_for_spikes_salvation.items.*;
 import ee.taltech.pony_dash_for_spikes_salvation.scenes.Hud;
 import ee.taltech.pony_dash_for_spikes_salvation.sprites.PonySprite;
 import ee.taltech.pony_dash_for_spikes_salvation.tools.WorldContactListener;
@@ -30,6 +32,9 @@ import ee.taltech.pony_dash_for_spikes_salvation.objects.Stage3Spike;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PlayScreen implements Screen {
@@ -53,6 +58,12 @@ public class PlayScreen implements Screen {
     private final World world;
     private final Box2DDebugRenderer b2dr;
     private PonySprite player;
+    private Texture cherry;
+    private Texture apple;
+
+    // Power-ups
+    Map<List<Integer>, InteractiveTileObject> powerUps = new HashMap<>();
+
     /**
      * Gets ppm.
      *
@@ -88,6 +99,10 @@ public class PlayScreen implements Screen {
 
         player = new PonySprite(world, this, game.getMyPlayer(), ponyId);
         game.getMyPlayer().setSprite(player);
+
+        cherry = new Texture("Game Assets/cherry.png");
+        apple = new Texture("Game Assets/apple.png");
+
         // collision types
         world.setContactListener(new WorldContactListener());
 
@@ -153,6 +168,22 @@ public class PlayScreen implements Screen {
         for(RectangleMapObject object: map.getLayers().get(19).getObjects().getByType(RectangleMapObject.class)) {
             new objects.Stage3(world, map, object, hud);
         }
+        //Cherries
+        for(RectangleMapObject object: map.getLayers().get(20).getObjects().getByType(RectangleMapObject.class)) {
+            Cherry cherryObject = new Cherry(world, map, object, hud, game.getMyPlayer(), game);
+            List<Integer> coordinates = new ArrayList<>();
+            coordinates.add(Math.round(cherryObject.getCellX()));
+            coordinates.add(Math.round(cherryObject.getCellY()));
+            powerUps.put(coordinates, cherryObject);
+        }
+        //Apples
+        for(RectangleMapObject object: map.getLayers().get(21).getObjects().getByType(RectangleMapObject.class)) {
+            Apple appleObject = new Apple(world, map, object, hud, game.getMyPlayer(), game);
+            List<Integer> coordinates = new ArrayList<>();
+            coordinates.add(Math.round(appleObject.getCellX()));
+            coordinates.add(Math.round(appleObject.getCellY()));
+            powerUps.put(coordinates, appleObject);
+        }
     }
 
     public void updatePonyIdAndSprite(int ponyId) {
@@ -184,20 +215,20 @@ public class PlayScreen implements Screen {
      * Handle input and define movements.
      */
     public void handleInput() {
-        if (Duration.between(game.getMyPlayer().getCaptureTime(), LocalDateTime.now()).toMillis() > (5000)) { // Player is captured for 10 seconds and cannot move
+        if (Duration.between(game.getMyPlayer().getCaptureTime(), LocalDateTime.now()).toMillis() > (5000)) { // Player is captured for 5 seconds and cannot move
             float xVelocity = player.getB2body().getLinearVelocity().x;
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && (player.getCurrentState().equals("run")
                     || player.getCurrentState().equals("standing"))) {
-                player.getB2body().applyLinearImpulse(new Vector2(0, 4.5f), player.getB2body().getWorldCenter(), true);
+                setCorrectJumpingHeight();
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && xVelocity <= 2) {
-                player.getB2body().applyLinearImpulse(new Vector2(0.1f, 0), player.getB2body().getWorldCenter(), true);
+                setCorrectSpeedRight();
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && xVelocity >= -2) {
-                player.getB2body().applyLinearImpulse(new Vector2(-0.1f, 0), player.getB2body().getWorldCenter(), true);
+                setCorrectSpeedLeft();
             }
 
             // If button is not pressed down, moving stops
@@ -207,6 +238,33 @@ public class PlayScreen implements Screen {
 
             // Update player's position
             updatePlayerPosition();
+        }
+    }
+
+    private void setCorrectJumpingHeight() {
+        if (Duration.between(game.getMyPlayer().getGotCherryTime(), LocalDateTime.now()).toMillis() > (20000)) {
+            player.getB2body().applyLinearImpulse(new Vector2(0, 4.5f), player.getB2body().getWorldCenter(), true);
+        } else {
+            // Give extra jumping height for 20 seconds
+            player.getB2body().applyLinearImpulse(new Vector2(0, 7f), player.getB2body().getWorldCenter(), true);
+        }
+    }
+
+    private void setCorrectSpeedRight() {
+        if (Duration.between(game.getMyPlayer().getGotAppleTime(), LocalDateTime.now()).toMillis() > (20000)) {
+            player.getB2body().applyLinearImpulse(new Vector2(0.1f, 0), player.getB2body().getWorldCenter(), true);
+        } else {
+            // Give extra speed with apple for 20 seconds
+            player.getB2body().applyLinearImpulse(new Vector2(1f, 0), player.getB2body().getWorldCenter(), true);
+        }
+    }
+
+    private void setCorrectSpeedLeft() {
+        if (Duration.between(game.getMyPlayer().getGotAppleTime(), LocalDateTime.now()).toMillis() > (20000)) {
+            player.getB2body().applyLinearImpulse(new Vector2(-0.1f, 0), player.getB2body().getWorldCenter(), true);
+        } else {
+            // Give extra speed with apple for 20 seconds
+            player.getB2body().applyLinearImpulse(new Vector2(-1f, 0), player.getB2body().getWorldCenter(), true);
         }
     }
 
@@ -282,6 +340,17 @@ public class PlayScreen implements Screen {
         renderAllPlayers();
         player.draw(game.getBatch());
 
+        String testText = "Hello hello";
+        BitmapFont font = new BitmapFont();
+        font.draw(game.getBatch(), testText, 1, 1);
+
+        if (Duration.between(game.getMyPlayer().getGotCherryTime(), LocalDateTime.now()).toMillis() <= (20000)) {
+            game.getBatch().draw(cherry, (float) (gameCam.position.x + 2.5), (float) (gameCam.position.y + 1.6), 0.3F, 0.3F);
+        }
+        if (Duration.between(game.getMyPlayer().getGotAppleTime(), LocalDateTime.now()).toMillis() <= (20000)) {
+            game.getBatch().draw(apple, (float) (gameCam.position.x - 2.8), (float) (gameCam.position.y + 1.6), 0.3F, 0.3F);
+        }
+
         game.getBatch().end();
         hud.stage.draw();
         game.sendPositionInfoToServer();
@@ -302,6 +371,22 @@ public class PlayScreen implements Screen {
             npc.update(Gdx.graphics.getDeltaTime());
             npc.draw(game.getBatch());
         }
+    }
+
+    /**
+     * Delete power-up from map when someone else has taken it.
+     * @param x coordinate of power-up
+     * @param y coordinate of power-up
+     */
+    public void deletePowerUp(float x, float y) {
+        Filter filter = new Filter();
+        filter.categoryBits = Main.COLLECTED_BIT;
+        List<Integer> coordinates = new ArrayList<>();
+        coordinates.add(Math.round(x));
+        coordinates.add(Math.round(y));
+        powerUps.get(coordinates).getFixture().setFilterData(filter);
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(16);
+        layer.getCell((int)(x * PlayScreen.getPPM() / 16), (int)(y * PlayScreen.getPPM() / 16)).setTile(null);
     }
 
     /**
