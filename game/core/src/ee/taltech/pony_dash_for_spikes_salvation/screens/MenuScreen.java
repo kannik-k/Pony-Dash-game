@@ -16,15 +16,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
+import org.lwjgl.glfw.GLFW;
 
 
 public class MenuScreen implements Screen {
     private final Main game;
     private final Stage stage;
     final OrthographicCamera gameCam;
-    final ExtendViewport viewport;
+    final Viewport viewport;
     private SpriteBatch spriteBatch;
     private final Texture backgroundTexture;
 
@@ -39,7 +41,14 @@ public class MenuScreen implements Screen {
         backgroundTexture = new Texture("Game Assets/Sunny land winter forest sky.png");
         changeCursorToDefault();
         gameCam = new OrthographicCamera();
-        viewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), gameCam);
+
+        viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        viewport.apply();
+        Gdx.graphics.setWindowedMode(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        long windowHandle = GLFW.glfwGetCurrentContext();
+        GLFW.glfwSetWindowSizeLimits(windowHandle, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),
+                Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
         stage = new Stage(viewport);
     }
 
@@ -56,7 +65,7 @@ public class MenuScreen implements Screen {
 
         // Draw the background image
         spriteBatch.begin();
-        spriteBatch.draw(backgroundTexture, 0, 0, stage.getWidth(), stage.getHeight());
+        spriteBatch.draw(backgroundTexture, 0, 0, viewport.getWorldWidth(), viewport.getWorldWidth());
         spriteBatch.end();
 
         // tell our stage to do actions and draw itself
@@ -115,6 +124,8 @@ public class MenuScreen implements Screen {
         Skin skin;
         Label heading;
         spriteBatch = new SpriteBatch();
+
+        Gdx.graphics.setWindowedMode(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         skin = new Skin(Gdx.files.internal("Skin/terramotherui/terra-mother-ui.json"));
         heading = new Label("Welcome to Pony Dash For Spikes Salvation!", skin);

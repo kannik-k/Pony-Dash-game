@@ -62,6 +62,10 @@ project(":core") {
         api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
         api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         api "com.badlogicgames.ashley:ashley:$ashleyVersion"
+        api "org.lwjgl:lwjgl:3.2.3"
+        api "org.lwjgl:lwjgl-glfw:3.2.3"
+        api "org.lwjgl:lwjgl-openal:3.2.3"
+        api "org.lwjgl:lwjgl-opengl:3.2.3"
         
     }
 }
