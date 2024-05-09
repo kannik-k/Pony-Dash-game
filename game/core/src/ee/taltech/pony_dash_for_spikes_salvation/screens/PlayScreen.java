@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -31,7 +30,6 @@ import ee.taltech.pony_dash_for_spikes_salvation.objects.Finish;
 import ee.taltech.pony_dash_for_spikes_salvation.objects.Stage2Spike;
 import ee.taltech.pony_dash_for_spikes_salvation.objects.Stage3Spike;
 
-import java.awt.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -172,19 +170,19 @@ public class PlayScreen implements Screen {
         }
         //Cherries
         for(RectangleMapObject object: map.getLayers().get(20).getObjects().getByType(RectangleMapObject.class)) {
-            Cherry cherry = new Cherry(world, map, object, hud, game.getMyPlayer(), game);
+            Cherry cherryObject = new Cherry(world, map, object, hud, game.getMyPlayer(), game);
             List<Integer> coordinates = new ArrayList<>();
-            coordinates.add(Math.round(cherry.getCellX()));
-            coordinates.add(Math.round(cherry.getCellY()));
-            powerUps.put(coordinates, cherry);
+            coordinates.add(Math.round(cherryObject.getCellX()));
+            coordinates.add(Math.round(cherryObject.getCellY()));
+            powerUps.put(coordinates, cherryObject);
         }
         //Apples
         for(RectangleMapObject object: map.getLayers().get(21).getObjects().getByType(RectangleMapObject.class)) {
-            Apple apple = new Apple(world, map, object, hud, game.getMyPlayer(), game);
+            Apple appleObject = new Apple(world, map, object, hud, game.getMyPlayer(), game);
             List<Integer> coordinates = new ArrayList<>();
-            coordinates.add(Math.round(apple.getCellX()));
-            coordinates.add(Math.round(apple.getCellY()));
-            powerUps.put(coordinates, apple);
+            coordinates.add(Math.round(appleObject.getCellX()));
+            coordinates.add(Math.round(appleObject.getCellY()));
+            powerUps.put(coordinates, appleObject);
         }
     }
 
@@ -222,30 +220,15 @@ public class PlayScreen implements Screen {
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && (player.getCurrentState().equals("run")
                     || player.getCurrentState().equals("standing"))) {
-                if (Duration.between(game.getMyPlayer().getGotCherryTime(), LocalDateTime.now()).toMillis() > (20000)) {
-                    player.getB2body().applyLinearImpulse(new Vector2(0, 4.5f), player.getB2body().getWorldCenter(), true);
-                } else {
-                    // Give extra jumping height for 20 seconds
-                    player.getB2body().applyLinearImpulse(new Vector2(0, 7f), player.getB2body().getWorldCenter(), true);
-                }
+                setCorrectJumpingHeight();
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && xVelocity <= 2) {
-                if (Duration.between(game.getMyPlayer().getGotAppleTime(), LocalDateTime.now()).toMillis() > (20000)) {
-                    player.getB2body().applyLinearImpulse(new Vector2(0.1f, 0), player.getB2body().getWorldCenter(), true);
-                } else {
-                    // Give extra speed with apple for 20 seconds
-                    player.getB2body().applyLinearImpulse(new Vector2(1f, 0), player.getB2body().getWorldCenter(), true);
-                }
+                setCorrectSpeedRight();
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && xVelocity >= -2) {
-                if (Duration.between(game.getMyPlayer().getGotAppleTime(), LocalDateTime.now()).toMillis() > (20000)) {
-                    player.getB2body().applyLinearImpulse(new Vector2(-0.1f, 0), player.getB2body().getWorldCenter(), true);
-                } else {
-                    // Give extra speed with apple for 20 seconds
-                    player.getB2body().applyLinearImpulse(new Vector2(-1f, 0), player.getB2body().getWorldCenter(), true);
-                }
+                setCorrectSpeedLeft();
             }
 
             // If button is not pressed down, moving stops
@@ -255,6 +238,33 @@ public class PlayScreen implements Screen {
 
             // Update player's position
             updatePlayerPosition();
+        }
+    }
+
+    private void setCorrectJumpingHeight() {
+        if (Duration.between(game.getMyPlayer().getGotCherryTime(), LocalDateTime.now()).toMillis() > (20000)) {
+            player.getB2body().applyLinearImpulse(new Vector2(0, 4.5f), player.getB2body().getWorldCenter(), true);
+        } else {
+            // Give extra jumping height for 20 seconds
+            player.getB2body().applyLinearImpulse(new Vector2(0, 7f), player.getB2body().getWorldCenter(), true);
+        }
+    }
+
+    private void setCorrectSpeedRight() {
+        if (Duration.between(game.getMyPlayer().getGotAppleTime(), LocalDateTime.now()).toMillis() > (20000)) {
+            player.getB2body().applyLinearImpulse(new Vector2(0.1f, 0), player.getB2body().getWorldCenter(), true);
+        } else {
+            // Give extra speed with apple for 20 seconds
+            player.getB2body().applyLinearImpulse(new Vector2(1f, 0), player.getB2body().getWorldCenter(), true);
+        }
+    }
+
+    private void setCorrectSpeedLeft() {
+        if (Duration.between(game.getMyPlayer().getGotAppleTime(), LocalDateTime.now()).toMillis() > (20000)) {
+            player.getB2body().applyLinearImpulse(new Vector2(-0.1f, 0), player.getB2body().getWorldCenter(), true);
+        } else {
+            // Give extra speed with apple for 20 seconds
+            player.getB2body().applyLinearImpulse(new Vector2(-1f, 0), player.getB2body().getWorldCenter(), true);
         }
     }
 
@@ -369,13 +379,11 @@ public class PlayScreen implements Screen {
      * @param y coordinate of power-up
      */
     public void deletePowerUp(float x, float y) {
-        System.out.println(powerUps);
         Filter filter = new Filter();
         filter.categoryBits = Main.COLLECTED_BIT;
         List<Integer> coordinates = new ArrayList<>();
         coordinates.add(Math.round(x));
         coordinates.add(Math.round(y));
-        System.out.println("Gotten coordinates: " + coordinates);
         powerUps.get(coordinates).getFixture().setFilterData(filter);
         TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(16);
         layer.getCell((int)(x * PlayScreen.getPPM() / 16), (int)(y * PlayScreen.getPPM() / 16)).setTile(null);
