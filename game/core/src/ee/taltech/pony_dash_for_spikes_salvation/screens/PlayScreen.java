@@ -150,19 +150,19 @@ public class PlayScreen implements Screen {
         }
         // Coin
         for(RectangleMapObject object: map.getLayers().get(15).getObjects().getByType(RectangleMapObject.class)) {
-            new Coin(world, map, object, hud);
+            new Coin(world, map, object, hud, game);
         }
         //Key
         for(RectangleMapObject object: map.getLayers().get(17).getObjects().getByType(RectangleMapObject.class)) {
-            new Key(world, map, object, hud);
+            new Key(world, map, object, hud, game);
         }
         //Spikes stage 2
         for(RectangleMapObject object: map.getLayers().get(13).getObjects().getByType(RectangleMapObject.class)) {
-            new Stage2Spike(world, map, object, hud);
+            new Stage2Spike(world, map, object, hud, game);
         }
         //Spikes Stage 3
         for(RectangleMapObject object: map.getLayers().get(14).getObjects().getByType(RectangleMapObject.class)) {
-            new Stage3Spike(world, map, object, hud);
+            new Stage3Spike(world, map, object, hud, game);
         }
         //Finish
         for(RectangleMapObject object: map.getLayers().get(12).getObjects().getByType(RectangleMapObject.class)) {
@@ -170,11 +170,11 @@ public class PlayScreen implements Screen {
         }
         //Stage2
         for(RectangleMapObject object: map.getLayers().get(18).getObjects().getByType(RectangleMapObject.class)) {
-            new objects.Stage2(world, map, object, hud);
+            new objects.Stage2(world, map, object, hud, game);
         }
         //Stage3
         for(RectangleMapObject object: map.getLayers().get(19).getObjects().getByType(RectangleMapObject.class)) {
-            new objects.Stage3(world, map, object, hud);
+            new objects.Stage3(world, map, object, hud, game);
         }
         //Cherries
         for(RectangleMapObject object: map.getLayers().get(20).getObjects().getByType(RectangleMapObject.class)) {

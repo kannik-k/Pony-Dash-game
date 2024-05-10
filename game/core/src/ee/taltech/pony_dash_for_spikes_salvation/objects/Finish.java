@@ -1,6 +1,7 @@
 package ee.taltech.pony_dash_for_spikes_salvation.objects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.physics.box2d.World;
@@ -36,6 +37,7 @@ public class Finish extends InteractiveObject {
                 gameOverScreen.setWinnerName(main.getPlayerName());
                 gameOverScreen.setWinnerId(main.getPlayerId());
                 main.setScreen(gameOverScreen);
+                main.getManager().get("Game Assets/yay-101soundboards.mp3", Sound.class);
             }
         }
     }

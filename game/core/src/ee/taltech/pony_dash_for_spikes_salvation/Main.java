@@ -106,6 +106,12 @@ public class Main extends Game {
 		manager = new AssetManager();
 		manager.load("Game Assets/Mlp Gameloft Background Music Extended.mp3", Music.class);
 		manager.load("Game Assets/mixkit-video-game-health-recharge-2837.wav", Sound.class);
+		manager.load("Game Assets/mixkit-bonus-earned-in-video-game-2058.wav", Sound.class);
+		manager.load("Game Assets/mixkit-winning-a-coin-video-game-2069.wav", Sound.class);
+		manager.load("Game Assets/mixkit-game-bonus-reached-2065.wav", Sound.class);
+		manager.load("Game Assets/mixkit-player-losing-or-failing-2042.wav", Sound.class);
+		manager.load("Game Assets/mixkit-small-hit-in-a-game-2072.wav", Sound.class);
+		manager.load("Game Assets/yay-101soundboards.mp3", Sound.class);
 		manager.finishLoading();
 		myPlayer = new Player("player");
 		playScreen = new PlayScreen(this);

@@ -14,12 +14,11 @@ import java.time.LocalDateTime;
 
 public class Cherry extends InteractiveTileObject {
     private final Player player;
-    private final Main game;
+
 
     public Cherry(World world, TiledMap map, MapObject object, Hud hud, Player player, Main game) {
-        super(world, map, object, hud);
+        super(world, map, object, hud, game);
         this.player = player;
-        this.game = game;
 
         fixture.setUserData(this);
         setCategoryFilter(Main.CHERRY_BIT);

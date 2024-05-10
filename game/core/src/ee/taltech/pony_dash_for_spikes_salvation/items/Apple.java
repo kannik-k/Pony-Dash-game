@@ -14,12 +14,10 @@ import java.time.LocalDateTime;
 
 public class Apple extends InteractiveTileObject {
     private final Player player;
-    private final Main game;
 
     public Apple(World world, TiledMap map, MapObject object, Hud hud, Player player, Main game) {
-        super(world, map, object, hud);
+        super(world, map, object, hud, game);
         this.player = player;
-        this.game = game;
 
         fixture.setUserData(this);
         setCategoryFilter(Main.APPLE_BIT);
