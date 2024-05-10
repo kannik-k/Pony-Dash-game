@@ -37,7 +37,7 @@ public class Finish extends InteractiveObject {
                 gameOverScreen.setWinnerName(main.getPlayerName());
                 gameOverScreen.setWinnerId(main.getPlayerId());
                 main.setScreen(gameOverScreen);
-                main.getManager().get("Game Assets/yay-101soundboards.mp3", Sound.class);
+                main.getManager().get("Game Assets/yay-101soundboards.mp3", Sound.class).play(0.3f);
             }
         }
     }
