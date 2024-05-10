@@ -182,6 +182,10 @@ public class Main extends Game {
 					});
 				}
 
+				if (object instanceof OnLobbyJoin) {
+					logger.info(((OnLobbyJoin) object).getName());
+				}
+
 				if (object instanceof OnLobbyList) {
 					List<OnLobbyJoin> names = new ArrayList<>(((OnLobbyList) object).getPeers());
 					for (OnLobbyJoin name : names) {
