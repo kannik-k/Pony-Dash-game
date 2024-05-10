@@ -5,9 +5,10 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.physics.box2d.World;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
+import ee.taltech.pony_dash_for_spikes_salvation.items.InteractiveTileObject;
 import ee.taltech.pony_dash_for_spikes_salvation.scenes.Hud;
 
-public class Stage2Spike extends InteractiveObject {
+public class Stage2Spike extends InteractiveTileObject {
 
     public Stage2Spike(World world, TiledMap map, MapObject object, Hud hud) {
         super(world, map, object, hud);
