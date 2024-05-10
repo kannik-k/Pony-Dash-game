@@ -17,8 +17,8 @@ import ee.taltech.pony_dash_for_spikes_salvation.Main;
 
 public class TutorialScreen implements Screen {
     private final Main game;
-    private Stage stage;
-    private Texture backgroundTexture;
+    private final Stage stage;
+    private final Texture backgroundTexture;
     private static final String TUTORIAL_TEXT = "We are delighted to greet you on this Ponyville adventure!\n\n" +
             "Spike, our beloved dragon, has been kidnapped and imprisoned, and his rescue depends on you!" +
             "Your task is to reach the end point as quickly as possible to free Spike from his dire situation." +
