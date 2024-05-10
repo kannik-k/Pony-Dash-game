@@ -53,6 +53,9 @@ public class Main extends Game {
 	public static final short SPIKE_2_BIT = 32;
 	public static final short SPIKE_3_BIT = 64;
 	public static final short FINISH_BIT = 128;
+	public static final short STAGE_BLOCK_BIT = 512;
+	public static final short APPLE_BIT = 256;
+	public static final short CHERRY_BIT = 1024;
 	public static final short STAGE_BLOCK_BIT = 516;
 	/* Using AssetManager in a static way can cause issues, especially on Android.
 	Instead, you may want to pass around AssetManager to those classes that need it.
@@ -124,21 +127,25 @@ public class Main extends Game {
 			/**
 			 * Create listener for different packets sent to the client.
 			 * <p>
-			 *     There are seven kinds of packets that the listener receives.
+			 *     There are eleven kinds of packets that the listener receives.
 			 *     1. PacketGameId
 			 *     2. The PacketPlayerConnect packet is received when someone joins the game. If the packet contains the
 			 *     same player that the packet was sent to then the player and their id are added to the players map.
 			 *     Otherwise a new player is created and added to the map. A new sprite is created for the new player.
 			 *     3. The PacketSendCoordinates packet is received when a player moves in the game. Next the
 			 *     moving players coordinates are set accordingly.
-			 *     3. OnStartGame is received when someone presses "Start game" button. If server sends client this
+			 *     4. PacketPowerUpTaken is received when someone else has collected a power up in the clients game.
+			 *     5. OnStartGame is received when someone presses "Start game" button. If server sends client this
 			 *     packet, the lobby screen is switched to the play screen and game id is saved for the player.
-			 *     4. OnLobbyList is sent to the client every time someone joins lobby. It contains list of players in
+			 *     6. OnLobbyList is sent to the client every time someone joins lobby. It contains list of players in
 			 *     the lobby.
-			 *     5. PacketGameOver contains winner id and name. Id and name will be saved in class GameOverScreen. The
+			 *     7. PacketGameOver contains winner id and name. Id and name will be saved in class GameOverScreen. The
 			 *     screen is switched to the GameOverScreen and winner's name is displayed.
-			 *     6. The PacketOnSpawn packets are received after the player connects to the server. One packet contains
+			 *     8. The PacketOnSpawn packets are received after the player connects to the server. One packet contains
 			 *     an npc-s id and tiled coordinates. Then a new npc is added.
+			 *     9. PacketOnSpawnNpc is received after connecting to a game. This includes all of the bots' initial coordinates.
+			 *     10. PacketOnMoveNpc is received when bots move.
+			 *     11. PacketCaptured is received when the client has been captured by a bot. This includes the starting time of the capture.
 			 * </p>
 			 * @param connection (TCP or UDP)
 			 * @param object that is received
@@ -148,6 +155,7 @@ public class Main extends Game {
 				if (object instanceof PacketGameId) {
 					myPlayer.setGameID(((PacketGameId) object).getGameId());
 				}
+
 				if (object instanceof PacketPlayerConnect) {
 					if (((PacketPlayerConnect) object).getPlayerID() == connection.getID()) {
 						players.put(connection.getID(), myPlayer);
@@ -160,6 +168,7 @@ public class Main extends Game {
 						playScreen.createNewSprite(player);
 					}
 				}
+
 				if (object instanceof PacketSendCoordinates) {
 					Player player = players.get(((PacketSendCoordinates) object).getPlayerID());
 					if (player != null && player != myPlayer) {
@@ -168,6 +177,11 @@ public class Main extends Game {
 						player.setGameID(myPlayer.getGameID());
 					}
 				}
+
+				if (object instanceof PacketPowerUpTaken) {
+					playScreen.deletePowerUp(((PacketPowerUpTaken) object).getX(), ((PacketPowerUpTaken) object).getY());
+				}
+
 				if (object instanceof OnStartGame) {
 					Gdx.app.postRunnable(new Runnable() {
 						@Override
