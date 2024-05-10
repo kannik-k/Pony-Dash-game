@@ -20,7 +20,7 @@ public class Key extends InteractiveTileObject {
     public void onHeadHit() {
         Gdx.app.log("Key", "Collision");
         collected();
-        game.getManager().get("Game Assets/mixkit-winning-a-coin-video-game-2069.wav", Sound.class).play();
+        game.getManager().get("Game Assets/mixkit-winning-a-coin-video-game-2069.wav", Sound.class).play(0.1f);
     }
 
     public void collected() {

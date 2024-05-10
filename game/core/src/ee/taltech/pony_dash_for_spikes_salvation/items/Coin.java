@@ -27,6 +27,6 @@ public class Coin extends InteractiveTileObject {
     public void collected() {
         setCategoryFilter(Main.COLLECTED_BIT);
         getCell().setTile(null);
-        game.getManager().get("Game Assets/mixkit-bonus-earned-in-video-game-2058.wav", Sound.class).play();
+        game.getManager().get("Game Assets/mixkit-bonus-earned-in-video-game-2058.wav", Sound.class).play(0.1f);
     }
 }

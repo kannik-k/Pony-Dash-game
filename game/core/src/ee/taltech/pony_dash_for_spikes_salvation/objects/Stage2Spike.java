@@ -20,6 +20,6 @@ public class Stage2Spike extends InteractiveObject {
     @Override
     public void onHeadHit() {
         Gdx.app.log("Spike2", "Collision");
-        game.getManager().get("Game Assets/mixkit-player-losing-or-failing-2042.wav", Sound.class).play();
+        game.getManager().get("Game Assets/mixkit-player-losing-or-failing-2042.wav", Sound.class).play(0.1f);
     }
 }
