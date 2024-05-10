@@ -112,7 +112,7 @@ public class PlayScreen implements Screen {
 
         hud = new Hud(game.getBatch());
 
-        music = Main.manager.get("Game Assets/Mlp Gameloft Background Music Extended.mp3", Music.class);
+        music = game.getManager().get("Game Assets/Mlp Gameloft Background Music Extended.mp3", Music.class);
         music.setLooping(true);
         music.play();
 

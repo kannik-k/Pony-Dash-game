@@ -1,6 +1,7 @@
 package ee.taltech.pony_dash_for_spikes_salvation.items;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.physics.box2d.World;
@@ -44,5 +45,6 @@ public class Apple extends InteractiveTileObject {
     public void collected() {
         setCategoryFilter(Main.COLLECTED_BIT);
         getCell().setTile(null);
+        game.getManager().get("Game Assets/mixkit-video-game-health-recharge-2837.wav", Sound.class).play();
     }
 }
