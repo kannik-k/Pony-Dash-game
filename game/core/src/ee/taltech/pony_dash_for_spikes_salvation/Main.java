@@ -222,7 +222,6 @@ public class Main extends Game {
 					Gdx.app.postRunnable(new Runnable() {
 						@Override
 						public void run() {
-							gameOverScreen.setWinnerId(((PacketGameOver) object).getPlayerId());
 							gameOverScreen.setWinnerName(((PacketGameOver) object).getPlayerName());
 							setScreen(gameOverScreen);
 						}
