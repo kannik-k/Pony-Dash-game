@@ -19,6 +19,7 @@ public class PonySprite extends Sprite {
     private State previousState;
     private final World world;
     private Body b2body;
+    private BodyDef bdef;
 
     // Animation
     private final TextureRegion ponyStill;
@@ -37,6 +38,10 @@ public class PonySprite extends Sprite {
      */
     public Body getB2body() {
         return b2body;
+    }
+
+    public BodyDef getBdef() {
+        return bdef;
     }
 
     /**
@@ -211,8 +216,9 @@ public class PonySprite extends Sprite {
      * Define pony.
      */
     public void definePony() {
-        BodyDef bdef = new BodyDef();
+        bdef = new BodyDef();
         bdef.position.set(64 / getPPM(), 420 / getPPM());
+        // bdef.position.set(40000 / getPPM(), 620 / getPPM());
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
