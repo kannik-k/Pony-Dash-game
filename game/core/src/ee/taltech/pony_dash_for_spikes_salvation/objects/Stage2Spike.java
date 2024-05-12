@@ -7,6 +7,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.physics.box2d.World;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
 import ee.taltech.pony_dash_for_spikes_salvation.items.InteractiveTileObject;
+import ee.taltech.pony_dash_for_spikes_salvation.Player;
 import ee.taltech.pony_dash_for_spikes_salvation.scenes.Hud;
 
 public class Stage2Spike extends InteractiveTileObject {
@@ -20,5 +21,6 @@ public class Stage2Spike extends InteractiveTileObject {
     public void onHeadHit() {
         Gdx.app.log("Spike2", "Collision");
         game.getManager().get("Game Assets/mixkit-player-losing-or-failing-2042.wav", Sound.class).play(0.1f);
+        game.getMyPlayer().setTeleporting2(true);
     }
 }

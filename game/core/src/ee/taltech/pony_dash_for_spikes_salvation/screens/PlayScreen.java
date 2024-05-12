@@ -157,10 +157,12 @@ public class PlayScreen implements Screen {
         //Spikes stage 2
         for(RectangleMapObject object: map.getLayers().get(13).getObjects().getByType(RectangleMapObject.class)) {
             new Stage2Spike(world, map, object, hud, game);
+            new Stage2Spike(world, map, object, hud, game.getMyPlayer());
         }
         //Spikes Stage 3
         for(RectangleMapObject object: map.getLayers().get(14).getObjects().getByType(RectangleMapObject.class)) {
             new Stage3Spike(world, map, object, hud, game);
+            new Stage3Spike(world, map, object, hud, game.getMyPlayer());
         }
         //Finish
         for(RectangleMapObject object: map.getLayers().get(12).getObjects().getByType(RectangleMapObject.class)) {
@@ -242,8 +244,8 @@ public class PlayScreen implements Screen {
                 player.getB2body().setLinearVelocity(0, player.getB2body().getLinearVelocity().y);
             }
 
-            // Update player's position
-            updatePlayerPosition();
+            // Update players position
+            updatePlayerPosition("normal");
         }
     }
 
@@ -274,14 +276,28 @@ public class PlayScreen implements Screen {
         }
     }
 
-    private void updatePlayerPosition() {
+    public void updatePlayerPosition(String situation) {
         Player myPlayer = game.getMyPlayer();
-        float box2DX = player.getB2body().getPosition().x;
-        float box2DY = player.getB2body().getPosition().y;
-        myPlayer.setX(box2DX);
-        myPlayer.setY(box2DY);
-        myPlayer.setTiledX(Math.round(box2DX * PPM));
-        myPlayer.setTiledY(Math.round(box2DY * PPM));
+        if (situation.equals("normal")) {
+            float box2DX = player.getB2body().getPosition().x;
+            float box2DY = player.getB2body().getPosition().y;
+            myPlayer.setX(box2DX);
+            myPlayer.setY(box2DY);
+            myPlayer.setTiledX(Math.round(box2DX * PPM));
+            myPlayer.setTiledY(Math.round(box2DY * PPM));
+        } else if (situation.equals("spikes2")) { // Player touched spikes in second part of map
+            myPlayer.setTiledX(1135 * 16);
+            myPlayer.setTiledY(26 * 16);
+            myPlayer.setX((float) myPlayer.getTiledX() / 100);
+            myPlayer.setY((float) myPlayer.getTiledY() / 100);
+            player.getB2body().setTransform(new Vector2(myPlayer.getX(), myPlayer.getY()), player.getB2body().getAngle());
+        } else { // Player touched spikes in third part of map
+            myPlayer.setTiledX(2378 * 16);
+            myPlayer.setTiledY(47 * 16);
+            myPlayer.setX((float) myPlayer.getTiledX() / 100);
+            myPlayer.setY((float) myPlayer.getTiledY() / 100);
+            player.getB2body().setTransform(new Vector2(myPlayer.getX(), myPlayer.getY()), player.getB2body().getAngle());
+        }
     }
 
     /**
@@ -290,19 +306,21 @@ public class PlayScreen implements Screen {
      * @param dt the dt
      */
     public void update(float dt) {
-        player.update(dt);
         hud.update(dt);
-        handleInput();
+        if (!game.getMyPlayer().isTeleporting2() || !game.getMyPlayer().isTeleporting3()) {
+            handleInput();
+        }
+        player.update(dt);
         updateAllPlayers(dt);
 
         float mapWidth = map.getProperties().get("width", Integer.class) * map.getProperties().get("tilewidth", Integer.class) / PPM;
         float mapHeight = map.getProperties().get("height", Integer.class) * map.getProperties().get("tileheight", Integer.class) / PPM;
 
-        float cameraX = MathUtils.clamp(player.getB2body().getPosition().x, gameCam.viewportWidth / 2, mapWidth - gameCam.viewportWidth / 2);
-        float cameraY = MathUtils.clamp(player.getB2body().getPosition().y, gameCam.viewportHeight / 2, mapHeight - gameCam.viewportHeight / 2);
+        float cameraX = MathUtils.clamp(game.getMyPlayer().getX(), gameCam.viewportWidth / 2, mapWidth - gameCam.viewportWidth / 2);
+        float cameraY = MathUtils.clamp(game.getMyPlayer().getY(), gameCam.viewportHeight / 2, mapHeight - gameCam.viewportHeight / 2);
 
         gameCam.position.set(cameraX, cameraY, 0);
-        world.step(1/60f, 6, 2);
+        world.step(1 / 60f, 6, 2);
         gameCam.update();
         renderer.setView(gameCam);
     }
@@ -337,6 +355,15 @@ public class PlayScreen implements Screen {
         renderer.render();
         // b2dr.render(world, gameCam.combined); // renders box2drender lines
         game.getBatch().begin(); // Opens window
+
+        if (game.getMyPlayer().isTeleporting2()) {
+            updatePlayerPosition("spikes2"); // Teleport the player
+            game.getMyPlayer().setTeleporting2(false); // Reset the teleporting flag
+        } else if (game.getMyPlayer().isTeleporting3()) {
+            updatePlayerPosition("spikes3"); // Teleport the player
+            game.getMyPlayer().setTeleporting3(false); // Reset the teleporting flag
+        }
+
         update(delta);
 
         game.getBatch().setProjectionMatrix(gameCam.combined);
