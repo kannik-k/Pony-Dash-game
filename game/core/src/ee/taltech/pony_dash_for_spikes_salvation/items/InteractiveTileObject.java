@@ -5,7 +5,6 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import ee.taltech.pony_dash_for_spikes_salvation.scenes.Hud;
 import ee.taltech.pony_dash_for_spikes_salvation.screens.PlayScreen;
@@ -17,7 +16,6 @@ public abstract class InteractiveTileObject {
     protected TiledMap map;
     protected Rectangle bounds;
     protected Body body;
-    protected Vector2 velocity;
     protected MapObject object;
 
     protected InteractiveTileObject(World world, TiledMap map, MapObject object, Hud hud) {
@@ -31,7 +29,7 @@ public abstract class InteractiveTileObject {
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
 
-        bdef.type = BodyDef.BodyType.DynamicBody;
+        bdef.type = BodyDef.BodyType.StaticBody;
         bdef.position.set((bounds.getX() + bounds.getWidth() / 2) / PlayScreen.getPPM(), (bounds.getY() + bounds.getHeight() / 2) / PlayScreen.getPPM());
 
         body = world.createBody(bdef);
@@ -39,7 +37,6 @@ public abstract class InteractiveTileObject {
         shape.setAsBox(bounds.getWidth() / 2 / PlayScreen.getPPM(), bounds.getHeight() / 2 / PlayScreen.getPPM());
         fdef.shape = shape;
         fixture = body.createFixture(fdef);
-        this.velocity = new Vector2(0, 0);
 
     }
 
