@@ -6,13 +6,14 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.physics.box2d.World;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
 import ee.taltech.pony_dash_for_spikes_salvation.Player;
+import ee.taltech.pony_dash_for_spikes_salvation.items.InteractiveTileObject;
 import ee.taltech.pony_dash_for_spikes_salvation.packets.PacketGameOver;
 import ee.taltech.pony_dash_for_spikes_salvation.scenes.Hud;
 import ee.taltech.pony_dash_for_spikes_salvation.screens.GameOverScreen;
 
-public class Finish extends InteractiveObject {
-    private final Main main;
-    private final GameOverScreen gameOverScreen;
+public class Finish extends InteractiveTileObject {
+    private Main main;
+    private GameOverScreen gameOverScreen;
 
     public Finish(World world, TiledMap map, MapObject object, Hud hud, Main main) {
         super(world, map, object, hud);
