@@ -1,6 +1,7 @@
 package ee.taltech.pony_dash_for_spikes_salvation.sprites;
 
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
@@ -213,6 +214,7 @@ public class PonySprite extends Sprite {
     public void definePony() {
         BodyDef bdef = new BodyDef();
         bdef.position.set(64 / getPPM(), 420 / getPPM());
+        // bdef.position.set(40000 / getPPM(), 620 / getPPM());
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
@@ -220,9 +222,28 @@ public class PonySprite extends Sprite {
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(14 / getPPM(), 14 / getPPM());
         fdef.filter.categoryBits = Main.CHAR_BIT;
-        fdef.filter.maskBits = Main.DEFAULT_BIT | Main.COIN_BIT | Main.KEY_BIT | Main.FINISH_BIT | Main.SPIKE_2_BIT | Main.SPIKE_3_BIT | Main.STAGE_BLOCK_BIT | Main.CHERRY_BIT | Main.APPLE_BIT;
+        fdef.filter.maskBits = Main.DEFAULT_BIT | Main.STAGE_BLOCK_BIT;
 
         fdef.shape = shape;
+        b2body.createFixture(fdef);
+
+        EdgeShape head = new EdgeShape();
+        head.set(new Vector2(-16 / getPPM(), 16 / getPPM()), new Vector2(16 / getPPM(), 16 / getPPM()));
+        fdef.shape = head;
+        fdef.isSensor = true;
+        fdef.filter.maskBits = Main.COIN_BIT | Main.KEY_BIT | Main.FINISH_BIT | Main.SPIKE_2_BIT | Main.SPIKE_3_BIT | Main.STAGE_BLOCK_BIT | Main.CHERRY_BIT | Main.APPLE_BIT;
+        b2body.createFixture(fdef).setUserData("pony");
+
+        head.set(new Vector2(-16 / getPPM(), -16 / getPPM()), new Vector2(16 / getPPM(), -16 / getPPM()));
+        fdef.shape = head;
+        b2body.createFixture(fdef).setUserData("pony");
+
+        head.set(new Vector2(-16 / getPPM(), 16 / getPPM()), new Vector2(-16 / getPPM(), -16 / getPPM()));
+        fdef.shape = head;
+        b2body.createFixture(fdef).setUserData("pony");
+
+        head.set(new Vector2(16 / getPPM(), -16 / getPPM()), new Vector2(16 / getPPM(), 16 / getPPM()));
+        fdef.shape = head;
         b2body.createFixture(fdef).setUserData("pony");
     }
 }

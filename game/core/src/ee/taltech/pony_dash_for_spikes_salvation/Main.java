@@ -1,6 +1,9 @@
 package ee.taltech.pony_dash_for_spikes_salvation;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -55,6 +58,8 @@ public class Main extends Game {
 	public static final short APPLE_BIT = 256;
 	public static final short CHERRY_BIT = 1024;
 
+	private AssetManager manager;
+
 	public SpriteBatch getBatch() {
 		return batch;
 	}
@@ -78,6 +83,9 @@ public class Main extends Game {
 	public PlayScreen getPlayScreen() {
 		return playScreen;
 	}
+	public AssetManager getManager() {
+		return manager;
+	}
 
 	/**
 	 * Create a new client and player, create listener.
@@ -95,6 +103,16 @@ public class Main extends Game {
 		client.start();
 		Network.register(client);
 		batch = new SpriteBatch();
+		manager = new AssetManager();
+		manager.load("Game Assets/Mlp Gameloft Background Music Extended.mp3", Music.class);
+		manager.load("Game Assets/mixkit-video-game-health-recharge-2837.wav", Sound.class);
+		manager.load("Game Assets/mixkit-bonus-earned-in-video-game-2058.wav", Sound.class);
+		manager.load("Game Assets/mixkit-winning-a-coin-video-game-2069.wav", Sound.class);
+		manager.load("Game Assets/mixkit-game-bonus-reached-2065.wav", Sound.class);
+		manager.load("Game Assets/mixkit-player-losing-or-failing-2042.wav", Sound.class);
+		manager.load("Game Assets/mixkit-small-hit-in-a-game-2072.wav", Sound.class);
+		manager.load("Game Assets/yay-101soundboards.mp3", Sound.class);
+		manager.finishLoading();
 		myPlayer = new Player("player");
 		playScreen = new PlayScreen(this);
 		gameOverScreen = new GameOverScreen(this);
@@ -327,5 +345,6 @@ public class Main extends Game {
 			throw new ConnectionException(e.getMessage());
 		}
 		batch.dispose();
+		manager.dispose();
 	}
 }
