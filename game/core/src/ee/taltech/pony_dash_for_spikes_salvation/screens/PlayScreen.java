@@ -150,11 +150,11 @@ public class PlayScreen implements Screen {
         }
         //Spikes stage 2
         for(RectangleMapObject object: map.getLayers().get(13).getObjects().getByType(RectangleMapObject.class)) {
-            new Stage2Spike(world, map, object, hud, this, game.getMyPlayer());
+            new Stage2Spike(world, map, object, hud, game.getMyPlayer());
         }
         //Spikes Stage 3
         for(RectangleMapObject object: map.getLayers().get(14).getObjects().getByType(RectangleMapObject.class)) {
-            new Stage3Spike(world, map, object, hud, this, game.getMyPlayer());
+            new Stage3Spike(world, map, object, hud, game.getMyPlayer());
         }
         //Finish
         for(RectangleMapObject object: map.getLayers().get(12).getObjects().getByType(RectangleMapObject.class)) {
