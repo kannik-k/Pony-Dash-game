@@ -3,6 +3,7 @@ package ee.taltech.pony_dash_for_spikes_salvation.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -23,12 +24,10 @@ import ee.taltech.pony_dash_for_spikes_salvation.Main;
 import ee.taltech.pony_dash_for_spikes_salvation.Player;
 import ee.taltech.pony_dash_for_spikes_salvation.ai.NPC;
 import ee.taltech.pony_dash_for_spikes_salvation.items.*;
+import ee.taltech.pony_dash_for_spikes_salvation.objects.*;
 import ee.taltech.pony_dash_for_spikes_salvation.scenes.Hud;
 import ee.taltech.pony_dash_for_spikes_salvation.sprites.PonySprite;
 import ee.taltech.pony_dash_for_spikes_salvation.tools.WorldContactListener;
-import ee.taltech.pony_dash_for_spikes_salvation.objects.Finish;
-import ee.taltech.pony_dash_for_spikes_salvation.objects.Stage2Spike;
-import ee.taltech.pony_dash_for_spikes_salvation.objects.Stage3Spike;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -64,6 +63,9 @@ public class PlayScreen implements Screen {
     // Power-ups
     Map<List<Integer>, InteractiveTileObject> powerUps = new HashMap<>();
 
+
+    //Sound
+    private Music music;
     /**
      * Gets ppm.
      *
@@ -108,6 +110,10 @@ public class PlayScreen implements Screen {
 
         hud = new Hud(game.getBatch());
 
+        music = game.getManager().get("Game Assets/Mlp Gameloft Background Music Extended.mp3", Music.class);
+        music.setLooping(true);
+        music.play();
+
         // Ajutine, tuleb hiljem ümber tõsta
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
@@ -142,19 +148,19 @@ public class PlayScreen implements Screen {
         }
         // Coin
         for(RectangleMapObject object: map.getLayers().get(15).getObjects().getByType(RectangleMapObject.class)) {
-            new Coin(world, map, object, hud);
+            new Coin(world, map, object, hud, game);
         }
         //Key
         for(RectangleMapObject object: map.getLayers().get(17).getObjects().getByType(RectangleMapObject.class)) {
-            new Key(world, map, object, hud);
+            new Key(world, map, object, hud, game);
         }
         //Spikes stage 2
         for(RectangleMapObject object: map.getLayers().get(13).getObjects().getByType(RectangleMapObject.class)) {
-            new Stage2Spike(world, map, object, hud, game.getMyPlayer());
+            new Stage2Spike(world, map, object, hud, game);
         }
         //Spikes Stage 3
         for(RectangleMapObject object: map.getLayers().get(14).getObjects().getByType(RectangleMapObject.class)) {
-            new Stage3Spike(world, map, object, hud, game.getMyPlayer());
+            new Stage3Spike(world, map, object, hud, game);
         }
         //Finish
         for(RectangleMapObject object: map.getLayers().get(12).getObjects().getByType(RectangleMapObject.class)) {
@@ -162,11 +168,11 @@ public class PlayScreen implements Screen {
         }
         //Stage2
         for(RectangleMapObject object: map.getLayers().get(18).getObjects().getByType(RectangleMapObject.class)) {
-            new objects.Stage2(world, map, object, hud);
+            new Stage2(world, map, object, hud, game);
         }
         //Stage3
         for(RectangleMapObject object: map.getLayers().get(19).getObjects().getByType(RectangleMapObject.class)) {
-            new objects.Stage3(world, map, object, hud);
+            new Stage3(world, map, object, hud, game);
         }
         //Cherries
         for(RectangleMapObject object: map.getLayers().get(20).getObjects().getByType(RectangleMapObject.class)) {
