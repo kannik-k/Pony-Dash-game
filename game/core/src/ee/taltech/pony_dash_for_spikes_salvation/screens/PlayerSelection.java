@@ -20,11 +20,11 @@ import ee.taltech.pony_dash_for_spikes_salvation.packets.PacketSinglePlayer;
 
 public class PlayerSelection implements Screen {
     private final Main game;
-    private Stage stage;
-    private final OrthographicCamera gameCam;
-    private ExtendViewport viewport;
+    private final Stage stage;
+    final OrthographicCamera gameCam;
+    final ExtendViewport viewport;
     private SpriteBatch spriteBatch;
-    private Texture backgroundTexture;
+    private final Texture backgroundTexture;
     private int spriteId;
     private TextField playerNameTextField;
     private String playerName = "";
@@ -144,6 +144,7 @@ public class PlayerSelection implements Screen {
                 game.setPlayerName(playerName);
                 game.getMyPlayer().setPlayerName(playerName);
                 changeCursorToDefault();
+                okButton.setStyle(greenStyle);
             }
         });
 

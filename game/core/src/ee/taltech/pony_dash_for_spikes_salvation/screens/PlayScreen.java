@@ -40,8 +40,8 @@ import java.util.Map;
 
 public class PlayScreen implements Screen {
     private final Main game;
-    private Hud hud;
-    private TextureAtlas atlas;
+    private final Hud hud;
+    private final TextureAtlas atlas;
     private static final int WIDTH = 620;
     private static final int HEIGHT = 408;
     private static final float PPM = 100f; // pixels per meter
@@ -51,13 +51,13 @@ public class PlayScreen implements Screen {
     private int ponyId;
 
     // Tiled
-    private TmxMapLoader mapLoader;
-    private TiledMap map;
-    private OrthogonalTiledMapRenderer renderer;
+    final TmxMapLoader mapLoader;
+    private final TiledMap map;
+    private final OrthogonalTiledMapRenderer renderer;
 
     // Box2d muutujad
-    private World world;
-    private Box2DDebugRenderer b2dr;
+    private final World world;
+    private final Box2DDebugRenderer b2dr;
     private PonySprite player;
     private Texture cherry;
     private Texture apple;
