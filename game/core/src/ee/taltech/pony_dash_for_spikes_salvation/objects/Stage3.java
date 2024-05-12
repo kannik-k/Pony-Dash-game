@@ -10,9 +10,8 @@ import ee.taltech.pony_dash_for_spikes_salvation.items.InteractiveTileObject;
 import ee.taltech.pony_dash_for_spikes_salvation.scenes.Hud;
 
 public class Stage3 extends InteractiveTileObject {
-    public Stage3(World world, TiledMap map, MapObject object, Hud hud) {
-        super(world, map, object,hud);
-        this.game = game;
+    public Stage3(World world, TiledMap map, MapObject object, Hud hud, Main game) {
+        super(world, map, object,hud, game);
         fixture.setUserData(this);
         setCategoryFilter(Main.STAGE_BLOCK_BIT);
     }

@@ -17,8 +17,7 @@ public class Finish extends InteractiveTileObject {
     private GameOverScreen gameOverScreen;
 
     public Finish(World world, TiledMap map, MapObject object, Hud hud, Main main) {
-        super(world, map, object, hud);
-        this.main = main;
+        super(world, map, object, hud, main);
         this.gameOverScreen = new GameOverScreen(main);
         fixture.setUserData(this);
         setCategoryFilter(Main.FINISH_BIT);

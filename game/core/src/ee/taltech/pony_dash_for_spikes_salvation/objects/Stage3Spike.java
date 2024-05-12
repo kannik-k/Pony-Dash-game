@@ -14,7 +14,7 @@ public class Stage3Spike extends InteractiveTileObject {
     private Main game;
 
     public Stage3Spike(World world, TiledMap map, MapObject object, Hud hud, Main game) {
-        super(world, map, object, hud);
+        super(world, map, object, hud, game);
         this.game = game;
         fixture.setUserData(this);
         setCategoryFilter(Main.SPIKE_3_BIT);
