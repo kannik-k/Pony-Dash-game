@@ -24,12 +24,10 @@ import ee.taltech.pony_dash_for_spikes_salvation.Main;
 import ee.taltech.pony_dash_for_spikes_salvation.Player;
 import ee.taltech.pony_dash_for_spikes_salvation.ai.NPC;
 import ee.taltech.pony_dash_for_spikes_salvation.items.*;
+import ee.taltech.pony_dash_for_spikes_salvation.objects.*;
 import ee.taltech.pony_dash_for_spikes_salvation.scenes.Hud;
 import ee.taltech.pony_dash_for_spikes_salvation.sprites.PonySprite;
 import ee.taltech.pony_dash_for_spikes_salvation.tools.WorldContactListener;
-import ee.taltech.pony_dash_for_spikes_salvation.objects.Finish;
-import ee.taltech.pony_dash_for_spikes_salvation.objects.Stage2Spike;
-import ee.taltech.pony_dash_for_spikes_salvation.objects.Stage3Spike;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -170,11 +168,11 @@ public class PlayScreen implements Screen {
         }
         //Stage2
         for(RectangleMapObject object: map.getLayers().get(18).getObjects().getByType(RectangleMapObject.class)) {
-            new objects.Stage2(world, map, object, hud, game);
+            new Stage2(world, map, object, hud, game);
         }
         //Stage3
         for(RectangleMapObject object: map.getLayers().get(19).getObjects().getByType(RectangleMapObject.class)) {
-            new objects.Stage3(world, map, object, hud, game);
+            new Stage3(world, map, object, hud, game);
         }
         //Cherries
         for(RectangleMapObject object: map.getLayers().get(20).getObjects().getByType(RectangleMapObject.class)) {

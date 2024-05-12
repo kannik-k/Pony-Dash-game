@@ -1,4 +1,4 @@
-package objects;
+package ee.taltech.pony_dash_for_spikes_salvation.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
