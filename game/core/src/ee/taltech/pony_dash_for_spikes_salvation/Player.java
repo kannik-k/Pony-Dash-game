@@ -16,6 +16,8 @@ public class Player {
     private LocalDateTime captureTime = LocalDateTime.of(2000, 6, 6, 12, 12, 12); // Old date
     private LocalDateTime gotAppleTime = LocalDateTime.of(2000, 6, 6, 12, 12, 12); // Old date
     private LocalDateTime gotCherryTime = LocalDateTime.of(2000, 6, 6, 12, 12, 12); // Old date
+    private boolean teleporting2 = false; // For stage 2
+    private boolean teleporting3 = false; // For stage 3
 
     public Player(String playerName) {
         this.playerName = playerName;
@@ -107,5 +109,21 @@ public class Player {
 
     public void setGotCherryTime(LocalDateTime gotCherryTime) {
         this.gotCherryTime = gotCherryTime;
+    }
+
+    public boolean isTeleporting2() {
+        return teleporting2;
+    }
+
+    public void setTeleporting2(boolean teleporting2) {
+        this.teleporting2 = teleporting2;
+    }
+
+    public boolean isTeleporting3() {
+        return teleporting3;
+    }
+
+    public void setTeleporting3(boolean teleporting3) {
+        this.teleporting3 = teleporting3;
     }
 }

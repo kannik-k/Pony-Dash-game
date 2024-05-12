@@ -6,12 +6,16 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.physics.box2d.World;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
 import ee.taltech.pony_dash_for_spikes_salvation.items.InteractiveTileObject;
+import ee.taltech.pony_dash_for_spikes_salvation.Player;
 import ee.taltech.pony_dash_for_spikes_salvation.scenes.Hud;
 
 public class Stage3Spike extends InteractiveTileObject {
+    private final Player player;
 
-    public Stage3Spike(World world, TiledMap map, MapObject object, Hud hud) {
+    public Stage3Spike(World world, TiledMap map, MapObject object, Hud hud, Player player) {
         super(world, map, object, hud);
+        this.player = player;
+
         fixture.setUserData(this);
         setCategoryFilter(Main.SPIKE_3_BIT);
     }
@@ -19,6 +23,6 @@ public class Stage3Spike extends InteractiveTileObject {
     @Override
     public void onHeadHit() {
         Gdx.app.log("Spike3", "Collision");
-
+        player.setTeleporting3(true);
     }
 }
