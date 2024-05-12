@@ -230,7 +230,7 @@ public class PonySprite extends Sprite {
         head.set(new Vector2(-16 / getPPM(), 16 / getPPM()), new Vector2(16 / getPPM(), 16 / getPPM()));
         fdef.shape = head;
         fdef.isSensor = true;
-        fdef.filter.maskBits = Main.COIN_BIT | Main.KEY_BIT | Main.FINISH_BIT | Main.SPIKE_2_BIT | Main.SPIKE_3_BIT | Main.STAGE_BLOCK_BIT;
+        fdef.filter.maskBits = Main.COIN_BIT | Main.KEY_BIT | Main.FINISH_BIT | Main.SPIKE_2_BIT | Main.SPIKE_3_BIT | Main.STAGE_BLOCK_BIT | Main.CHERRY_BIT | Main.APPLE_BIT;
         b2body.createFixture(fdef).setUserData("pony");
 
         head.set(new Vector2(-16 / getPPM(), -16 / getPPM()), new Vector2(16 / getPPM(), -16 / getPPM()));
