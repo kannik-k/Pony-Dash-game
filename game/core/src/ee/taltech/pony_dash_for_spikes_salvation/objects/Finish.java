@@ -13,7 +13,6 @@ import ee.taltech.pony_dash_for_spikes_salvation.scenes.Hud;
 import ee.taltech.pony_dash_for_spikes_salvation.screens.GameOverScreen;
 
 public class Finish extends InteractiveTileObject {
-    private Main main;
     private GameOverScreen gameOverScreen;
 
     public Finish(World world, TiledMap map, MapObject object, Hud hud, Main main) {
@@ -27,16 +26,16 @@ public class Finish extends InteractiveTileObject {
     public void onHeadHit() {
         Gdx.app.log("Finish", "Collision");
         if (hud.isKeyCollected()) {
-            Player player = main.getMyPlayer();
+            Player player = game.getMyPlayer();
             PacketGameOver packet = new PacketGameOver();
-            packet.setPlayerId(main.getPlayerId());
+            packet.setPlayerId(game.getPlayerId());
             packet.setGameId(player.getGameID());
-            packet.setPlayerName(main.getPlayerName());
-            main.sendPacketToServer(packet);
-            if (main.isSinglePlayer()) {
-                gameOverScreen.setWinnerName(main.getPlayerName());
-                main.setScreen(gameOverScreen);
-                main.getManager().get("Game Assets/yay-101soundboards.mp3", Sound.class).play(0.3f);
+            packet.setPlayerName(game.getPlayerName());
+            game.sendPacketToServer(packet);
+            if (game.isSinglePlayer()) {
+                gameOverScreen.setWinnerName(game.getPlayerName());
+                game.setScreen(gameOverScreen);
+                game.getManager().get("Game Assets/yay-101soundboards.mp3", Sound.class).play(0.3f);
             }
         }
     }
