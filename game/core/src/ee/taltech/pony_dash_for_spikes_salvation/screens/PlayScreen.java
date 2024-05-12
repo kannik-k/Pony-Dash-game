@@ -277,29 +277,19 @@ public class PlayScreen implements Screen {
             myPlayer.setY(box2DY);
             myPlayer.setTiledX(Math.round(box2DX * PPM));
             myPlayer.setTiledY(Math.round(box2DY * PPM));
-        } else if (situation.equals("spikes2")) {
+        } else if (situation.equals("spikes2")) { // Player touched spikes in second part of map
             myPlayer.setTiledX(1135 * 16);
             myPlayer.setTiledY(26 * 16);
             myPlayer.setX((float) myPlayer.getTiledX() / 100);
             myPlayer.setY((float) myPlayer.getTiledY() / 100);
             player.getB2body().setTransform(new Vector2(myPlayer.getX(), myPlayer.getY()), player.getB2body().getAngle());
-            // player.setPosition(myPlayer.getX() - player.getWidth() / 2, myPlayer.getY() - player.getHeight() / 2);
-            // player.getB2body().getPosition().set(myPlayer.getX(), myPlayer.getY());
-            // player.getBdef().position.set(myPlayer.getX(), myPlayer.getY());
-        } else {
-            System.out.println("landed on spikes 3");
+        } else { // Player touched spikes in third part of map
             myPlayer.setTiledX(2378 * 16);
             myPlayer.setTiledY(47 * 16);
             myPlayer.setX((float) myPlayer.getTiledX() / 100);
             myPlayer.setY((float) myPlayer.getTiledY() / 100);
-            System.out.println(myPlayer.getX() + " " + myPlayer.getY());
             player.getB2body().setTransform(new Vector2(myPlayer.getX(), myPlayer.getY()), player.getB2body().getAngle());
-            // player.setPosition(myPlayer.getX() - player.getWidth() / 2, myPlayer.getY() - player.getHeight() / 2);
-            // player.getB2body().getPosition().set(myPlayer.getX(), myPlayer.getY());
-            // player.getBdef().position.set(myPlayer.getX(), myPlayer.getY());
-            System.out.println(player.getB2body().getPosition().x + " " + player.getB2body().getPosition().y);
         }
-        // System.out.println("x: " + myPlayer.getX() + "y: " + myPlayer.getY());
     }
 
     /**
@@ -313,15 +303,11 @@ public class PlayScreen implements Screen {
             handleInput();
         }
         player.update(dt);
-        // System.out.println("body x: " + player.getB2body().getPosition().x + " body y: " + player.getB2body().getPosition().y);
-        // System.out.println("player x: " + game.getMyPlayer().getX() + " player y: " + game.getMyPlayer().getY());
         updateAllPlayers(dt);
 
         float mapWidth = map.getProperties().get("width", Integer.class) * map.getProperties().get("tilewidth", Integer.class) / PPM;
         float mapHeight = map.getProperties().get("height", Integer.class) * map.getProperties().get("tileheight", Integer.class) / PPM;
 
-        // float cameraX = MathUtils.clamp(player.getB2body().getPosition().x, gameCam.viewportWidth / 2, mapWidth - gameCam.viewportWidth / 2);
-        // float cameraY = MathUtils.clamp(player.getB2body().getPosition().y, gameCam.viewportHeight / 2, mapHeight - gameCam.viewportHeight / 2);
         float cameraX = MathUtils.clamp(game.getMyPlayer().getX(), gameCam.viewportWidth / 2, mapWidth - gameCam.viewportWidth / 2);
         float cameraY = MathUtils.clamp(game.getMyPlayer().getY(), gameCam.viewportHeight / 2, mapHeight - gameCam.viewportHeight / 2);
 
