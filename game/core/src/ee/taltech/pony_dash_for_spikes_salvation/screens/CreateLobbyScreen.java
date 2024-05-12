@@ -244,6 +244,7 @@ public class CreateLobbyScreen implements Screen {
                 game.setPlayerName(playerName);
                 changeCursorToDefault();
                 isNameSelected = true;
+                okButton.setStyle(greenStyle);
             }
         });
 
@@ -264,13 +265,10 @@ public class CreateLobbyScreen implements Screen {
                     PlayScreen playScreen = game.getPlayScreen();
                     playScreen.updatePonyIdAndSprite(spriteId);
                     game.sendPacketToServer(packet);
-                    Gdx.app.postRunnable(new Runnable() {
-                        @Override
-                        public void run() {
-                            game.setScreen(new LobbyScreen(game));
-                        }
+                    Gdx.app.postRunnable(() -> {
+                        game.setScreen(new LobbyScreen(game));
+                        changeCursorToDefault();
                     });
-                    changeCursorToDefault();
                 }
             }
         });

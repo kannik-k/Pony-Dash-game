@@ -14,6 +14,9 @@ import ee.taltech.pony_dash_for_spikes_salvation.screens.GameOverScreen;
 public class Finish extends InteractiveTileObject {
     private Main main;
     private GameOverScreen gameOverScreen;
+public class Finish extends InteractiveObject {
+    private final Main main;
+    private final GameOverScreen gameOverScreen;
 
     public Finish(World world, TiledMap map, MapObject object, Hud hud, Main main) {
         super(world, map, object, hud);
@@ -35,7 +38,6 @@ public class Finish extends InteractiveTileObject {
             main.sendPacketToServer(packet);
             if (main.isSinglePlayer()) {
                 gameOverScreen.setWinnerName(main.getPlayerName());
-                gameOverScreen.setWinnerId(main.getPlayerId());
                 main.setScreen(gameOverScreen);
             }
         }

@@ -22,13 +22,12 @@ import ee.taltech.pony_dash_for_spikes_salvation.Main;
 
 public class GameOverScreen implements Screen {
     private final Main game;
-    private Stage stage;
-    private final OrthographicCamera gameCam;
-    private ExtendViewport viewport;
+    private final Stage stage;
+    final OrthographicCamera gameCam;
+    final ExtendViewport viewport;
     private SpriteBatch spriteBatch;
-    private Texture backgroundTexture;
+    private final Texture backgroundTexture;
     private BitmapFont font;
-    private int winnerId;
     private String winnerName;
 
 
@@ -163,18 +162,6 @@ public class GameOverScreen implements Screen {
         back.addListener(inputListener);
 
         Gdx.input.setInputProcessor(stage);
-    }
-
-    public int getWinnerId() {
-        return winnerId;
-    }
-
-    public void setWinnerId(int winnerId) {
-        this.winnerId = winnerId;
-    }
-
-    public String getWinnerName() {
-        return winnerName;
     }
 
     public void setWinnerName(String winnerName) {
