@@ -371,10 +371,6 @@ public class PlayScreen implements Screen {
         renderAllPlayers();
         player.draw(game.getBatch());
 
-        String testText = "Hello hello";
-        BitmapFont font = new BitmapFont();
-        font.draw(game.getBatch(), testText, 1, 1);
-
         if (Duration.between(game.getMyPlayer().getGotCherryTime(), LocalDateTime.now()).toMillis() <= (20000)) {
             game.getBatch().draw(cherry, (float) (gameCam.position.x + 2.5), (float) (gameCam.position.y + 1.6), 0.3F, 0.3F);
         }
