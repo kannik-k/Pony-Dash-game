@@ -131,7 +131,7 @@ public class MenuScreen implements Screen {
         heading = new Label("Welcome to Pony Dash For Spikes Salvation!", skin);
         Table textTable = new Table();
         textTable.setFillParent(true);
-        textTable.row().pad(0, 0, 110, 0);
+        textTable.row().pad(0, 0, 140, 0);
         textTable.add(heading).fillX().uniformX();
         textTable.row();
         stage.addActor(textTable);

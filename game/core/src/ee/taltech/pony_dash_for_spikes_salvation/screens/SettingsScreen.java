@@ -31,18 +31,25 @@ public class SettingsScreen implements Screen {
         Skin sliderSkin = new Skin(Gdx.files.internal("Skin2/neon/neon-ui.json"));
 
         TextButton back = new TextButton("Back", skin);
-        titleLabel = new Label( "Settings", skin );
-        volumeMusicLabel = new Label( "Music", skin );
-        volumeSoundLabel = new Label( "Sound", skin );
+        titleLabel = new Label( "Settings", skin);
+        volumeMusicLabel = new Label( "Music", skin);
+        volumeSoundLabel = new Label( "Sound", skin);
 
         Table topTable = new Table();
         topTable.top().left();
         topTable.setFillParent(true);
         topTable.add(back).pad(10).center();
 
+        Table textTable = new Table();
+        textTable.setFillParent(true);
+        textTable.row().pad(0, 0, 140, 0);
+        textTable.add(titleLabel).fillX().uniformX();
+        textTable.row();
+        stage.addActor(textTable);
+
         Table table = new Table();
         table.setFillParent(true);
-        table.setDebug(true);
+        // table.setDebug(true);
         stage.addActor(table);
 
         stage.addActor(topTable);
@@ -69,12 +76,11 @@ public class SettingsScreen implements Screen {
             }
         });
 
-        table.add(titleLabel);
-        table.row();
-        table.add(volumeMusicLabel);
+        table.row().pad(0, 0, 10, 0);
+        table.add(volumeMusicLabel).pad(0, 0, 0, 20);
         table.add(volumeMusicSlider);
         table.row();
-        table.add(volumeSoundLabel);
+        table.add(volumeSoundLabel).pad(0, 0, 0, 20);
         table.add(soundMusicSlider);
 
         back.addListener(new ChangeListener() {
