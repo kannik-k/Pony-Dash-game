@@ -145,6 +145,7 @@ public class MenuScreen implements Screen {
         TextButton singlePlayer = new TextButton("Single player", skin);
         TextButton multiplayer = new TextButton("Multiplayer", skin);
         TextButton tutorial = new TextButton("Tutorial", skin);
+        TextButton settings = new TextButton("Settings", skin);
         TextButton exit = new TextButton("Exit", skin);
 
 
@@ -154,6 +155,8 @@ public class MenuScreen implements Screen {
         buttonTable.add(multiplayer).fillX().uniformX();
         buttonTable.row().pad(0, 0, 10, 0);
         buttonTable.add(tutorial).fillX().uniformX();
+        buttonTable.row().pad(0, 0, 10, 0);
+        buttonTable.add(settings).fillX().uniformX();
         buttonTable.row();
         buttonTable.add(exit).fillX().uniformX();
 
@@ -185,6 +188,14 @@ public class MenuScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 game.setScreen(new TutorialScreen(game));
+                changeCursorToDefault();
+            }
+        });
+
+        settings.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new SettingsScreen(game));
                 changeCursorToDefault();
             }
         });

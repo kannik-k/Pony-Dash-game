@@ -65,6 +65,7 @@ public class PlayScreen implements Screen {
 
     //Sound
     private Music music;
+
     /**
      * Gets ppm.
      *
@@ -72,6 +73,10 @@ public class PlayScreen implements Screen {
      */
     public static float getPPM() {
         return PPM;
+    }
+
+    public Music getMusic() {
+        return music;
     }
 
     /**
