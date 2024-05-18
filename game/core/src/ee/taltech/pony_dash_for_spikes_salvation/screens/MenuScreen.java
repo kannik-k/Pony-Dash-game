@@ -217,6 +217,7 @@ public class MenuScreen implements Screen {
         exit.addListener(inputListener);
         singlePlayer.addListener(inputListener);
         multiplayer.addListener(inputListener);
+        settings.addListener(inputListener);
         tutorial.addListener(inputListener);
 
         Gdx.input.setInputProcessor(stage);
