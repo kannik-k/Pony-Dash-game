@@ -386,6 +386,7 @@ public class PlayScreen implements Screen {
         for (Map.Entry<Integer, Player> entry : game.getPlayers().entrySet()) {
             Player currentPlayer = entry.getValue();
             if (currentPlayer.getSprite() != null) {
+                // System.out.println("player info: " + currentPlayer.getSpriteId());
                 currentPlayer.getSprite().update(Gdx.graphics.getDeltaTime());
                 currentPlayer.getSprite().draw(game.getBatch());
             }

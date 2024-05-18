@@ -35,6 +35,7 @@ public class Main extends Game {
 	private BitmapFont font;
 	private Client client;
 	private Map<Integer, Player> players = new HashMap<>();
+	private int playerCount = 1;
 	private List<NPC> bots = new ArrayList<>();
 	private Player myPlayer;
 	private int playerSpriteId;
@@ -159,6 +160,11 @@ public class Main extends Game {
 			 */
 			@Override
 			public void received(Connection connection, Object object) {
+				if (object instanceof PacketUpdateLobby) {
+					System.out.println("Lobby size: " + ((PacketUpdateLobby) object).getLobbySize());
+					lobbyScreen.updatePlayerCount(((PacketUpdateLobby) object).getLobbySize());
+				}
+
 				if (object instanceof PacketGameId) {
 					myPlayer.setGameID(((PacketGameId) object).getGameId());
 				}
@@ -169,6 +175,7 @@ public class Main extends Game {
 						playerId = connection.getID();
 						gameId = ((PacketPlayerConnect) object).getGameID();
 						myPlayer.setGameID(gameId);
+						myPlayer.setId(connection.getID());
 					} else {
 						Player player = new Player(((PacketPlayerConnect) object).getPlayerName());
 						players.put(((PacketPlayerConnect) object).getPlayerID(), player);
@@ -201,11 +208,14 @@ public class Main extends Game {
 				}
 
 				if (object instanceof OnLobbyJoin) {
-					logger.info(((OnLobbyJoin) object).getName());
+					// logger.info(((OnLobbyJoin) object).getName());
+					// playerCount++;
+					// logger.info("new player has arrived");
 				}
 
 				if (object instanceof OnLobbyList) {
 					List<OnLobbyJoin> names = new ArrayList<>(((OnLobbyList) object).getPeers());
+					logger.info("new player has joined");
 					for (OnLobbyJoin name : names) {
 						logger.info(name.getName());
 					}
@@ -338,6 +348,13 @@ public class Main extends Game {
 	 */
 	@Override
 	public void dispose () {
+		System.out.println("in dispose");
+		System.out.println("player id " + myPlayer.getId());
+		System.out.println("Player name " + myPlayer.getPlayerName());
+		PacketPlayerLeftLobby packet = new PacketPlayerLeftLobby();
+		packet.setId(myPlayer.getId());
+		packet.setName(myPlayer.getPlayerName());
+		this.sendPacketToServer(packet);
 		client.close();
 		try {
 			client.dispose();
@@ -345,6 +362,11 @@ public class Main extends Game {
 			throw new ConnectionException(e.getMessage());
 		}
 		batch.dispose();
+		playerCount = 1;
 		manager.dispose();
+	}
+
+	public int getPlayerCount() {
+		return playerCount;
 	}
 }

@@ -2,15 +2,14 @@ package ee.taltech.pony_dash_for_spikes_salvation.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -19,15 +18,17 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
 import ee.taltech.pony_dash_for_spikes_salvation.packets.OnStartGame;
 
-
 public class LobbyScreen implements Screen {
     private final Main game;
     private final Stage stage;
     final OrthographicCamera gameCam;
     final ExtendViewport viewport;
+    private final Label playerAmountLabel;
     private SpriteBatch spriteBatch;
     private final Texture backgroundTexture;
-
+    private BitmapFont font;
+    private int playerCount;
+    private Label playerCountLabel;
 
     /**
      * Constructor.
@@ -42,6 +43,21 @@ public class LobbyScreen implements Screen {
         gameCam = new OrthographicCamera();
         viewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), gameCam);
         stage = new Stage(viewport);
+        font = new BitmapFont();
+        playerCount = 1;
+
+        Table table = new Table();
+        table.top();
+        table.setFillParent(true);
+
+        // Initialize player count label
+        playerCountLabel = new Label("", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        playerAmountLabel = new Label(String.valueOf(playerCount), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+
+        table.add(playerCountLabel);
+        table.add(playerAmountLabel);
+
+        stage.addActor(playerCountLabel);
     }
 
     /**
@@ -74,6 +90,7 @@ public class LobbyScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
+        playerCountLabel.setPosition(stage.getWidth() / 2 - 70, stage.getHeight() / 2 + 50);
     }
 
     /**
@@ -90,9 +107,6 @@ public class LobbyScreen implements Screen {
         resizedPixmap.dispose();
     }
 
-    /**
-     * Change cursor to pointer.
-     */
     private void changeCursorToPointer() {
         Pixmap originalPixmap = new Pixmap(Gdx.files.internal("cursor-png-1115.png")); // Replace with your pointer image path
         int desiredWidth = 32; // Desired width of the cursor
@@ -118,11 +132,13 @@ public class LobbyScreen implements Screen {
 
         skin = new Skin(Gdx.files.internal("Skin/terramotherui/terra-mother-ui.json"));
 
+        Label.LabelStyle labelStyle = skin.get("default", Label.LabelStyle.class);
+        font = labelStyle.font;
+
         // Table for the buttons visible on screen.
         Table buttonTable = new Table();
         buttonTable.setFillParent(true);
         stage.addActor(buttonTable);
-
 
         TextButton startGame = new TextButton("Start game", skin);
 
@@ -176,5 +192,11 @@ public class LobbyScreen implements Screen {
         spriteBatch.dispose();
 
         Gdx.input.setInputProcessor(null);
+    }
+
+    public void updatePlayerCount(int lobbySize) {
+        playerCount = lobbySize;
+        playerAmountLabel.setText(String.valueOf(playerCount));
+        System.out.println("player count: " + playerCount);
     }
 }
