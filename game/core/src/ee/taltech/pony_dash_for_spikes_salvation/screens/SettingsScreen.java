@@ -2,6 +2,7 @@ package ee.taltech.pony_dash_for_spikes_salvation.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -97,9 +98,17 @@ public class SettingsScreen implements Screen {
                 // Change cursor to pointer when mouse enters the button
                 changeCursorToPointer();
             }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, com.badlogic.gdx.scenes.scene2d.Actor toActor) {
+                // Change cursor back to default when mouse exits the button
+                changeCursorToDefault();
+            }
         };
 
         back.addListener(inputListener);
+        volumeMusicSlider.addListener(inputListener);
+        soundMusicSlider.addListener(inputListener);
 
         Gdx.input.setInputProcessor(stage);
     }
