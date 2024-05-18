@@ -254,7 +254,7 @@ public class Main extends Game {
 	}
 
 	private void addNpc(int id, int tiledX, int tiledY) {
-		Sprite sprite = new Sprite(new Texture("twilight_sparkle_one.png"));
+		Sprite sprite = new Sprite(new Texture("derpy.png"));
 		sprite.setSize(32, 32);
 		NPC npc = new NPC(id, tiledX, tiledY, sprite);
 		bots.add(npc);

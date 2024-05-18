@@ -7,7 +7,6 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -370,10 +369,6 @@ public class PlayScreen implements Screen {
         renderNPCs();
         renderAllPlayers();
         player.draw(game.getBatch());
-
-        String testText = "Hello hello";
-        BitmapFont font = new BitmapFont();
-        font.draw(game.getBatch(), testText, 1, 1);
 
         if (Duration.between(game.getMyPlayer().getGotCherryTime(), LocalDateTime.now()).toMillis() <= (20000)) {
             game.getBatch().draw(cherry, (float) (gameCam.position.x + 2.5), (float) (gameCam.position.y + 1.6), 0.3F, 0.3F);
