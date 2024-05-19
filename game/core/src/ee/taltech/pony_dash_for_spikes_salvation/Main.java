@@ -5,7 +5,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -32,7 +31,6 @@ public class Main extends Game {
 	public static final int V_WIDTH = 620;
 	public static final int V_HEIGHT = 408;
 	private SpriteBatch batch; // holds stuff, for example maps. One is enough.
-	private BitmapFont font;
 	private Client client;
 	private final Map<Integer, Player> players = new HashMap<>();
 	private int playerCount = 1;
@@ -206,14 +204,11 @@ public class Main extends Game {
 				}
 
 				if (object instanceof OnStartGame) {
-					Gdx.app.postRunnable(new Runnable() {
-						@Override
-						public void run() {
-							setScreen(playScreen);
-							myPlayer.setGameID(((OnStartGame) object).getGameId());
-							gameId = myPlayer.getGameID();
-						}
-					});
+					Gdx.app.postRunnable(() -> {
+                        setScreen(playScreen);
+                        myPlayer.setGameID(((OnStartGame) object).getGameId());
+                        gameId = myPlayer.getGameID();
+                    });
 				}
 
 				if (object instanceof OnLobbyList) {
@@ -226,50 +221,28 @@ public class Main extends Game {
 
 				if (object instanceof PacketOnSpawnNpc) {
 					final PacketOnSpawnNpc onSpawnNpc = (PacketOnSpawnNpc) object;
-					Gdx.app.postRunnable(new Runnable() {
-						@Override
-						public void run() {
-							addNpc(onSpawnNpc.getId(), onSpawnNpc.getTiledX(), onSpawnNpc.getTiledY());
-						}
-					});
+					Gdx.app.postRunnable(() -> addNpc(onSpawnNpc.getId(), onSpawnNpc.getTiledX(), onSpawnNpc.getTiledY()));
 				}
 
 				if (object instanceof PacketOnNpcMove) {
 					final PacketOnNpcMove move = (PacketOnNpcMove) object;
-					Gdx.app.postRunnable(new Runnable() {
-						@Override
-						public void run() {
-							changeNpcLocation(move.getNetId(), move.getTiledX(), move.getTiledY());
-						}
-					});
+					Gdx.app.postRunnable(() -> changeNpcLocation(move.getNetId(), move.getTiledX(), move.getTiledY()));
 				}
 
 				if (object instanceof PacketCaptured) {
-					Gdx.app.postRunnable(new Runnable() {
-						@Override
-						public void run() {
-							myPlayer.setCaptureTime(LocalDateTime.parse(((PacketCaptured) object).getTime()));
-						}
-					});
+					Gdx.app.postRunnable(() -> myPlayer.setCaptureTime(LocalDateTime.parse(((PacketCaptured) object).getTime())));
 				}
 
 				if (object instanceof PacketPlayerExitedGame) {
-					Gdx.app.postRunnable(new Runnable() {
-						@Override
-						public void run() {
-							players.remove(((PacketPlayerExitedGame) object).getGameId());
-						}
-					});
+					System.out.println("player exited");
+					Gdx.app.postRunnable(() -> players.remove(((PacketPlayerExitedGame) object).getGameId()));
 				}
 
 				if (object instanceof PacketGameOver) {
-					Gdx.app.postRunnable(new Runnable() {
-						@Override
-						public void run() {
-							gameOverScreen.setWinnerName(((PacketGameOver) object).getPlayerName());
-							setScreen(gameOverScreen);
-						}
-					});
+					Gdx.app.postRunnable(() -> {
+                        gameOverScreen.setWinnerName(((PacketGameOver) object).getPlayerName());
+                        setScreen(gameOverScreen);
+                    });
 				}
 			}
 		}));

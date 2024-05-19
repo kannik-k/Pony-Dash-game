@@ -17,8 +17,6 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -181,21 +179,14 @@ public class PlayScreen implements Screen {
             if (!Gdx.input.isKeyPressed(Input.Keys.RIGHT) && !Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 player.getB2body().setLinearVelocity(0, player.getB2body().getLinearVelocity().y);
             }
-
-            // Check if Esc is pressed
-            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-                game.setScreen(game.getMenuScreen());
-                Player myPlayer = game.getMyPlayer();
-                PacketPlayerExitedGame packet = new PacketPlayerExitedGame();
-                packet.setGameId(myPlayer.getGameID());
-                packet.setId(myPlayer.getId());
-                game.sendPacketToServer(packet);
-                Gdx.app.exit();
-            }
-
-            // Update players position
-            updatePlayerPosition("normal");
         }
+        // Check if Esc is pressed
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            exitGame();
+        }
+
+        // Update players position
+        updatePlayerPosition("normal");
     }
 
     private void setCorrectJumpingHeight() {
@@ -223,6 +214,16 @@ public class PlayScreen implements Screen {
             // Give extra speed with apple for 20 seconds
             player.getB2body().applyLinearImpulse(new Vector2(-1f, 0), player.getB2body().getWorldCenter(), true);
         }
+    }
+
+    private void exitGame() {
+        game.setScreen(game.getMenuScreen());
+        Player myPlayer = game.getMyPlayer();
+        PacketPlayerExitedGame packet = new PacketPlayerExitedGame();
+        packet.setGameId(myPlayer.getGameID());
+        packet.setId(myPlayer.getId());
+        game.sendPacketToServer(packet);
+        Gdx.app.exit();
     }
 
     public void updatePlayerPosition(String situation) {
