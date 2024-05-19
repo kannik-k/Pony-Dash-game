@@ -2,7 +2,6 @@ package ee.taltech.pony_dash_for_spikes_salvation.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,9 +15,6 @@ public class SettingsScreen implements Screen {
     private final Main game;
     private final Stage stage;
     private final Texture backgroundTexture;
-    private Label titleLabel;
-    private Label volumeMusicLabel;
-    private Label volumeSoundLabel;
 
 
     public SettingsScreen(Main game) {
@@ -32,9 +28,9 @@ public class SettingsScreen implements Screen {
         Skin sliderSkin = new Skin(Gdx.files.internal("Skin2/neon/neon-ui.json"));
 
         TextButton back = new TextButton("Back", skin);
-        titleLabel = new Label( "Settings", skin);
-        volumeMusicLabel = new Label( "Music", skin);
-        volumeSoundLabel = new Label( "Sound", skin);
+        Label titleLabel = new Label("Settings", skin);
+        Label volumeMusicLabel = new Label("Music", skin);
+        Label volumeSoundLabel = new Label("Sound", skin);
 
         Table topTable = new Table();
         topTable.top().left();
@@ -50,7 +46,6 @@ public class SettingsScreen implements Screen {
 
         Table table = new Table();
         table.setFillParent(true);
-        // table.setDebug(true);
         stage.addActor(table);
 
         stage.addActor(topTable);
@@ -59,22 +54,16 @@ public class SettingsScreen implements Screen {
         //volume
         final Slider volumeMusicSlider = new Slider( 0f, 1f, 0.1f,false, sliderSkin);
         volumeMusicSlider.setValue(game.getPlayScreen().getMusic().getVolume());
-        volumeMusicSlider.addListener( new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                game.getPlayScreen().getMusic().setVolume(volumeMusicSlider.getValue());
-                return false;
-            }
+        volumeMusicSlider.addListener(event -> {
+            game.getPlayScreen().getMusic().setVolume(volumeMusicSlider.getValue());
+            return false;
         });
 
         final Slider soundMusicSlider = new Slider( 0f, 1f, 0.05f,false, sliderSkin);
         soundMusicSlider.setValue(game.getSoundVolume());
-        soundMusicSlider.addListener( new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                game.setSoundVolume(soundMusicSlider.getValue());
-                return false;
-            }
+        soundMusicSlider.addListener(event -> {
+            game.setSoundVolume(soundMusicSlider.getValue());
+            return false;
         });
 
         table.row().pad(0, 0, 10, 0);
@@ -171,17 +160,17 @@ public class SettingsScreen implements Screen {
 
     @Override
     public void pause() {
-
+        // Called when the application is paused
     }
 
     @Override
     public void resume() {
-
+        // Called when the application is resumed from paused state
     }
 
     @Override
     public void hide() {
-
+        // Called when this screen is no longer the current screen
     }
 
     @Override
