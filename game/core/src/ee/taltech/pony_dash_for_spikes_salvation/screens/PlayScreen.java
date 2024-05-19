@@ -58,6 +58,7 @@ public class PlayScreen implements Screen {
     private PonySprite player;
     private final Texture cherry;
     private final Texture apple;
+    private final Texture speechBubble;
 
     // Power-ups
     Map<List<Integer>, InteractiveTileObject> powerUps = new HashMap<>();
@@ -103,6 +104,7 @@ public class PlayScreen implements Screen {
 
         cherry = new Texture("Game Assets/cherry.png");
         apple = new Texture("Game Assets/apple.png");
+        speechBubble = new Texture("speech_bubble.png");
 
         // collision types
         world.setContactListener(new WorldContactListener());
@@ -352,6 +354,18 @@ public class PlayScreen implements Screen {
         renderer.render();
         // b2dr.render(world, gameCam.combined); // renders box2drender lines
         game.getBatch().begin(); // Opens window
+
+        // Check if the player is captured
+        boolean isCaptured = Duration.between(game.getMyPlayer().getCaptureTime(), LocalDateTime.now()).toMillis() <= 5000;
+
+        if (isCaptured) {
+            // Calculate the position for the speech bubble
+            float bubbleX = player.getB2body().getPosition().x + 270;
+            float bubbleY = player.getB2body().getPosition().y + 230;
+
+            // Draw the speech bubble
+            game.getBatch().draw(speechBubble, bubbleX, bubbleY, 80, 40);
+        }
 
         if (game.getMyPlayer().isTeleporting2()) {
             updatePlayerPosition("spikes2"); // Teleport the player
