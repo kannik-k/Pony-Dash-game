@@ -2,15 +2,14 @@ package ee.taltech.pony_dash_for_spikes_salvation.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -19,7 +18,6 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
 import ee.taltech.pony_dash_for_spikes_salvation.packets.OnStartGame;
 
-
 public class LobbyScreen implements Screen {
     private final Main game;
     private final Stage stage;
@@ -27,12 +25,17 @@ public class LobbyScreen implements Screen {
     final ExtendViewport viewport;
     private SpriteBatch spriteBatch;
     private final Texture backgroundTexture;
-
+    private BitmapFont font;
+    private static int playerCount;
+    Label playerCountLabel;
+    Label playerAmountLabel;
+    private Skin skin;
+    private final Table table;
 
     /**
      * Constructor.
      *
-     * @param game  Main game.
+     * @param game Main game.
      */
     public LobbyScreen(Main game) {
         this.game = game;
@@ -42,6 +45,15 @@ public class LobbyScreen implements Screen {
         gameCam = new OrthographicCamera();
         viewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), gameCam);
         stage = new Stage(viewport);
+        font = new BitmapFont();
+
+        table = new Table();
+        table.setFillParent(true);
+
+        skin = new Skin(Gdx.files.internal("Skin/terramotherui/terra-mother-ui.json"));
+
+        table.center();
+        stage.addActor(table);
     }
 
     /**
@@ -60,10 +72,21 @@ public class LobbyScreen implements Screen {
         spriteBatch.draw(backgroundTexture, 0, 0, stage.getWidth(), stage.getHeight());
         spriteBatch.end();
 
+        // Remove previous player count labels
+        table.clearChildren();
+
+        // Initialize player count label with skin style
+        playerCountLabel = new Label("Players in lobby:", skin);
+        playerAmountLabel = new Label(String.valueOf(playerCount), skin);
+
+        table.add(playerCountLabel).padRight(10);
+        table.add(playerAmountLabel).padLeft(10).row();
+
         // tell our stage to do actions and draw itself
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }
+
 
     /**
      * Updates the size of the viewport.
@@ -90,9 +113,6 @@ public class LobbyScreen implements Screen {
         resizedPixmap.dispose();
     }
 
-    /**
-     * Change cursor to pointer.
-     */
     private void changeCursorToPointer() {
         Pixmap originalPixmap = new Pixmap(Gdx.files.internal("cursor-png-1115.png")); // Replace with your pointer image path
         int desiredWidth = 32; // Desired width of the cursor
@@ -113,16 +133,17 @@ public class LobbyScreen implements Screen {
      */
     @Override
     public void show() {
-        Skin skin;
         spriteBatch = new SpriteBatch();
 
         skin = new Skin(Gdx.files.internal("Skin/terramotherui/terra-mother-ui.json"));
+
+        Label.LabelStyle labelStyle = skin.get("default", Label.LabelStyle.class);
+        font = labelStyle.font;
 
         // Table for the buttons visible on screen.
         Table buttonTable = new Table();
         buttonTable.setFillParent(true);
         stage.addActor(buttonTable);
-
 
         TextButton startGame = new TextButton("Start game", skin);
 
@@ -151,9 +172,19 @@ public class LobbyScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
     }
 
+    public static void setPlayerCount(int count) {
+        playerCount = count;
+    }
+
+    public void updatePlayerCount(int lobbySize) {
+        setPlayerCount(lobbySize);
+        playerAmountLabel.setText(String.valueOf(playerCount));
+    }
+
     @Override
     public void hide() {
-        // Called when this screen is no longer the current screen
+        Gdx.input.setInputProcessor(null);
+        stage.clear();
     }
 
     @Override
@@ -166,15 +197,12 @@ public class LobbyScreen implements Screen {
         // Called when the application is resumed from paused state
     }
 
-    /**
-     * Dispose of stage, background and spriteBatch when the menu-screen is closed.
-     */
     @Override
     public void dispose() {
         stage.dispose();
-        backgroundTexture.dispose();
+        skin.dispose();
         spriteBatch.dispose();
-
-        Gdx.input.setInputProcessor(null);
+        backgroundTexture.dispose();
+        font.dispose();
     }
 }

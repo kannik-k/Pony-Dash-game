@@ -54,8 +54,8 @@ public class PlayScreen implements Screen {
     private final World world;
     private final Box2DDebugRenderer b2dr;
     private PonySprite player;
-    private Texture cherry;
-    private Texture apple;
+    private final Texture cherry;
+    private final Texture apple;
 
     // Power-ups
     Map<List<Integer>, InteractiveTileObject> powerUps = new HashMap<>();
@@ -63,7 +63,6 @@ public class PlayScreen implements Screen {
 
     //Sound
     private Music music;
-
     /**
      * Gets ppm.
      *
