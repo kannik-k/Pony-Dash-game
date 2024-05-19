@@ -34,9 +34,9 @@ public class Main extends Game {
 	private SpriteBatch batch; // holds stuff, for example maps. One is enough.
 	private BitmapFont font;
 	private Client client;
-	private Map<Integer, Player> players = new HashMap<>();
+	private final Map<Integer, Player> players = new HashMap<>();
 	private int playerCount = 1;
-	private List<NPC> bots = new ArrayList<>();
+	private final List<NPC> bots = new ArrayList<>();
 	private Player myPlayer;
 	private int playerSpriteId;
 	private PlayScreen playScreen;
@@ -63,14 +63,6 @@ public class Main extends Game {
 
 	public SpriteBatch getBatch() {
 		return batch;
-	}
-
-	public BitmapFont getFont() {
-		return font;
-	}
-
-	public Client getClient() {
-		return client;
 	}
 
 	public Map<Integer, Player> getPlayers() {
@@ -161,7 +153,6 @@ public class Main extends Game {
 			@Override
 			public void received(Connection connection, Object object) {
 				if (object instanceof PacketUpdateLobby) {
-					System.out.println("Lobby size: " + ((PacketUpdateLobby) object).getLobbySize());
 					lobbyScreen.updatePlayerCount(((PacketUpdateLobby) object).getLobbySize());
 				}
 
@@ -205,12 +196,6 @@ public class Main extends Game {
 							gameId = myPlayer.getGameID();
 						}
 					});
-				}
-
-				if (object instanceof OnLobbyJoin) {
-					// logger.info(((OnLobbyJoin) object).getName());
-					// playerCount++;
-					// logger.info("new player has arrived");
 				}
 
 				if (object instanceof OnLobbyList) {
@@ -348,9 +333,6 @@ public class Main extends Game {
 	 */
 	@Override
 	public void dispose () {
-		System.out.println("in dispose");
-		System.out.println("player id " + myPlayer.getId());
-		System.out.println("Player name " + myPlayer.getPlayerName());
 		PacketPlayerLeftLobby packet = new PacketPlayerLeftLobby();
 		packet.setId(myPlayer.getId());
 		packet.setName(myPlayer.getPlayerName());
