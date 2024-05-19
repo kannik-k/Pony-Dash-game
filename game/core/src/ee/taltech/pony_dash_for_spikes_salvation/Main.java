@@ -106,9 +106,6 @@ public class Main extends Game {
 	 */
 	@Override
 	public void create () {
-		client = new Client();
-		client.start();
-		Network.register(client);
 		batch = new SpriteBatch();
 		manager = new AssetManager();
 		manager.load("Game Assets/Mlp Gameloft Background Music Extended.mp3", Music.class);
@@ -121,12 +118,18 @@ public class Main extends Game {
 		manager.load("Game Assets/yay-101soundboards.mp3", Sound.class);
 		manager.finishLoading();
 		myPlayer = new Player("player");
-		playScreen = new PlayScreen(this);
 		gameOverScreen = new GameOverScreen(this);
-		lobbyScreen = new LobbyScreen(this);
 		singlePlayer = false;
 		menuScreen = new MenuScreen(this);
 		setScreen(menuScreen);
+	}
+
+	public void createClient() {
+		playScreen = new PlayScreen(this);
+		lobbyScreen = new LobbyScreen(this);
+		client = new Client();
+		client.start();
+		Network.register(client);
 		try {
 			client.connect(5000, "localhost", 8080, 8081); // Use this to play on local host
 			// client.connect(5000, "193.40.255.33", 8080, 8081); // Use this to play on the school server
@@ -141,7 +144,7 @@ public class Main extends Game {
 			/**
 			 * Create listener for different packets sent to the client.
 			 * <p>
-			 *     There are eleven kinds of packets that the listener receives.
+			 *     There are twelve kinds of packets that the listener receives.
 			 *     1. PacketGameId
 			 *     2. The PacketPlayerConnect packet is received when someone joins the game. If the packet contains the
 			 *     same player that the packet was sent to then the player and their id are added to the players map.
@@ -160,6 +163,7 @@ public class Main extends Game {
 			 *     9. PacketOnSpawnNpc is received after connecting to a game. This includes all of the bots' initial coordinates.
 			 *     10. PacketOnMoveNpc is received when bots move.
 			 *     11. PacketCaptured is received when the client has been captured by a bot. This includes the starting time of the capture.
+			 *     12. PacketPlayerExitedGame is received when somebody else disconnects from the clients game.
 			 * </p>
 			 * @param connection (TCP or UDP)
 			 * @param object that is received
@@ -311,14 +315,6 @@ public class Main extends Game {
 	}
 	public void setNewPlayScreen() {
 		this.playScreen = new PlayScreen(this);
-	}
-
-	public void deleteOldBots() {
-		bots.clear();
-	}
-
-	public void deleteOtherPlayers() {
-		players.clear();
 	}
 
 	public Player getMyPlayer() {

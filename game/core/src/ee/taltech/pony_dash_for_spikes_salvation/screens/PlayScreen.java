@@ -185,14 +185,12 @@ public class PlayScreen implements Screen {
             // Check if Esc is pressed
             if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
                 game.setScreen(game.getMenuScreen());
-                game.setNewPlayScreen(); // Reset play screen
-                game.deleteOldBots();
-                game.deleteOtherPlayers();
                 Player myPlayer = game.getMyPlayer();
                 PacketPlayerExitedGame packet = new PacketPlayerExitedGame();
                 packet.setGameId(myPlayer.getGameID());
                 packet.setId(myPlayer.getId());
                 game.sendPacketToServer(packet);
+                Gdx.app.exit();
             }
 
             // Update players position
