@@ -20,11 +20,11 @@ public class Stage3 extends InteractiveTileObject {
     public void onHeadHit() {
         if (hud.getCoins() >= 35) {
             Gdx.app.log("Stage3", "New area unlocked!");
-            game.getManager().get("Game Assets/mixkit-game-bonus-reached-2065.wav", Sound.class).play(0.1f);
+            game.getManager().get("Game Assets/mixkit-game-bonus-reached-2065.wav", Sound.class).play(game.getSoundVolume());
             setCategoryFilter(Main.COLLECTED_BIT);
         } else {
             Gdx.app.log("Stage3", "Not enough coins");
-            game.getManager().get("Game Assets/mixkit-small-hit-in-a-game-2072.wav", Sound.class).play(0.1f);
+            game.getManager().get("Game Assets/mixkit-small-hit-in-a-game-2072.wav", Sound.class).play(game.getSoundVolume());
         }
     }
 }
