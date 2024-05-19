@@ -169,7 +169,6 @@ public class Main extends Game {
 			@Override
 			public void received(Connection connection, Object object) {
 				if (object instanceof PacketUpdateLobby) {
-					System.out.println("lobby size: " + ((PacketUpdateLobby) object).getLobbySize());
 					lobbyScreen.updatePlayerCount(((PacketUpdateLobby) object).getLobbySize());
 				}
 
@@ -235,7 +234,7 @@ public class Main extends Game {
 				}
 
 				if (object instanceof PacketPlayerExitedGame) {
-					players.remove(((PacketPlayerExitedGame) object).getGameId());
+					players.remove(((PacketPlayerExitedGame) object).getId());
 				}
 
 				if (object instanceof PacketGameOver) {
