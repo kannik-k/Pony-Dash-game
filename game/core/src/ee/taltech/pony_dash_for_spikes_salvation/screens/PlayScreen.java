@@ -25,6 +25,7 @@ import ee.taltech.pony_dash_for_spikes_salvation.Main;
 import ee.taltech.pony_dash_for_spikes_salvation.Player;
 import ee.taltech.pony_dash_for_spikes_salvation.ai.NPC;
 import ee.taltech.pony_dash_for_spikes_salvation.items.*;
+import ee.taltech.pony_dash_for_spikes_salvation.packets.PacketPlayerExitedGame;
 import ee.taltech.pony_dash_for_spikes_salvation.scenes.Hud;
 import ee.taltech.pony_dash_for_spikes_salvation.sprites.PonySprite;
 import ee.taltech.pony_dash_for_spikes_salvation.tools.B2WorldCreator;
@@ -179,10 +180,14 @@ public class PlayScreen implements Screen {
             if (!Gdx.input.isKeyPressed(Input.Keys.RIGHT) && !Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 player.getB2body().setLinearVelocity(0, player.getB2body().getLinearVelocity().y);
             }
-
-            // Update players position
-            updatePlayerPosition("normal");
         }
+        // Check if Esc is pressed
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            exitGame();
+        }
+
+        // Update players position
+        updatePlayerPosition("normal");
     }
 
     private void setCorrectJumpingHeight() {
@@ -210,6 +215,16 @@ public class PlayScreen implements Screen {
             // Give extra speed with apple for 20 seconds
             player.getB2body().applyLinearImpulse(new Vector2(-1f, 0), player.getB2body().getWorldCenter(), true);
         }
+    }
+
+    private void exitGame() {
+        game.setScreen(game.getMenuScreen());
+        Player myPlayer = game.getMyPlayer();
+        PacketPlayerExitedGame packet = new PacketPlayerExitedGame();
+        packet.setGameId(myPlayer.getGameID());
+        packet.setId(myPlayer.getId());
+        game.sendPacketToServer(packet);
+        Gdx.app.exit();
     }
 
     public void updatePlayerPosition(String situation) {
@@ -336,6 +351,7 @@ public class PlayScreen implements Screen {
         }
 
         game.getBatch().end();
+
         hud.stage.draw();
         game.sendPositionInfoToServer();
     }
@@ -423,6 +439,13 @@ public class PlayScreen implements Screen {
 
     @Override
     public void dispose() {
-        //Will use later
+        map.dispose();
+        renderer.dispose();
+        world.dispose();
+        b2dr.dispose();
+        hud.dispose();
+        music.dispose();
+        skin.dispose();
+        font.dispose();
     }
 }

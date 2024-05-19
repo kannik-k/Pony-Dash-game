@@ -390,6 +390,7 @@ public class PlayerSelection implements Screen {
      */
     private void startGame() {
 
+        game.createClient();
         // Send packet to server
         PacketSinglePlayer packet = new PacketSinglePlayer();
         game.setSinglePlayer(true);
