@@ -36,12 +36,13 @@ public class Main extends Game {
 	private Client client;
 	private final Map<Integer, Player> players = new HashMap<>();
 	private int playerCount = 1;
-	private final List<NPC> bots = new ArrayList<>();
+	private List<NPC> bots = new ArrayList<>();
 	private Player myPlayer;
 	private int playerSpriteId;
 	private PlayScreen playScreen;
 	private LobbyScreen lobbyScreen;
 	private GameOverScreen gameOverScreen;
+	private MenuScreen menuScreen;
 	private int gameId;
 	private int playerId;
 	private String playerName;
@@ -86,6 +87,9 @@ public class Main extends Game {
 	public PlayScreen getPlayScreen() {
 		return playScreen;
 	}
+	public MenuScreen getMenuScreen() {
+		return menuScreen;
+	}
 	public AssetManager getManager() {
 		return manager;
 	}
@@ -121,7 +125,7 @@ public class Main extends Game {
 		gameOverScreen = new GameOverScreen(this);
 		lobbyScreen = new LobbyScreen(this);
 		singlePlayer = false;
-		MenuScreen menuScreen = new MenuScreen(this);
+		menuScreen = new MenuScreen(this);
 		setScreen(menuScreen);
 		try {
 			client.connect(5000, "localhost", 8080, 8081); // Use this to play on local host
@@ -245,6 +249,15 @@ public class Main extends Game {
 					});
 				}
 
+				if (object instanceof PacketPlayerExitedGame) {
+					Gdx.app.postRunnable(new Runnable() {
+						@Override
+						public void run() {
+							players.remove(((PacketPlayerExitedGame) object).getGameId());
+						}
+					});
+				}
+
 				if (object instanceof PacketGameOver) {
 					Gdx.app.postRunnable(new Runnable() {
 						@Override
@@ -295,6 +308,17 @@ public class Main extends Game {
 
 	public void setSinglePlayer(boolean singlePlayer) {
 		this.singlePlayer = singlePlayer;
+	}
+	public void setNewPlayScreen() {
+		this.playScreen = new PlayScreen(this);
+	}
+
+	public void deleteOldBots() {
+		bots.clear();
+	}
+
+	public void deleteOtherPlayers() {
+		players.clear();
 	}
 
 	public Player getMyPlayer() {
