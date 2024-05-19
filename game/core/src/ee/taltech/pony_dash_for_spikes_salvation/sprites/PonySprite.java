@@ -149,6 +149,7 @@ public class PonySprite extends Sprite {
         setPosition(x - getWidth() / 2, y - getHeight() / 2);
         b2body.getPosition().set(x, y);
         setRegion(getFrame(dt));
+        player.setState(getCurrentState());
     }
 
     /**
@@ -244,5 +245,9 @@ public class PonySprite extends Sprite {
         head.set(new Vector2(16 / getPPM(), -16 / getPPM()), new Vector2(16 / getPPM(), 16 / getPPM()));
         fdef.shape = head;
         b2body.createFixture(fdef).setUserData("pony");
+    }
+
+    public void setState(State state) {
+        currentState = state;
     }
 }

@@ -38,6 +38,7 @@ import java.util.Map;
 public class PlayScreen implements Screen {
     private final Main game;
     private final Hud hud;
+    private enum State {FALLING, JUMPING, STANDING, RUN}
     private final TextureAtlas atlas;
     private static final int WIDTH = 620;
     private static final int HEIGHT = 408;
@@ -386,6 +387,10 @@ public class PlayScreen implements Screen {
         for (Map.Entry<Integer, Player> entry : game.getPlayers().entrySet()) {
             Player currentPlayer = entry.getValue();
             if (currentPlayer.getSprite() != null) {
+                // System.out.println("--------------------------------------------------------------");
+                // System.out.println("current player sprite id: " + currentPlayer.getSpriteId());
+                // System.out.println("current player state: " + currentPlayer.getState());
+                // System.out.println("--------------------------------------------------------------");
                 currentPlayer.getSprite().update(Gdx.graphics.getDeltaTime());
                 currentPlayer.getSprite().draw(game.getBatch());
             }

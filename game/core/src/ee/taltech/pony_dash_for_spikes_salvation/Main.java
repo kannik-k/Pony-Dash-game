@@ -122,6 +122,7 @@ public class Main extends Game {
 		PacketPlayerConnect packetPlayerConnect = new PacketPlayerConnect();
 		packetPlayerConnect.setPlayerName("player");
 		packetPlayerConnect.setGameID(gameId);
+		packetPlayerConnect.setId(playerSpriteId);
 		client.sendTCP(packetPlayerConnect); // Send server info that client has connected
 		client.addListener(new Listener.ThreadedListener(new Listener() {
 			/**
@@ -167,8 +168,10 @@ public class Main extends Game {
 						gameId = ((PacketPlayerConnect) object).getGameID();
 						myPlayer.setGameID(gameId);
 						myPlayer.setId(connection.getID());
+						myPlayer.setId(((PacketPlayerConnect) object).getId());
 					} else {
 						Player player = new Player(((PacketPlayerConnect) object).getPlayerName());
+						player.setId(((PacketPlayerConnect) object).getId());
 						players.put(((PacketPlayerConnect) object).getPlayerID(), player);
 						playScreen.createNewSprite(player);
 					}
@@ -180,6 +183,9 @@ public class Main extends Game {
 						player.setX(((PacketSendCoordinates) object).getX());
 						player.setY(((PacketSendCoordinates) object).getY());
 						player.setGameID(myPlayer.getGameID());
+						player.setState(((PacketSendCoordinates) object).getState());
+						player.setId(((PacketSendCoordinates) object).getSpriteId());
+						System.out.println(((PacketSendCoordinates) object).getState());
 					}
 				}
 
@@ -317,6 +323,10 @@ public class Main extends Game {
 		packetSendCoordinates.setTiledY(Math.round(box2DY * 100));
 		packetSendCoordinates.setPlayerID(client.getID());
 		packetSendCoordinates.setGameID(myPlayer.getGameID());
+		packetSendCoordinates.setSpriteId(myPlayer.getSpriteId());
+		packetSendCoordinates.setState(myPlayer.getState());
+		logger.info("position info going to the server: sprite id " + String.valueOf(myPlayer.getSpriteId()));
+		logger.info("current state: " + myPlayer.getState());
 		client.sendUDP(packetSendCoordinates);
 	}
 
