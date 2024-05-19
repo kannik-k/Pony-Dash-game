@@ -29,6 +29,7 @@ public class PonySprite extends Sprite {
     private boolean runningRight;
     private float stateTimer;
     private Player player;
+    private int id;
     List<Integer> animationInformation = Arrays.asList(2, 546, 560, 418, 2, 15, 18, 0, 0);
 
     /**
@@ -46,30 +47,20 @@ public class PonySprite extends Sprite {
      * @param world  the world
      * @param screen the screen
      * @param player the player
+     * @param id the id of the sprite
      */
     public PonySprite(World world, PlayScreen screen, Player player, int id) {
         super(screen.getAtlas().findRegion("applejack"));
         this.world = world;
         this.player = player;
+        this.id = id;
         currentState = State.STANDING;
         previousState = State.STANDING;
         this.runningRight = true;
         this.stateTimer = 0;
         Array<TextureRegion> frames = new Array<>();
 
-        if (id == 1) {
-            this.animationInformation = Arrays.asList(2, 482, 512, 418, 2, 15, 18, 0, 0);
-        } else if (id == 5) {
-            this.animationInformation = Arrays.asList(10, 480, 512, 419, 3, 15, 18, 3, 3);
-        } else if (id == 4) {
-            this.animationInformation = Arrays.asList(18, 480, 512, 419, 3, 15, 18, 4, 3);
-        } else if (id == 2) {
-            this.animationInformation = Arrays.asList(2, 96, 128, 32, 2, 2, 5, 0, 0);
-        } else if (id == 3) {
-            this.animationInformation = Arrays.asList(18, 96, 128, 32, 0, 2, 5, 4, 3);
-        } else if (id == 6) {
-            this.animationInformation = Arrays.asList(10, 96, 128, 33, 2, 2, 5, 3, 1);
-        }
+        setAnimationInformation();
 
         // Pony run animation
         for (int i = animationInformation.get(5); i < animationInformation.get(6); i++) {
@@ -85,7 +76,6 @@ public class PonySprite extends Sprite {
                 32 * animationInformation.get(0) + animationInformation.get(7), 32, 32);
 
         // Pony fall animation
-
         ponyFall = new TextureRegion(getTexture(), animationInformation.get(2) + animationInformation.get(4),
                 32 * animationInformation.get(0) + animationInformation.get(7), 32, 32);
 
@@ -97,6 +87,25 @@ public class PonySprite extends Sprite {
 
         setBounds(418, 65, 32 / getPPM(), 32 / getPPM());
         setRegion(ponyStill);
+    }
+
+    /**
+     * Sets animation information based on the sprite ID.
+     */
+    private void setAnimationInformation() {
+        if (id == 1) {
+            animationInformation = Arrays.asList(2, 482, 512, 418, 2, 15, 18, 0, 0);
+        } else if (id == 5) {
+            animationInformation = Arrays.asList(10, 480, 512, 419, 3, 15, 18, 3, 3);
+        } else if (id == 4) {
+            animationInformation = Arrays.asList(18, 480, 512, 419, 3, 15, 18, 4, 3);
+        } else if (id == 2) {
+            animationInformation = Arrays.asList(2, 96, 128, 32, 2, 2, 5, 0, 0);
+        } else if (id == 3) {
+            animationInformation = Arrays.asList(18, 96, 128, 32, 0, 2, 5, 4, 3);
+        } else if (id == 6) {
+            animationInformation = Arrays.asList(10, 96, 128, 33, 2, 2, 5, 3, 1);
+        }
     }
 
     /**
@@ -123,31 +132,23 @@ public class PonySprite extends Sprite {
      * @return the current state
      */
     public String getCurrentState() {
-        if (currentState == State.FALLING) {
-            return "falling";
-        }
-        if (currentState == State.RUN) {
-            return "run";
-        }
-        if (currentState == State.STANDING) {
-            return "standing";
-        }
-        if (currentState == State.JUMPING) {
-            return "jumping";
-        }
-        return null;
+        return currentState.name().toLowerCase();
     }
 
     /**
      * Update player.
      *
-     * @param dt           the dt
+     * @param dt the delta time
+     * @param spriteId the sprite ID
+     * @param state the state as a string
      */
-    public void update(float dt) {
+    public void update(float dt, int spriteId, String state) {
         float x = player.getX();
         float y = player.getY();
+        id = spriteId;
+        setState(State.valueOf(state.toUpperCase()));
         setPosition(x - getWidth() / 2, y - getHeight() / 2);
-        b2body.getPosition().set(x, y);
+        b2body.setTransform(x / getPPM(), y / getPPM(), 0);
         setRegion(getFrame(dt));
         player.setState(getCurrentState());
     }
@@ -155,14 +156,11 @@ public class PonySprite extends Sprite {
     /**
      * Gets frame.
      *
-     * @param dt the dt
+     * @param dt the delta time
      * @return the frame
      */
     public TextureRegion getFrame(float dt) {
-        currentState = getState();
-
         TextureRegion region;
-
         switch (currentState) {
             case JUMPING:
                 region = ponyJump;
@@ -247,7 +245,12 @@ public class PonySprite extends Sprite {
         b2body.createFixture(fdef).setUserData("pony");
     }
 
+    /**
+     * Sets the current state of the sprite.
+     *
+     * @param state the new state
+     */
     public void setState(State state) {
-        currentState = state;
+        this.currentState = state;
     }
 }

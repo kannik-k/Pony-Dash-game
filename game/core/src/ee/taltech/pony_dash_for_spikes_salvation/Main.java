@@ -196,6 +196,7 @@ public class Main extends Game {
 						player.setState(((PacketSendCoordinates) object).getState());
 						player.setId(((PacketSendCoordinates) object).getSpriteId());
 						System.out.println(((PacketSendCoordinates) object).getState());
+						System.out.println(((PacketSendCoordinates) object).getSpriteId());
 					}
 				}
 
@@ -335,8 +336,8 @@ public class Main extends Game {
 		packetSendCoordinates.setGameID(myPlayer.getGameID());
 		packetSendCoordinates.setSpriteId(myPlayer.getSpriteId());
 		packetSendCoordinates.setState(myPlayer.getState());
-		logger.info("position info going to the server: sprite id " + String.valueOf(myPlayer.getSpriteId()));
-		logger.info("current state: " + myPlayer.getState());
+		// logger.info("position info going to the server: sprite id " + String.valueOf(myPlayer.getSpriteId()));
+		// logger.info("current state: " + myPlayer.getState());
 		client.sendUDP(packetSendCoordinates);
 	}
 
