@@ -26,7 +26,7 @@ public class LobbyScreen implements Screen {
     private SpriteBatch spriteBatch;
     private final Texture backgroundTexture;
     private BitmapFont font;
-    private int playerCount;
+    private static int playerCount;
     Label playerCountLabel;
     Label playerAmountLabel;
     private Skin skin;
@@ -46,12 +46,14 @@ public class LobbyScreen implements Screen {
         viewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), gameCam);
         stage = new Stage(viewport);
         font = new BitmapFont();
-        playerCount = 0;
-
-        skin = new Skin(Gdx.files.internal("Skin/terramotherui/terra-mother-ui.json"));
 
         table = new Table();
         table.setFillParent(true);
+
+        skin = new Skin(Gdx.files.internal("Skin/terramotherui/terra-mother-ui.json"));
+
+        table.center();
+        stage.addActor(table);
     }
 
     /**
@@ -70,13 +72,21 @@ public class LobbyScreen implements Screen {
         spriteBatch.draw(backgroundTexture, 0, 0, stage.getWidth(), stage.getHeight());
         spriteBatch.end();
 
+        // Remove previous player count labels
+        table.clearChildren();
+
+        // Initialize player count label with skin style
+        playerCountLabel = new Label("Players in lobby:", skin);
+        playerAmountLabel = new Label(String.valueOf(playerCount), skin);
+
+        table.add(playerCountLabel).padRight(10);
+        table.add(playerAmountLabel).padLeft(10).row();
+
         // tell our stage to do actions and draw itself
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
-
-        // Debugging log for player count
-        System.out.println("Render player count: " + playerCount);
     }
+
 
     /**
      * Updates the size of the viewport.
@@ -140,19 +150,6 @@ public class LobbyScreen implements Screen {
         buttonTable.row().pad(100, 0, 10, 0);
         buttonTable.add(startGame).fillX().uniformX();
 
-        // Debugging log for player count
-        System.out.println("Show player count: " + playerCount);
-
-        // Initialize player count label with skin style
-        playerCountLabel = new Label("Players in lobby:", skin);
-        playerAmountLabel = new Label(String.valueOf(playerCount), skin);
-
-        table.add(playerCountLabel).padRight(10);
-        table.add(playerAmountLabel).padLeft(10).row();
-
-        table.center();
-        stage.addActor(table);
-
         startGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -175,19 +172,13 @@ public class LobbyScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
     }
 
-    public void setPlayerCount(int playerCount) {
-        this.playerCount = playerCount;
-        System.out.println("setPlayerCount called with: " + playerCount);
-        System.out.println("player count in the setPlayerCount: " + this.playerCount);
+    public static void setPlayerCount(int count) {
+        playerCount = count;
     }
 
     public void updatePlayerCount(int lobbySize) {
         setPlayerCount(lobbySize);
         playerAmountLabel.setText(String.valueOf(playerCount));
-        System.out.println("updatePlayerCount called with: " + lobbySize);
-        System.out.println("player count: " + playerCount);
-        // Add a debug log to ensure the label text is being updated
-        System.out.println("playerAmountLabel text: " + playerAmountLabel.getText().toString());
     }
 
     @Override
@@ -198,10 +189,12 @@ public class LobbyScreen implements Screen {
 
     @Override
     public void pause() {
+        // Called when the application is paused
     }
 
     @Override
     public void resume() {
+        // Called when the application is resumed from paused state
     }
 
     @Override

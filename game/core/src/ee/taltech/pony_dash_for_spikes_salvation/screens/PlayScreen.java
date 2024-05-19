@@ -56,15 +56,15 @@ public class PlayScreen implements Screen {
     private final World world;
     private final Box2DDebugRenderer b2dr;
     private PonySprite player;
-    private Texture cherry;
-    private Texture apple;
+    private final Texture cherry;
+    private final Texture apple;
 
     // Power-ups
     Map<List<Integer>, InteractiveTileObject> powerUps = new HashMap<>();
 
 
     //Sound
-    private Music music;
+    final Music music;
     /**
      * Gets ppm.
      *
@@ -386,7 +386,6 @@ public class PlayScreen implements Screen {
         for (Map.Entry<Integer, Player> entry : game.getPlayers().entrySet()) {
             Player currentPlayer = entry.getValue();
             if (currentPlayer.getSprite() != null) {
-                // System.out.println("player info: " + currentPlayer.getSpriteId());
                 currentPlayer.getSprite().update(Gdx.graphics.getDeltaTime());
                 currentPlayer.getSprite().draw(game.getBatch());
             }
