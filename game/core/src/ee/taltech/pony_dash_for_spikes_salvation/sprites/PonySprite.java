@@ -29,7 +29,7 @@ public class PonySprite extends Sprite {
     private boolean runningRight;
     private float stateTimer;
     private Player player;
-    private int id;
+    private final int id;
     List<Integer> animationInformation = Arrays.asList(2, 546, 560, 418, 2, 15, 18, 0, 0);
 
     /**
@@ -127,39 +127,46 @@ public class PonySprite extends Sprite {
     }
 
     /**
-     * Gets current state.
-     *
-     * @return the current state
+     * Update player.
      */
     public String getCurrentState() {
-        return currentState.name().toLowerCase();
+        if (currentState == State.FALLING) {
+            return "falling";
+        }
+        if (currentState == State.RUN) {
+            return "run";
+        }
+        if (currentState == State.STANDING) {
+            return "standing";
+        }
+        if (currentState == State.JUMPING) {
+            return "jumping";
+        }
+        return null;
     }
 
     /**
      * Update player.
      *
-     * @param dt the delta time
-     * @param spriteId the sprite ID
-     * @param state the state as a string
+     * @param dt           the dt
      */
-    public void update(float dt, int spriteId, String state) {
+    public void update(float dt) {
         float x = player.getX();
         float y = player.getY();
-        id = spriteId;
-        setState(State.valueOf(state.toUpperCase()));
         setPosition(x - getWidth() / 2, y - getHeight() / 2);
-        b2body.setTransform(x / getPPM(), y / getPPM(), 0);
+        b2body.getPosition().set(x, y);
         setRegion(getFrame(dt));
-        player.setState(getCurrentState());
     }
 
     /**
      * Gets frame.
      *
-     * @param dt the delta time
+     * @param dt the dt
      * @return the frame
      */
     public TextureRegion getFrame(float dt) {
+        currentState = getState();
+
         TextureRegion region;
         switch (currentState) {
             case JUMPING:

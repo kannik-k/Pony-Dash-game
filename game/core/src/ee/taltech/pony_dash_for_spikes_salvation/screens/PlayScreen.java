@@ -246,7 +246,7 @@ public class PlayScreen implements Screen {
         if (!game.getMyPlayer().isTeleporting2() || !game.getMyPlayer().isTeleporting3()) {
             handleInput();
         }
-        // player.update(dt);
+        player.update(dt);
         updateAllPlayers(dt);
 
         float mapWidth = map.getProperties().get("width", Integer.class) * map.getProperties().get("tilewidth", Integer.class) / PPM;
@@ -269,7 +269,7 @@ public class PlayScreen implements Screen {
     public void updateAllPlayers(float dt) {
         Map<Integer, Player> playerMap = game.getPlayers();
         for (Map.Entry<Integer, Player> set : playerMap.entrySet()) {
-            set.getValue().getSprite().update(dt, set.getValue().getSpriteId(), set.getValue().getState());
+            set.getValue().getSprite().update(dt);
         }
     }
 
@@ -347,8 +347,7 @@ public class PlayScreen implements Screen {
                 // System.out.println("--------------------------------------------------------------");
                 // System.out.println("current player sprite id: " + currentPlayer.getSpriteId());
                 // System.out.println("current player state: " + currentPlayer.getState());
-                // System.out.println("--------------------------------------------------------------");
-                currentPlayer.getSprite().update(Gdx.graphics.getDeltaTime(), currentPlayer.getSpriteId(), currentPlayer.getState());
+                currentPlayer.getSprite().update(Gdx.graphics.getDeltaTime());
                 currentPlayer.getSprite().draw(game.getBatch());
             }
         }
