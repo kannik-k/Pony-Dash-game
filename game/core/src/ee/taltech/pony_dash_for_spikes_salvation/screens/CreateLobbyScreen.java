@@ -260,6 +260,7 @@ public class CreateLobbyScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (isNameSelected) {
+                    game.createClient();
                     PlayerJoinPacket packet = new PlayerJoinPacket();
                     packet.setUserName(playerName);
                     PlayScreen playScreen = game.getPlayScreen();

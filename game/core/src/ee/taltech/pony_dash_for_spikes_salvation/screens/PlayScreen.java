@@ -17,6 +17,8 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -25,6 +27,7 @@ import ee.taltech.pony_dash_for_spikes_salvation.Main;
 import ee.taltech.pony_dash_for_spikes_salvation.Player;
 import ee.taltech.pony_dash_for_spikes_salvation.ai.NPC;
 import ee.taltech.pony_dash_for_spikes_salvation.items.*;
+import ee.taltech.pony_dash_for_spikes_salvation.packets.PacketPlayerExitedGame;
 import ee.taltech.pony_dash_for_spikes_salvation.scenes.Hud;
 import ee.taltech.pony_dash_for_spikes_salvation.sprites.PonySprite;
 import ee.taltech.pony_dash_for_spikes_salvation.tools.B2WorldCreator;
@@ -177,6 +180,17 @@ public class PlayScreen implements Screen {
             // If button is not pressed down, moving stops
             if (!Gdx.input.isKeyPressed(Input.Keys.RIGHT) && !Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 player.getB2body().setLinearVelocity(0, player.getB2body().getLinearVelocity().y);
+            }
+
+            // Check if Esc is pressed
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+                game.setScreen(game.getMenuScreen());
+                Player myPlayer = game.getMyPlayer();
+                PacketPlayerExitedGame packet = new PacketPlayerExitedGame();
+                packet.setGameId(myPlayer.getGameID());
+                packet.setId(myPlayer.getId());
+                game.sendPacketToServer(packet);
+                Gdx.app.exit();
             }
 
             // Update players position
@@ -335,6 +349,7 @@ public class PlayScreen implements Screen {
         }
 
         game.getBatch().end();
+
         hud.stage.draw();
         game.sendPositionInfoToServer();
     }
@@ -419,6 +434,13 @@ public class PlayScreen implements Screen {
 
     @Override
     public void dispose() {
-        //Will use later
+        map.dispose();
+        renderer.dispose();
+        world.dispose();
+        b2dr.dispose();
+        hud.dispose();
+        music.dispose();
+        skin.dispose();
+        font.dispose();
     }
 }
