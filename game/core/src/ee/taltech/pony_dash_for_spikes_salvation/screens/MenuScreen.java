@@ -131,7 +131,7 @@ public class MenuScreen implements Screen {
         heading = new Label("Welcome to Pony Dash For Spikes Salvation!", skin);
         Table textTable = new Table();
         textTable.setFillParent(true);
-        textTable.row().pad(0, 0, 110, 0);
+        textTable.row().pad(0, 0, 140, 0);
         textTable.add(heading).fillX().uniformX();
         textTable.row();
         stage.addActor(textTable);
@@ -145,6 +145,7 @@ public class MenuScreen implements Screen {
         TextButton singlePlayer = new TextButton("Single player", skin);
         TextButton multiplayer = new TextButton("Multiplayer", skin);
         TextButton tutorial = new TextButton("Tutorial", skin);
+        TextButton settings = new TextButton("Settings", skin);
         TextButton exit = new TextButton("Exit", skin);
 
 
@@ -154,6 +155,8 @@ public class MenuScreen implements Screen {
         buttonTable.add(multiplayer).fillX().uniformX();
         buttonTable.row().pad(0, 0, 10, 0);
         buttonTable.add(tutorial).fillX().uniformX();
+        buttonTable.row().pad(0, 0, 10, 0);
+        buttonTable.add(settings).fillX().uniformX();
         buttonTable.row();
         buttonTable.add(exit).fillX().uniformX();
 
@@ -189,6 +192,14 @@ public class MenuScreen implements Screen {
             }
         });
 
+        settings.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new SettingsScreen(game));
+                changeCursorToDefault();
+            }
+        });
+
         InputListener inputListener = new InputListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, com.badlogic.gdx.scenes.scene2d.Actor fromActor) {
@@ -206,6 +217,7 @@ public class MenuScreen implements Screen {
         exit.addListener(inputListener);
         singlePlayer.addListener(inputListener);
         multiplayer.addListener(inputListener);
+        settings.addListener(inputListener);
         tutorial.addListener(inputListener);
 
         Gdx.input.setInputProcessor(stage);
