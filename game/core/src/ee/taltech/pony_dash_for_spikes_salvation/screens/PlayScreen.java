@@ -4,9 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -17,6 +19,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
@@ -59,6 +63,8 @@ public class PlayScreen implements Screen {
     private final Texture cherry;
     private final Texture apple;
     private final Texture speechBubble;
+    private Skin skin;
+    private final BitmapFont font;
 
     // Power-ups
     Map<List<Integer>, InteractiveTileObject> powerUps = new HashMap<>();
@@ -105,6 +111,10 @@ public class PlayScreen implements Screen {
         cherry = new Texture("Game Assets/cherry.png");
         apple = new Texture("Game Assets/apple.png");
         speechBubble = new Texture("speech_bubble.png");
+        skin = new Skin(Gdx.files.internal("Skin/terramotherui/terra-mother-ui.json"));
+        Label.LabelStyle labelStyle = skin.get("default", Label.LabelStyle.class);
+        font = labelStyle.font;
+        font.getData().setScale(0.65f); // Change scale of font
 
         // collision types
         world.setContactListener(new WorldContactListener());
@@ -365,6 +375,13 @@ public class PlayScreen implements Screen {
 
             // Draw the speech bubble
             game.getBatch().draw(speechBubble, bubbleX, bubbleY, 80, 40);
+
+            font.setColor(Color.BLACK);
+            float textX = bubbleX + 10f;
+            float textY = bubbleY + 30f;
+
+            // Draw the text
+            font.draw(game.getBatch(), "*spilling tea*", textX, textY);
         }
 
         if (game.getMyPlayer().isTeleporting2()) {
