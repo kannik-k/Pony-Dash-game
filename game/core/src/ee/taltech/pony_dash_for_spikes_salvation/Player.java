@@ -13,6 +13,7 @@ public class Player {
     private PonySprite sprite;
     private int spriteId;
     private int gameID;
+    private int id;
     private LocalDateTime captureTime = LocalDateTime.of(2000, 6, 6, 12, 12, 12); // Old date
     private LocalDateTime gotAppleTime = LocalDateTime.of(2000, 6, 6, 12, 12, 12); // Old date
     private LocalDateTime gotCherryTime = LocalDateTime.of(2000, 6, 6, 12, 12, 12); // Old date
@@ -125,5 +126,13 @@ public class Player {
 
     public void setTeleporting3(boolean teleporting3) {
         this.teleporting3 = teleporting3;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
