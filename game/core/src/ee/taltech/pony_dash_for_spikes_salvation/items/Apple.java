@@ -43,6 +43,6 @@ public class Apple extends InteractiveTileObject {
     public void collected() {
         setCategoryFilter(Main.COLLECTED_BIT);
         getCell().setTile(null);
-        game.getManager().get("Game Assets/mixkit-video-game-health-recharge-2837.wav", Sound.class).play(0.1f);
+        game.getManager().get("Game Assets/mixkit-video-game-health-recharge-2837.wav", Sound.class).play(game.getSoundVolume());
     }
 }

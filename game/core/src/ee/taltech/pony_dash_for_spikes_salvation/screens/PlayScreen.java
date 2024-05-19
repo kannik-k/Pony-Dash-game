@@ -4,28 +4,30 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import ee.taltech.pony_dash_for_spikes_salvation.Main;
 import ee.taltech.pony_dash_for_spikes_salvation.Player;
 import ee.taltech.pony_dash_for_spikes_salvation.ai.NPC;
 import ee.taltech.pony_dash_for_spikes_salvation.items.*;
-import ee.taltech.pony_dash_for_spikes_salvation.objects.*;
 import ee.taltech.pony_dash_for_spikes_salvation.scenes.Hud;
 import ee.taltech.pony_dash_for_spikes_salvation.sprites.PonySprite;
+import ee.taltech.pony_dash_for_spikes_salvation.tools.B2WorldCreator;
 import ee.taltech.pony_dash_for_spikes_salvation.tools.WorldContactListener;
 
 import java.time.Duration;
@@ -59,13 +61,16 @@ public class PlayScreen implements Screen {
     private PonySprite player;
     private final Texture cherry;
     private final Texture apple;
+    private final Texture speechBubble;
+    private Skin skin;
+    private final BitmapFont font;
 
     // Power-ups
     Map<List<Integer>, InteractiveTileObject> powerUps = new HashMap<>();
 
 
     //Sound
-    final Music music;
+    private Music music;
     /**
      * Gets ppm.
      *
@@ -73,6 +78,10 @@ public class PlayScreen implements Screen {
      */
     public static float getPPM() {
         return PPM;
+    }
+
+    public Music getMusic() {
+        return music;
     }
 
     /**
@@ -104,92 +113,21 @@ public class PlayScreen implements Screen {
 
         cherry = new Texture("Game Assets/cherry.png");
         apple = new Texture("Game Assets/apple.png");
+        speechBubble = new Texture("speech_bubble.png");
+        skin = new Skin(Gdx.files.internal("Skin/terramotherui/terra-mother-ui.json"));
+        Label.LabelStyle labelStyle = skin.get("default", Label.LabelStyle.class);
+        font = labelStyle.font;
+        font.getData().setScale(0.65f); // Change scale of font
 
         // collision types
         world.setContactListener(new WorldContactListener());
 
         hud = new Hud(game.getBatch());
+        new B2WorldCreator(world, map, game, hud, powerUps);
 
         music = game.getManager().get("Game Assets/Mlp Gameloft Background Music Extended.mp3", Music.class);
         music.setLooping(true);
         music.play();
-
-        // Ajutine, tuleb hiljem ümber tõsta
-        BodyDef bdef = new BodyDef();
-        PolygonShape shape = new PolygonShape();
-        FixtureDef fdef = new FixtureDef();
-        Body body;
-
-        // Ground, temporary
-        for (RectangleMapObject object : map.getLayers().get(7).getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rectangle = (object).getRectangle();
-
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rectangle.getX() + rectangle.getWidth() / 2) / PPM, (rectangle.getY() + rectangle.getHeight() / 2) / PPM);
-
-            body = world.createBody(bdef);
-
-            shape.setAsBox(rectangle.getWidth() / 2 / PPM, rectangle.getHeight() / 2 / PPM);
-            fdef.shape = shape;
-            body.createFixture(fdef);
-        }
-
-        for (RectangleMapObject object : map.getLayers().get(6).getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rectangle = (object).getRectangle();
-
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rectangle.getX() + rectangle.getWidth() / 2) / PPM, (rectangle.getY() + rectangle.getHeight() / 2) / PPM);
-
-            body = world.createBody(bdef);
-
-            shape.setAsBox(rectangle.getWidth() / 2 / PPM, rectangle.getHeight() / 2 / PPM);
-            fdef.shape = shape;
-            body.createFixture(fdef);
-        }
-        // Coin
-        for(RectangleMapObject object: map.getLayers().get(15).getObjects().getByType(RectangleMapObject.class)) {
-            new Coin(world, map, object, hud, game);
-        }
-        //Key
-        for(RectangleMapObject object: map.getLayers().get(17).getObjects().getByType(RectangleMapObject.class)) {
-            new Key(world, map, object, hud, game);
-        }
-        //Spikes stage 2
-        for(RectangleMapObject object: map.getLayers().get(13).getObjects().getByType(RectangleMapObject.class)) {
-            new Stage2Spike(world, map, object, hud, game);
-        }
-        //Spikes Stage 3
-        for(RectangleMapObject object: map.getLayers().get(14).getObjects().getByType(RectangleMapObject.class)) {
-            new Stage3Spike(world, map, object, hud, game);
-        }
-        //Finish
-        for(RectangleMapObject object: map.getLayers().get(12).getObjects().getByType(RectangleMapObject.class)) {
-            new Finish(world, map, object, hud, game);
-        }
-        //Stage2
-        for(RectangleMapObject object: map.getLayers().get(18).getObjects().getByType(RectangleMapObject.class)) {
-            new Stage2(world, map, object, hud, game);
-        }
-        //Stage3
-        for(RectangleMapObject object: map.getLayers().get(19).getObjects().getByType(RectangleMapObject.class)) {
-            new Stage3(world, map, object, hud, game);
-        }
-        //Cherries
-        for(RectangleMapObject object: map.getLayers().get(20).getObjects().getByType(RectangleMapObject.class)) {
-            Cherry cherryObject = new Cherry(world, map, object, hud, game.getMyPlayer(), game);
-            List<Integer> coordinates = new ArrayList<>();
-            coordinates.add(Math.round(cherryObject.getCellX()));
-            coordinates.add(Math.round(cherryObject.getCellY()));
-            powerUps.put(coordinates, cherryObject);
-        }
-        //Apples
-        for(RectangleMapObject object: map.getLayers().get(21).getObjects().getByType(RectangleMapObject.class)) {
-            Apple appleObject = new Apple(world, map, object, hud, game.getMyPlayer(), game);
-            List<Integer> coordinates = new ArrayList<>();
-            coordinates.add(Math.round(appleObject.getCellX()));
-            coordinates.add(Math.round(appleObject.getCellY()));
-            powerUps.put(coordinates, appleObject);
-        }
     }
 
     public void updatePonyIdAndSprite(int ponyId) {
@@ -353,6 +291,25 @@ public class PlayScreen implements Screen {
         renderer.render();
         // b2dr.render(world, gameCam.combined); // renders box2drender lines
         game.getBatch().begin(); // Opens window
+
+        // Check if the player is captured
+        boolean isCaptured = Duration.between(game.getMyPlayer().getCaptureTime(), LocalDateTime.now()).toMillis() <= 5000;
+
+        if (isCaptured) {
+            // Calculate the position for the speech bubble
+            float bubbleX = player.getB2body().getPosition().x + 270;
+            float bubbleY = player.getB2body().getPosition().y + 230;
+
+            // Draw the speech bubble
+            game.getBatch().draw(speechBubble, bubbleX, bubbleY, 80, 40);
+
+            font.setColor(Color.BLACK);
+            float textX = bubbleX + 10f;
+            float textY = bubbleY + 30f;
+
+            // Draw the text
+            font.draw(game.getBatch(), "*spilling tea*", textX, textY);
+        }
 
         if (game.getMyPlayer().isTeleporting2()) {
             updatePlayerPosition("spikes2"); // Teleport the player

@@ -61,6 +61,16 @@ public class Main extends Game {
 
 	private AssetManager manager;
 
+	public float getSoundVolume() {
+		return soundVolume;
+	}
+
+	public void setSoundVolume(float soundVolume) {
+		this.soundVolume = soundVolume;
+	}
+
+	private float soundVolume = 0.1f;
+
 	public SpriteBatch getBatch() {
 		return batch;
 	}

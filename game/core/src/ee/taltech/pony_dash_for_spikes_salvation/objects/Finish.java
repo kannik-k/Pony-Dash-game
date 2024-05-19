@@ -35,7 +35,7 @@ public class Finish extends InteractiveTileObject {
             if (game.isSinglePlayer()) {
                 gameOverScreen.setWinnerName(game.getPlayerName());
                 game.setScreen(gameOverScreen);
-                game.getManager().get("Game Assets/yay-101soundboards.mp3", Sound.class).play(0.3f);
+                game.getManager().get("Game Assets/yay-101soundboards.mp3", Sound.class).play(game.getSoundVolume() * 3);
             }
         }
     }
