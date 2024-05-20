@@ -120,10 +120,10 @@ public class Main extends Game {
 		singlePlayer = false;
 		menuScreen = new MenuScreen(this);
 		setScreen(menuScreen);
+		playScreen = new PlayScreen(this);
 	}
 
 	public void createClient() {
-		playScreen = new PlayScreen(this);
 		lobbyScreen = new LobbyScreen(this);
 		client = new Client();
 		client.start();
