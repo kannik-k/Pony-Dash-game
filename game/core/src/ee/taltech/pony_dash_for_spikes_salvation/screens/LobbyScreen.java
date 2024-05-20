@@ -178,7 +178,6 @@ public class LobbyScreen implements Screen {
 
     public void updatePlayerCount(int lobbySize) {
         setPlayerCount(lobbySize);
-        playerAmountLabel.setText(String.valueOf(playerCount));
     }
 
     @Override

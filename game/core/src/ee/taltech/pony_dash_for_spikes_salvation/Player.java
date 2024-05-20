@@ -14,6 +14,7 @@ public class Player {
     private int spriteId;
     private int gameID;
     private int id;
+    private String state;
     private LocalDateTime captureTime = LocalDateTime.of(2000, 6, 6, 12, 12, 12); // Old date
     private LocalDateTime gotAppleTime = LocalDateTime.of(2000, 6, 6, 12, 12, 12); // Old date
     private LocalDateTime gotCherryTime = LocalDateTime.of(2000, 6, 6, 12, 12, 12); // Old date
@@ -134,5 +135,13 @@ public class Player {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

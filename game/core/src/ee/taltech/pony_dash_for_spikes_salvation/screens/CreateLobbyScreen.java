@@ -25,6 +25,7 @@ public class CreateLobbyScreen implements Screen {
     private TextField playerNameTextField;
     private String playerName = "";
     private boolean isNameSelected;
+    private boolean isPlayerSelected;
 
     /**
      * Constructor.
@@ -40,6 +41,7 @@ public class CreateLobbyScreen implements Screen {
         stage = new Stage(viewport, spriteBatch);
         this.spriteId = 1;
         this.isNameSelected = false;
+        this.isPlayerSelected = false;
     }
 
     /**
@@ -138,6 +140,7 @@ public class CreateLobbyScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 spriteId = 1;
+                isPlayerSelected = true;
                 twilight.setStyle(greenStyle);
                 rainbow.setStyle(defaultStyle);
                 applejack.setStyle(defaultStyle);
@@ -153,6 +156,7 @@ public class CreateLobbyScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 spriteId = 2;
+                isPlayerSelected = true;
                 twilight.setStyle(defaultStyle);
                 rainbow.setStyle(greenStyle);
                 applejack.setStyle(defaultStyle);
@@ -168,6 +172,7 @@ public class CreateLobbyScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 spriteId = 3;
+                isPlayerSelected = true;
                 twilight.setStyle(defaultStyle);
                 rainbow.setStyle(defaultStyle);
                 applejack.setStyle(greenStyle);
@@ -183,6 +188,7 @@ public class CreateLobbyScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 spriteId = 4;
+                isPlayerSelected = true;
                 twilight.setStyle(defaultStyle);
                 rainbow.setStyle(defaultStyle);
                 applejack.setStyle(defaultStyle);
@@ -198,6 +204,7 @@ public class CreateLobbyScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 spriteId = 5;
+                isPlayerSelected = true;
                 twilight.setStyle(defaultStyle);
                 rainbow.setStyle(defaultStyle);
                 applejack.setStyle(defaultStyle);
@@ -213,6 +220,7 @@ public class CreateLobbyScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 spriteId = 6;
+                isPlayerSelected = true;
                 twilight.setStyle(defaultStyle);
                 rainbow.setStyle(defaultStyle);
                 applejack.setStyle(defaultStyle);
@@ -259,7 +267,7 @@ public class CreateLobbyScreen implements Screen {
         joinLobby.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (isNameSelected) {
+                if (isNameSelected && isPlayerSelected) {
                     game.createClient();
                     PlayerJoinPacket packet = new PlayerJoinPacket();
                     packet.setUserName(playerName);
