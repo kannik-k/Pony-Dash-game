@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 public class Main extends Game {
 	public static final int V_WIDTH = 620;
@@ -33,8 +32,8 @@ public class Main extends Game {
 	private SpriteBatch batch; // holds stuff, for example maps. One is enough.
 	private Client client;
 	private final Map<Integer, Player> players = new HashMap<>();
-	private int playerCount = 1;
-	private List<NPC> bots = new ArrayList<>();
+	int playerCount = 1;
+	private final List<NPC> bots = new ArrayList<>();
 	private Player myPlayer;
 	private int playerSpriteId;
 	private PlayScreen playScreen;
@@ -45,7 +44,6 @@ public class Main extends Game {
 	private int playerId;
 	private String playerName;
 	private boolean singlePlayer;
-	private Logger logger = Logger.getLogger(getClass().getName());
 	public static final short DEFAULT_BIT = 1;
 	public static final short CHAR_BIT = 2;
 	public static final short KEY_BIT = 4;
@@ -201,8 +199,6 @@ public class Main extends Game {
 						player.setGameID(myPlayer.getGameID());
 						player.setState(((PacketSendCoordinates) object).getState());
 						player.setId(((PacketSendCoordinates) object).getSpriteId());
-						System.out.println(((PacketSendCoordinates) object).getState());
-						System.out.println(((PacketSendCoordinates) object).getSpriteId());
 					}
 				}
 
@@ -216,14 +212,6 @@ public class Main extends Game {
                         myPlayer.setGameID(((OnStartGame) object).getGameId());
                         gameId = myPlayer.getGameID();
                     });
-				}
-
-				if (object instanceof OnLobbyList) {
-					List<OnLobbyJoin> names = new ArrayList<>(((OnLobbyList) object).getPeers());
-					logger.info("new player has joined");
-					for (OnLobbyJoin name : names) {
-						logger.info(name.getName());
-					}
 				}
 
 				if (object instanceof PacketOnSpawnNpc) {
@@ -292,9 +280,6 @@ public class Main extends Game {
 	public void setSinglePlayer(boolean singlePlayer) {
 		this.singlePlayer = singlePlayer;
 	}
-	public void setNewPlayScreen() {
-		this.playScreen = new PlayScreen(this);
-	}
 
 	public Player getMyPlayer() {
 		return myPlayer;
@@ -328,14 +313,12 @@ public class Main extends Game {
 		packetSendCoordinates.setGameID(myPlayer.getGameID());
 		packetSendCoordinates.setSpriteId(myPlayer.getSpriteId());
 		packetSendCoordinates.setState(myPlayer.getState());
-		// logger.info("position info going to the server: sprite id " + String.valueOf(myPlayer.getSpriteId()));
-		// logger.info("current state: " + myPlayer.getState());
 		client.sendUDP(packetSendCoordinates);
 	}
 
 	/**
 	 * Send packet with lobby id and player name to server.
-	 * @param packet
+	 * @param packet packet
 	 */
 	public void sendPacketToServer(Object packet) {
 		client.sendUDP(packet);
@@ -359,9 +342,5 @@ public class Main extends Game {
 		batch.dispose();
 		playerCount = 1;
 		manager.dispose();
-	}
-
-	public int getPlayerCount() {
-		return playerCount;
 	}
 }

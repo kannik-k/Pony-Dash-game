@@ -251,13 +251,4 @@ public class PonySprite extends Sprite {
         fdef.shape = head;
         b2body.createFixture(fdef).setUserData("pony");
     }
-
-    /**
-     * Sets the current state of the sprite.
-     *
-     * @param state the new state
-     */
-    public void setState(State state) {
-        this.currentState = state;
-    }
 }
